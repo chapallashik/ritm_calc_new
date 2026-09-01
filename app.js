@@ -2547,7 +2547,7 @@
                                 style="flex:1; min-width:0; padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); font-weight:500;">
                             <input type="number" class="hh-no-ins" value="${r.priceNoIns}" style="width:90px; flex-shrink:0; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); text-align:center;">
                             <input type="number" class="hh-with-ins" value="${r.priceWithIns}" style="width:90px; flex-shrink:0; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); text-align:center;">
-                            <button class="btn btn-secondary hh-del" style="flex-shrink:0; width:34px; padding:6px 0; font-size:12px; border-color:#e74c3c; color:#e74c3c;">✕</button>
+                            <button class="btn btn-secondary hh-del" style="flex-shrink:0; width:34px; padding:6px 0; font-size:12px; border-color:#e74c3c; color:#e74c3c; justify-content:center;">✕</button>
                         </div>
                     `).join('')}
                 </div>
@@ -2611,7 +2611,7 @@
                                 <option value="addon" ${r.mode === 'addon' ? 'selected' : ''}>Доплата</option>
                             </select>
                             <input type="number" class="hl-price" value="${r.price}" style="width:90px; flex-shrink:0; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); text-align:center;">
-                            <button class="btn btn-secondary hl-del" style="flex-shrink:0; width:34px; padding:6px 0; font-size:12px; border-color:#e74c3c; color:#e74c3c;">✕</button>
+                            <button class="btn btn-secondary hl-del" style="flex-shrink:0; width:34px; padding:6px 0; font-size:12px; border-color:#e74c3c; color:#e74c3c; justify-content:center;">✕</button>
                         </div>
                     `).join('')}
                 </div>
