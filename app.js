@@ -2027,23 +2027,6 @@
                 { label: 'Тариф за Бытовку (м² по полу)', key: 'rate_cabin', val: customRates.rate_cabin },
                 { label: 'Тариф за Хозблок (м² по полу)', key: 'rate_hozblok', val: customRates.rate_hozblok },
                 { label: 'Тариф за Блок-контейнер (м² по полу)', key: 'rate_container', val: customRates.rate_container },
-                { label: 'Утепление 100 мм базальтовая плита (м² по формуле)', key: 'rate_ins_100', val: customRates.rate_ins_100 },
-                { label: 'Утепление 150 мм базальтовая плита (м², с верандой)', key: 'rate_ins_150', val: customRates.rate_ins_150 || 3700 },
-                { label: 'Утепление 200 мм базальтовая плита (м², с верандой)', key: 'rate_ins_200', val: customRates.rate_ins_200 || 5600 },
-                { label: 'Утепление MIX (м² стен)', key: 'rate_ins_mix', val: customRates.rate_ins_mix || 450 },
-                { label: 'Надбавка каркас 50/150 ХК (м², с верандой)', key: 'premium_frame_150_hk', val: customRates.premium_frame_150_hk || 2500 },
-                { label: 'Надбавка каркас 50/200 ХК (м², с верандой)', key: 'premium_frame_200_hk', val: customRates.premium_frame_200_hk || 4000 },
-                { label: 'Надбавка каркас 50/100 "камерная сушка" (м², с верандой)', key: 'premium_frame_100_kd', val: customRates.premium_frame_100_kd || 2000 },
-                { label: 'Надбавка каркас 50/150 "камерная сушка" (м², с верандой)', key: 'premium_frame_150_kd', val: customRates.premium_frame_150_kd || 4500 },
-                { label: 'Надбавка каркас 50/200 "камерная сушка" (м², с верандой)', key: 'premium_frame_200_kd', val: customRates.premium_frame_200_kd || 6000 },
-                { label: 'Каркас 50/150 КС + утепление 150мм (м², с верандой)', key: 'rate_kd_150_real', val: customRates.rate_kd_150_real || 5700 },
-                { label: 'Каркас 50/200 КС + утепление 200мм (м², с верандой)', key: 'rate_kd_200_real', val: customRates.rate_kd_200_real || 7600 },
-                { label: 'Замена каркаса 50/100→50/150 (с реальным утеплением), р/м²', key: 'price_frame_upgrade_normal', val: customRates.price_frame_upgrade_normal || 2000 },
-                { label: 'Замена каркаса 50/100→50/150 (без утепления), р/м²', key: 'price_frame_upgrade_no_ins', val: customRates.price_frame_upgrade_no_ins || 2500 },
-                { label: 'Поднятие стен +20см, каркас 50/100, р/м²', key: 'price_wall_raise_100', val: customRates.price_wall_raise_100 || 700 },
-                { label: 'Поднятие стен +20см, каркас 50/150, р/м²', key: 'price_wall_raise_150', val: customRates.price_wall_raise_150 || 1000 },
-                { label: 'Поднятие стен +20см, каркас 50/200, р/м²', key: 'price_wall_raise_200', val: customRates.price_wall_raise_200 || 1400 },
-                { label: 'Утепление 100 мм мин. вата бытовка (м² пола)', key: 'rate_ins_100_min_wool', val: customRates.rate_ins_100_min_wool || 550 },
                 { label: 'Утепление 200 мм потолок (м²)', key: 'rate_ins_200_ceiling', val: customRates.rate_ins_200_ceiling || 1000 },
                 { label: 'Утепление 200 мм пол (м²)', key: 'rate_ins_200_floor', val: customRates.rate_ins_200_floor || 1000 },
                 { label: 'Стоимость сборки (м² пола)', key: 'rate_assembly', val: customRates.rate_assembly },
@@ -2492,6 +2475,7 @@
 
     function renderMatList() {
         if (matActiveTab === 'exterior') { renderExteriorPanel(); return; }
+        if (matActiveTab === 'insulation') { renderInsulationPanel(); return; }
         const cat = matCategoryFilter.value;
         let items = getMatArray().filter(r => r.categories.includes(cat));
         if (matActiveTab === 'additions') {
@@ -2701,6 +2685,56 @@
         }
     }
 
+    const INSULATION_FIELDS = [
+        { key: 'rate_ins_100', label: 'Утепление 100 мм баз. плита (по формуле)', def: 450 },
+        { key: 'rate_ins_100_min_wool', label: 'Утепление 100 мм мин. вата (бытовка)', def: 550 },
+        { key: 'rate_ins_150', label: 'Утепление 150 мм баз. плита', def: 3700 },
+        { key: 'rate_ins_200', label: 'Утепление 200 мм баз. плита', def: 5600 },
+        { key: 'rate_ins_mix', label: 'Утепление MIX (каркас 50/100)', def: 450 },
+        { key: 'premium_frame_150_hk', label: 'Надбавка каркас 50/150 ХК', def: 2500 },
+        { key: 'premium_frame_200_hk', label: 'Надбавка каркас 50/200 ХК', def: 4000 },
+        { key: 'premium_frame_100_kd', label: 'Надбавка каркас 50/100 «камерная сушка»', def: 2000 },
+        { key: 'premium_frame_150_kd', label: 'Надбавка каркас 50/150 «камерная сушка»', def: 4500 },
+        { key: 'premium_frame_200_kd', label: 'Надбавка каркас 50/200 «камерная сушка»', def: 6000 },
+        { key: 'rate_kd_150_real', label: 'Каркас 50/150 КС + утепление 150мм', def: 5700 },
+        { key: 'rate_kd_200_real', label: 'Каркас 50/200 КС + утепление 200мм', def: 7600 },
+        { key: 'price_frame_upgrade_normal', label: 'Замена каркаса 50/100→50/150 (с утеплением)', def: 2000 },
+        { key: 'price_frame_upgrade_no_ins', label: 'Замена каркаса 50/100→50/150 (без утепления)', def: 2500 },
+        { key: 'price_wall_raise_100', label: 'Поднятие стен +20см, каркас 50/100', def: 700 },
+        { key: 'price_wall_raise_150', label: 'Поднятие стен +20см, каркас 50/150', def: 1000 },
+        { key: 'price_wall_raise_200', label: 'Поднятие стен +20см, каркас 50/200', def: 1400 }
+    ];
+
+    function renderInsulationPanel() {
+        matList.innerHTML = `
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">
+                Ставки и надбавки для утепления и связанных доп.опций — общие на дом высокий и дом низкий.
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                ${INSULATION_FIELDS.map(f => `
+                    <div class="option-row" style="flex-wrap:nowrap; gap:8px;" data-ins-key="${f.key}">
+                        <div style="flex:1; font-weight:500; font-size:13.5px;">${f.label}</div>
+                        <input type="number" class="ins-field" data-key="${f.key}" value="${customRates[f.key] != null ? customRates[f.key] : f.def}"
+                            style="width:100px; flex-shrink:0; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); text-align:center;">
+                        <span style="width:44px; flex-shrink:0; font-size:12px; color:var(--text-muted);">р/м²</span>
+                    </div>
+                `).join('')}
+            </div>
+            <div style="display:flex; gap:8px; margin-top:14px;">
+                <button class="btn btn-primary" id="btnInsSave" style="font-size:12px;">Сохранить</button>
+            </div>
+        `;
+        document.getElementById('btnInsSave').addEventListener('click', () => {
+            matList.querySelectorAll('.ins-field').forEach(input => {
+                const key = input.getAttribute('data-key');
+                customRates[key] = parseFloat(input.value) || 0;
+            });
+            localStorage.setItem('mobistroy_custom_rates', JSON.stringify(customRates));
+            renderModelUI();
+            alert('Сохранено.');
+        });
+    }
+
     function openMatForm(editId) {
         matEditingId = editId || null;
         const rec = matEditingId ? getMatArray().find(r => r.id === matEditingId) : null;
@@ -2877,6 +2911,15 @@
                 <li>Площадь считается как дом + веранда (если веранда включена в разделе 2)</li>
                 <li>Категории — можно отметить сразу несколько типов построек одной записью</li>
             </ul>`,
+        insulation: `
+            <b>Утепление</b>
+            <ul>
+                <li>Числа общие для дома высокого и дома низкого — отдельных категорий тут нет, менять и добавлять/удалять позиции нельзя, только сами ставки</li>
+                <li>«Надбавка каркас» — прибавляется к базовой ставке дома (Вагонка ВС / Имитация В), которая настраивается во вкладке «Наружная отделка»</li>
+                <li>«Каркас КС + утепление» — это уже готовая полная ставка за м² площади дома+веранды, а не надбавка</li>
+                <li>«Замена каркаса» и «Поднятие стен» — цена доп.опций на сайте, которая сама переключается в зависимости от выбранного утепления</li>
+                <li>Меняете число → «Сохранить» — подписи в выпадающем списке "Утепление" на сайте подтянут новое число автоматически</li>
+            </ul>`,
         additions: `
             <b>Доп.опции</b>
             <ul>
@@ -2895,8 +2938,9 @@
             b.classList.toggle('active', b.getAttribute('data-tab') === tab);
         });
         matGroupFilter.style.display = (tab === 'additions') ? 'inline-block' : 'none';
-        btnMatAddNew.style.display = 'inline-flex';
-        const titles = { interior: 'Материалы — Внутренняя отделка', exterior: 'Материалы — Наружная отделка', floor: 'Материалы — Настил пола', additions: 'Материалы — Доп.опции' };
+        matCategoryFilter.style.display = (tab === 'insulation') ? 'none' : 'inline-block';
+        btnMatAddNew.style.display = (tab === 'insulation') ? 'none' : 'inline-flex';
+        const titles = { interior: 'Редактирование сайта — Внутренняя отделка', exterior: 'Редактирование сайта — Наружная отделка', floor: 'Редактирование сайта — Настил пола', insulation: 'Редактирование сайта — Утепление', additions: 'Редактирование сайта — Доп.опции' };
         materialsModalTitle.textContent = titles[tab] || 'Материалы';
         const infoEl = document.getElementById('materialsInfoTooltip');
         if (infoEl) infoEl.innerHTML = MAT_TAB_INFO[tab] || '';
