@@ -1,6 +1,64 @@
 // Unified Custom Constructor & Standard Sheets Calculator
 
 (function () {
+    // 0. Внешние данные (материалы), редактируемые через админ-панель и публикуемые в materials.json
+    let MATERIALS = { interior: [] };
+
+    // Резервные данные на случай, если materials.json не загрузился (например, открыли файл локально без сервера)
+    const MATERIALS_FALLBACK = {
+        interior: [
+            { id: "int_hh_vagonka", name: "Вагонка 'ВС' (базовая, включена)", categories: ["house_high"], price: 0 },
+            { id: "int_hh_imitatsia", name: "Имитация бруса", categories: ["house_high"], price: 500 },
+            { id: "int_hl_osb", name: "ОСБ 9 мм (базовая, включена)", categories: ["house_low"], price: 0 },
+            { id: "int_hl_vagonka", name: "Вагонка 'ВС' (базовая, включена)", categories: ["house_low"], price: 0 },
+            { id: "int_hl_imitatsia", name: "Имитация бруса 'В'", categories: ["house_low"], price: 500 },
+            { id: "int_cabin_osb", name: "ОСБ 9 мм (базовая, включена)", categories: ["cabin"], price: 0 },
+            { id: "int_cabin_vagonka", name: "Вагонка 'ВС'", categories: ["cabin"], price: 120 },
+            { id: "int_cabin_imitatsia", name: "Имитация бруса 'В'", categories: ["cabin"], price: 370 },
+            { id: "int_hz_none", name: "Без отделки (базовая, включена)", categories: ["hozblok"], price: 0 },
+            { id: "int_hz_osb", name: "ОСБ 9 мм", categories: ["hozblok"], price: 300 },
+            { id: "int_hz_vagonka", name: "Вагонка класса В", categories: ["hozblok"], price: 400 },
+            { id: "int_hz_mdf", name: "МДФ панели", categories: ["hozblok"], price: 500 },
+            { id: "int_hz_pvc", name: "ПВХ панели", categories: ["hozblok"], price: 500 }
+        ]
+    };
+
+    async function loadMaterials() {
+        try {
+            const res = await fetch('./materials.json', { cache: 'no-store' });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const data = await res.json();
+            if (!data || !Array.isArray(data.interior)) throw new Error('bad shape');
+            MATERIALS = data;
+        } catch (e) {
+            console.warn('materials.json не загрузился, использую встроенные данные по умолчанию:', e);
+            MATERIALS = JSON.parse(JSON.stringify(MATERIALS_FALLBACK));
+        }
+        // Черновик из админки (если есть) имеет приоритет — чтобы правки не терялись между визитами админа,
+        // пока их не скачали и не залили на GitHub.
+        try {
+            const draft = localStorage.getItem('mobistroy_materials_draft');
+            if (draft) {
+                const parsed = JSON.parse(draft);
+                if (parsed && Array.isArray(parsed.interior)) {
+                    MATERIALS = parsed;
+                }
+            }
+        } catch (e) { /* ignore corrupt draft */ }
+    }
+
+    function saveMaterialsDraft() {
+        localStorage.setItem('mobistroy_materials_draft', JSON.stringify(MATERIALS));
+    }
+
+    function getInteriorOptions(category) {
+        return MATERIALS.interior.filter(r => r.categories.includes(category));
+    }
+
+    function getInteriorRecord(id) {
+        return MATERIALS.interior.find(r => r.id === id);
+    }
+
     // 1. Data & State Initialization
     const SHARED_ADDITIONS = [
         { id: "win_lux_50_50_p", name: "Окно ПВХ 1-камерный 50х50 поворотное", price: 5500, type: "quantity", quantity: 0 },
@@ -480,41 +538,19 @@
         }
         state.selCustomExterior = selCustomExterior.value;
 
-        // 2. Interior Dropdown
-        let intHTML = '';
-        if (type === 'house_high') {
-            intHTML = `
-                <option value="none">Вагонка 'ВС' (базовая, включена)</option>
-                <option value="imitation">Имитация бруса (+500 р/м²)</option>
-            `;
-        } else if (type === 'house_low') {
-            intHTML = `
-                <option value="osb">ОСБ 9 мм (базовая, включена)</option>
-                <option value="lining">Вагонка 'ВС' (базовая, включена)</option>
-                <option value="imitation">Имитация бруса 'В' (+500 р/м²)</option>
-            `;
-        } else if (type === 'cabin') {
-            intHTML = `
-                <option value="osb">ОСБ 9 мм (базовая, включена)</option>
-                <option value="lining">Вагонка 'ВС' (+120 р/м²)</option>
-                <option value="imitation">Имитация бруса 'В' (+370 р/м²)</option>
-            `;
-        } else { // hozblok
-            intHTML = `
-                <option value="none">Без отделки (базовая, включена)</option>
-                <option value="osb">ОСБ 9 мм (+300 р/м²)</option>
-                <option value="lining">Вагонка класса В (+400 р/м²)</option>
-                <option value="mdf">МДФ панели (+500 р/м²)</option>
-                <option value="pvc">ПВХ панели (+500 р/м²)</option>
-            `;
-        }
+        // 2. Interior Dropdown (данные из materials.json / MATERIALS.interior — редактируется в админке)
+        const intOptions = getInteriorOptions(type);
+        let intHTML = intOptions.map(r => {
+            const label = r.price > 0 ? `${r.name} (+${r.price.toLocaleString('ru-RU')} р/м²)` : r.name;
+            return `<option value="${r.id}">${label}</option>`;
+        }).join('\n');
         
         const prevInt = selCustomInterior.value;
         selCustomInterior.innerHTML = intHTML;
         if (selCustomInterior.querySelector(`option[value="${prevInt}"]`)) {
             selCustomInterior.value = prevInt;
         } else {
-            selCustomInterior.value = (type === 'house_low' || type === 'cabin') ? 'osb' : 'none';
+            selCustomInterior.value = intOptions.length ? intOptions[0].id : '';
         }
         state.selCustomInterior = selCustomInterior.value;
 
@@ -1359,28 +1395,15 @@
                 extCost = extWallArea * rate;
             }
 
-            // Interior Finish Upgrade
+            // Interior Finish Upgrade (цена берётся из MATERIALS.interior — редактируется в админке)
             let intCost = 0;
-            if (state.selCustomInterior !== 'none') {
-                const intArea = (state.customLength * 2 * 2.5) + (state.customWidth * 2 * 2.5) + area;
-                let rate = 0;
-                if (state.customType === 'house_high') {
-                    if (state.selCustomInterior === 'imitation') rate = 500;
-                } else if (state.customType === 'house_low') {
-                    if (state.selCustomInterior === 'imitation') rate = 500;
-                    else rate = 0;
-                } else if (state.customType === 'cabin') {
-                    if (state.selCustomInterior === 'lining') {
-                        rate = customRates.rate_int_cabin_lining || 120;
-                    } else if (state.selCustomInterior === 'imitation') {
-                        rate = customRates.rate_int_cabin_imitation || 370;
-                    } else {
-                        rate = 0;
-                    }
-                } else {
-                    rate = customRates[`rate_int_${state.selCustomInterior}`] || 0;
+            {
+                const intRecord = getInteriorRecord(state.selCustomInterior);
+                const rate = intRecord ? (intRecord.price || 0) : 0;
+                if (rate > 0) {
+                    const intArea = (state.customLength * 2 * 2.5) + (state.customWidth * 2 * 2.5) + area;
+                    intCost = intArea * rate;
                 }
-                intCost = intArea * rate;
             }
             floorSum += (extCost + intCost); // Group as finish upgrades
 
@@ -1793,7 +1816,8 @@
             };
             
             text += `  - Снаружи: ${extNames[state.selCustomExterior] || 'Базовая'}\n`;
-            text += `  - Внутри: ${intNames[state.selCustomInterior] || 'Базовая'}\n`;
+            const intRecForText = getInteriorRecord(state.selCustomInterior);
+            text += `  - Внутри: ${intRecForText ? intRecForText.name : 'Базовая'}\n`;
             let insText = '';
             if (state.selCustomInsulation === 'cold') {
                 insText = 'Холодный контур';
@@ -2269,6 +2293,173 @@
         URL.revokeObjectURL(url);
     });
 
+    // ==================== Панель "Материалы" (внутренняя отделка) ====================
+    const materialsToggleBtn = document.getElementById('materialsToggleBtn');
+    const materialsModal = document.getElementById('materialsModal');
+    const closeMaterialsBtn = document.getElementById('closeMaterialsBtn');
+    const matCategoryFilter = document.getElementById('matCategoryFilter');
+    const matList = document.getElementById('matList');
+    const matAddForm = document.getElementById('matAddForm');
+    const btnMatAddNew = document.getElementById('btnMatAddNew');
+    const btnMatDownload = document.getElementById('btnMatDownload');
+    const btnMatResetDrafts = document.getElementById('btnMatResetDrafts');
+
+    let matEditingId = null; // null = добавление новой записи, иначе — id редактируемой
+
+    function renderMatList() {
+        const cat = matCategoryFilter.value;
+        const items = MATERIALS.interior.filter(r => r.categories.includes(cat));
+        if (items.length === 0) {
+            matList.innerHTML = `<p style="color:var(--text-muted); font-size:13px;">Пока нет позиций для этой категории.</p>`;
+            return;
+        }
+        matList.innerHTML = items.map(r => `
+            <div class="option-row" style="justify-content: space-between;" data-mat-id="${r.id}">
+                <div>
+                    <div style="font-weight:600;">${r.name}</div>
+                    <div style="font-size:12px; color:var(--text-muted);">${r.price > 0 ? r.price.toLocaleString('ru-RU') + ' р/м²' : 'без доплаты (базовая)'}</div>
+                </div>
+                <div style="display:flex; gap:6px;">
+                    <button class="btn btn-secondary mat-edit-btn" style="padding:4px 10px; font-size:12px;">Изменить</button>
+                    <button class="btn btn-secondary mat-del-btn" style="padding:4px 10px; font-size:12px; border-color:#e74c3c; color:#e74c3c;">Удалить</button>
+                </div>
+            </div>
+        `).join('');
+
+        matList.querySelectorAll('.mat-edit-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = e.target.closest('[data-mat-id]').getAttribute('data-mat-id');
+                openMatForm(id);
+            });
+        });
+        matList.querySelectorAll('.mat-del-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = e.target.closest('[data-mat-id]').getAttribute('data-mat-id');
+                const rec = MATERIALS.interior.find(r => r.id === id);
+                if (rec && confirm(`Удалить позицию "${rec.name}"?`)) {
+                    MATERIALS.interior = MATERIALS.interior.filter(r => r.id !== id);
+                    saveMaterialsDraft();
+                    renderMatList();
+                    renderModelUI();
+                }
+            });
+        });
+    }
+
+    const ALL_CATEGORIES = [
+        { id: 'house_high', label: 'Дом высокий' },
+        { id: 'house_low', label: 'Дом низкий' },
+        { id: 'cabin', label: 'Бытовка' },
+        { id: 'hozblok', label: 'Хозблок' }
+    ];
+
+    function openMatForm(editId) {
+        matEditingId = editId || null;
+        const rec = matEditingId ? MATERIALS.interior.find(r => r.id === matEditingId) : null;
+        const preselectedCats = rec ? rec.categories : [matCategoryFilter.value];
+
+        matAddForm.innerHTML = `
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <div>
+                    <label style="font-weight:600; font-size:13px;">Название</label>
+                    <input type="text" id="matFieldName" value="${rec ? rec.name.replace(/"/g, '&quot;') : ''}"
+                        style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border-color,#ccc); margin-top:4px;">
+                </div>
+                <div>
+                    <label style="font-weight:600; font-size:13px;">Цена, р/м² (0 — без доплаты / базовая)</label>
+                    <input type="number" id="matFieldPrice" value="${rec ? rec.price : 0}" min="0" step="10"
+                        style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border-color,#ccc); margin-top:4px;">
+                </div>
+                <div>
+                    <label style="font-weight:600; font-size:13px;">Показывать в категориях:</label>
+                    <div style="display:flex; gap:14px; flex-wrap:wrap; margin-top:6px;">
+                        ${ALL_CATEGORIES.map(c => `
+                            <label style="display:flex; align-items:center; gap:5px; font-size:13px; cursor:pointer;">
+                                <input type="checkbox" class="matFieldCat" value="${c.id}" ${preselectedCats.includes(c.id) ? 'checked' : ''}>
+                                ${c.label}
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+                <div style="display:flex; gap:8px; justify-content:flex-end;">
+                    <button class="btn btn-secondary" id="btnMatCancel" style="font-size:13px;">Отмена</button>
+                    <button class="btn btn-primary" id="btnMatSave" style="font-size:13px;">${rec ? 'Сохранить' : 'Добавить'}</button>
+                </div>
+            </div>
+        `;
+        matAddForm.style.display = 'block';
+
+        document.getElementById('btnMatCancel').addEventListener('click', closeMatForm);
+        document.getElementById('btnMatSave').addEventListener('click', saveMatForm);
+    }
+
+    function closeMatForm() {
+        matAddForm.style.display = 'none';
+        matAddForm.innerHTML = '';
+        matEditingId = null;
+    }
+
+    function saveMatForm() {
+        const name = document.getElementById('matFieldName').value.trim();
+        const price = parseFloat(document.getElementById('matFieldPrice').value) || 0;
+        const cats = Array.from(document.querySelectorAll('.matFieldCat:checked')).map(el => el.value);
+
+        if (!name) { alert('Введите название позиции.'); return; }
+        if (cats.length === 0) { alert('Выберите хотя бы одну категорию.'); return; }
+
+        if (matEditingId) {
+            const rec = MATERIALS.interior.find(r => r.id === matEditingId);
+            rec.name = name;
+            rec.price = price;
+            rec.categories = cats;
+        } else {
+            const newId = 'int_custom_' + Date.now();
+            MATERIALS.interior.push({ id: newId, name, price, categories: cats });
+        }
+        saveMaterialsDraft();
+        closeMatForm();
+        renderMatList();
+        renderModelUI();
+    }
+
+    if (materialsToggleBtn) {
+        materialsToggleBtn.addEventListener('click', () => {
+            matCategoryFilter.value = (state.calculatorMode === 'custom' && state.customType) ? state.customType : 'house_high';
+            closeMatForm();
+            renderMatList();
+            materialsModal.style.display = 'flex';
+        });
+    }
+    if (closeMaterialsBtn) {
+        closeMaterialsBtn.addEventListener('click', () => { materialsModal.style.display = 'none'; });
+    }
+    window.addEventListener('click', (e) => {
+        if (e.target === materialsModal) materialsModal.style.display = 'none';
+    });
+    matCategoryFilter.addEventListener('change', () => { closeMatForm(); renderMatList(); });
+    btnMatAddNew.addEventListener('click', () => openMatForm(null));
+
+    btnMatDownload.addEventListener('click', () => {
+        const jsonContent = JSON.stringify(MATERIALS, null, 2);
+        const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'materials.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+
+    btnMatResetDrafts.addEventListener('click', async () => {
+        if (confirm('Сбросить все несохранённые правки материалов и перезагрузить с сайта?')) {
+            localStorage.removeItem('mobistroy_materials_draft');
+            await loadMaterials();
+            closeMatForm();
+            renderMatList();
+            renderModelUI();
+        }
+    });
+
     // Delivery Slider hooks
     deliverySlider.addEventListener('input', (e) => {
         const val = parseInt(e.target.value) || 0;
@@ -2357,8 +2548,11 @@
 
     // Startup bootstrap rendering
     renderTabs();
-    if (activeConfig.length > 0) {
-        state.selectedSizeId = activeConfig[0].sizes[0]?.id || '';
-        renderModelUI();
-    }
+    (async () => {
+        await loadMaterials();
+        if (activeConfig.length > 0) {
+            state.selectedSizeId = activeConfig[0].sizes[0]?.id || '';
+            renderModelUI();
+        }
+    })();
 })();

@@ -1,0 +1,20 @@
+{
+  "interior": [
+    { "id": "int_hh_vagonka", "name": "Вагонка 'ВС' (базовая, включена)", "categories": ["house_high"], "price": 0 },
+    { "id": "int_hh_imitatsia", "name": "Имитация бруса", "categories": ["house_high"], "price": 500 },
+
+    { "id": "int_hl_osb", "name": "ОСБ 9 мм (базовая, включена)", "categories": ["house_low"], "price": 0 },
+    { "id": "int_hl_vagonka", "name": "Вагонка 'ВС' (базовая, включена)", "categories": ["house_low"], "price": 0 },
+    { "id": "int_hl_imitatsia", "name": "Имитация бруса 'В'", "categories": ["house_low"], "price": 500 },
+
+    { "id": "int_cabin_osb", "name": "ОСБ 9 мм (базовая, включена)", "categories": ["cabin"], "price": 0 },
+    { "id": "int_cabin_vagonka", "name": "Вагонка 'ВС'", "categories": ["cabin"], "price": 120 },
+    { "id": "int_cabin_imitatsia", "name": "Имитация бруса 'В'", "categories": ["cabin"], "price": 370 },
+
+    { "id": "int_hz_none", "name": "Без отделки (базовая, включена)", "categories": ["hozblok"], "price": 0 },
+    { "id": "int_hz_osb", "name": "ОСБ 9 мм", "categories": ["hozblok"], "price": 300 },
+    { "id": "int_hz_vagonka", "name": "Вагонка класса В", "categories": ["hozblok"], "price": 400 },
+    { "id": "int_hz_mdf", "name": "МДФ панели", "categories": ["hozblok"], "price": 500 },
+    { "id": "int_hz_pvc", "name": "ПВХ панели", "categories": ["hozblok"], "price": 500 }
+  ]
+}

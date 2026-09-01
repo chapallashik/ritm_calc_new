@@ -63,6 +63,10 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
                 Цены
             </button>
+            <button class="btn btn-secondary" id="materialsToggleBtn" style="display:none;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                Материалы
+            </button>
             <button class="btn btn-secondary" id="btnLogout" style="font-size:12px;">
                 Выйти
             </button>
@@ -374,6 +378,36 @@
                 <button class="btn btn-secondary" id="btnResetCache" style="border-color: #e67e22; color: #e67e22;">Сбросить кэш</button>
                 <button class="btn btn-secondary" id="btnExportConfig">Скачать config.js</button>
                 <button class="btn btn-primary" id="btnSaveConfig">Сохранить изменения</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модал: Материалы (внутренняя отделка и др., редактируется через JSON) -->
+    <div class="modal" id="materialsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Материалы — Внутренняя отделка</h2>
+                <button class="close-btn" id="closeMaterialsBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">
+                    Изменения видны только вам, пока не скачаете <code>materials.json</code> и не замените им файл на GitHub — тогда обновится для всех посетителей сайта.
+                </p>
+                <div style="display:flex; gap:8px; margin-bottom: 14px; flex-wrap: wrap;">
+                    <select id="matCategoryFilter" style="padding:6px 10px; border-radius:8px; border:1px solid var(--border-color,#ccc);">
+                        <option value="house_high">Дом высокий</option>
+                        <option value="house_low">Дом низкий</option>
+                        <option value="cabin">Бытовка</option>
+                        <option value="hozblok">Хозблок</option>
+                    </select>
+                    <button class="btn btn-secondary" id="btnMatAddNew" style="font-size:13px;">+ Добавить позицию</button>
+                </div>
+                <div id="matAddForm" style="display:none; border:1px solid var(--border-color,#ddd); border-radius:10px; padding:12px; margin-bottom:14px;"></div>
+                <div class="admin-grid-edit" id="matList"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnMatResetDrafts" style="border-color: #e67e22; color: #e67e22;">Сбросить черновик</button>
+                <button class="btn btn-primary" id="btnMatDownload">Скачать materials.json</button>
             </div>
         </div>
     </div>

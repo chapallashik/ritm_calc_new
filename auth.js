@@ -20,6 +20,7 @@
     const appContainer = document.getElementById('appContainer');
     const adminBadge   = document.getElementById('adminBadge');
     const adminToggleBtn = document.getElementById('adminToggleBtn');
+    const materialsToggleBtn = document.getElementById('materialsToggleBtn');
     const btnLogout    = document.getElementById('btnLogout');
 
     const btnGuestLogin    = document.getElementById('btnGuestLogin');
@@ -48,9 +49,11 @@
         if (role === 'admin') {
             adminBadge.style.display     = 'inline-flex';
             adminToggleBtn.style.display = 'inline-flex';
+            if (materialsToggleBtn) materialsToggleBtn.style.display = 'inline-flex';
         } else {
             adminBadge.style.display     = 'none';
             adminToggleBtn.style.display = 'none';
+            if (materialsToggleBtn) materialsToggleBtn.style.display = 'none';
         }
     }
 
