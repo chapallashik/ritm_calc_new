@@ -141,13 +141,25 @@
 
     // Превращаем JSON-запись доп.опции в формат, который понимает остальной код (как SHARED_ADDITIONS)
     function materialsAdditionToAddition(r) {
-        const label = r.price > 0
+        const hasPerCategoryPrice = r.pricesByCategory && Object.keys(r.pricesByCategory).length > 0;
+        const label = (!hasPerCategoryPrice && r.price > 0)
             ? `${r.name} (${r.unit === 'area' ? '+' : ''}${r.price.toLocaleString('ru-RU')} р${r.unit === 'area' ? '/м²' : ''})`
-            : r.name;
+            : r.name; // при разной цене по категориям число показываем прямо в строке допов, не в названии
         return {
             id: r.id, name: label, price: r.price, type: r.unit, quantity: 0,
-            categories: r.categories, group: r.group, hint: r.hint, fromMaterials: true
+            categories: r.categories, group: r.group, hint: r.hint, fromMaterials: true,
+            pricesByCategory: r.pricesByCategory || null
         };
+    }
+
+    // Если у записи задана разная цена по категориям — берём цену под текущий выбор,
+    // иначе — обычную единую цену записи.
+    function getMaterialsAdditionPrice(add) {
+        if (add.pricesByCategory && state.calculatorMode === 'custom' &&
+            add.pricesByCategory[state.customType] != null) {
+            return add.pricesByCategory[state.customType];
+        }
+        return add.price || 0;
     }
 
     // Добавляет/обновляет доп.опции из MATERIALS.additions во все модели активного конфига
@@ -1020,6 +1032,7 @@
             const qty = state.additionQuantities[add.id] || 0;
             const price = (add.id === 'frame_upgrade') ? getFrameUpgradePrice()
                 : (add.id === 'wall_height_raise_20') ? getWallHeightRaisePrice()
+                : add.fromMaterials ? getMaterialsAdditionPrice(add)
                 : (add.price || 0);
             
             let recQty = 0;
@@ -1099,6 +1112,11 @@
                         recText = `Площадь: ${recQty} м²`;
                     } else if (add.hint === 'perimeter') {
                         recQty = Math.ceil(calcPerimeter);
+                        recText = `Периметр: ${recQty} м`;
+                    } else if (add.hint === 'perimeterAndVeranda') {
+                        // Точный периметр — берём из раздела "2. Веранда" (там заданы настоящие
+                        // длина/ширина веранды и прилегающая сторона, а не только площадь).
+                        recQty = Math.ceil(state.verandaEnabled ? state.verandaCombinedPerimeter : calcPerimeter);
                         recText = `Периметр: ${recQty} м`;
                     } else if (add.hint === 'houseArea') {
                         recQty = Math.ceil(area);
@@ -1635,6 +1653,7 @@
             if (qty > 0) {
                 const effectivePrice = (add.id === 'frame_upgrade') ? getFrameUpgradePrice()
                     : (add.id === 'wall_height_raise_20') ? getWallHeightRaisePrice()
+                    : add.fromMaterials ? getMaterialsAdditionPrice(add)
                     : add.price;
                 let total = qty * effectivePrice;
                 // Veranda: qty = depth (м)
@@ -2364,7 +2383,8 @@
         { id: 'none', label: 'Без подсказки' },
         { id: 'houseArea', label: 'Площадь дома' },
         { id: 'houseAndVeranda', label: 'Площадь дома + веранда' },
-        { id: 'perimeter', label: 'Периметр дома' }
+        { id: 'perimeter', label: 'Периметр дома' },
+        { id: 'perimeterAndVeranda', label: 'Периметр дома + веранда' }
     ];
 
     function getMatArray() {
@@ -2376,6 +2396,12 @@
             return r.price > 0 ? r.price.toLocaleString('ru-RU') + ' р/м²' : 'без доплаты (базовая)';
         }
         const unitLabel = r.unit === 'area' ? 'р/м²' : 'р/шт';
+        if (r.pricesByCategory && Object.keys(r.pricesByCategory).length > 0) {
+            const parts = ALL_CATEGORIES
+                .filter(c => r.pricesByCategory[c.id] != null)
+                .map(c => `${c.label}: ${r.pricesByCategory[c.id].toLocaleString('ru-RU')} ${unitLabel}`);
+            return parts.join(' · ');
+        }
         return r.price.toLocaleString('ru-RU') + ' ' + unitLabel;
     }
 
@@ -2444,7 +2470,27 @@
                     <label style="font-weight:600; font-size:13px;">Цена, р.${isAdd ? '' : '/м² (0 — без доплаты / базовая)'}</label>
                     <input type="number" id="matFieldPrice" value="${rec ? rec.price : 0}" min="0" step="10"
                         style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border-color,#ccc); margin-top:4px;">
+                    ${isAdd ? `<div style="font-size:12px; color:var(--text-muted); margin-top:4px;">Используется, если не задана разная цена по категориям ниже (или для категорий без своего значения).</div>` : ''}
                 </div>
+                ${isAdd ? `
+                <div>
+                    <label style="display:flex; align-items:center; gap:6px; font-size:13px; cursor:pointer;">
+                        <input type="checkbox" id="matFieldPerCatToggle" ${rec && rec.pricesByCategory ? 'checked' : ''}>
+                        Разная цена по категориям
+                    </label>
+                    <div id="matPerCatPriceWrap" style="display:${rec && rec.pricesByCategory ? 'flex' : 'none'}; flex-direction:column; gap:6px; margin-top:8px;">
+                        ${ALL_CATEGORIES.map(c => `
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <span style="width:110px; font-size:13px;">${c.label}:</span>
+                                <input type="number" class="matFieldCatPrice" data-cat="${c.id}" min="0" step="10"
+                                    value="${rec && rec.pricesByCategory && rec.pricesByCategory[c.id] != null ? rec.pricesByCategory[c.id] : ''}"
+                                    placeholder="как в общей цене"
+                                    style="flex:1; padding:6px 8px; border-radius:6px; border:1px solid var(--border-color,#ccc);">
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
                 ${isAdd ? `
                 <div>
                     <label style="font-weight:600; font-size:13px;">Единица измерения</label>
@@ -2487,6 +2533,12 @@
 
         document.getElementById('btnMatCancel').addEventListener('click', closeMatForm);
         document.getElementById('btnMatSave').addEventListener('click', saveMatForm);
+        const perCatToggle = document.getElementById('matFieldPerCatToggle');
+        if (perCatToggle) {
+            perCatToggle.addEventListener('change', () => {
+                document.getElementById('matPerCatPriceWrap').style.display = perCatToggle.checked ? 'flex' : 'none';
+            });
+        }
     }
 
     function closeMatForm() {
@@ -2504,6 +2556,19 @@
         if (!name) { alert('Введите название позиции.'); return; }
         if (cats.length === 0) { alert('Выберите хотя бы одну категорию.'); return; }
 
+        let pricesByCategory = null;
+        if (isAdd) {
+            const perCatToggle = document.getElementById('matFieldPerCatToggle');
+            if (perCatToggle && perCatToggle.checked) {
+                pricesByCategory = {};
+                document.querySelectorAll('.matFieldCatPrice').forEach(el => {
+                    const v = parseFloat(el.value);
+                    if (!isNaN(v)) pricesByCategory[el.getAttribute('data-cat')] = v;
+                });
+                if (Object.keys(pricesByCategory).length === 0) pricesByCategory = null;
+            }
+        }
+
         if (matEditingId) {
             const rec = getMatArray().find(r => r.id === matEditingId);
             rec.name = name;
@@ -2513,6 +2578,7 @@
                 rec.unit = document.getElementById('matFieldUnit').value;
                 rec.group = document.getElementById('matFieldGroup').value;
                 rec.hint = document.getElementById('matFieldHint').value;
+                rec.pricesByCategory = pricesByCategory;
             }
         } else {
             if (isAdd) {
@@ -2521,7 +2587,8 @@
                     id: newId, name, price, categories: cats,
                     unit: document.getElementById('matFieldUnit').value,
                     group: document.getElementById('matFieldGroup').value,
-                    hint: document.getElementById('matFieldHint').value
+                    hint: document.getElementById('matFieldHint').value,
+                    pricesByCategory
                 });
             } else {
                 const newId = 'int_custom_' + Date.now();
