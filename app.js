@@ -2,7 +2,7 @@
 
 (function () {
     // 0. Внешние данные (материалы), редактируемые через админ-панель и публикуемые в materials.json
-    let MATERIALS = { interior: [] };
+    let MATERIALS = { interior: [], floor: [], exterior: null, additions: [] };
 
     // Резервные данные на случай, если materials.json не загрузился (например, открыли файл локально без сервера)
     const MATERIALS_FALLBACK = {
@@ -21,6 +21,36 @@
             { id: "int_hz_mdf", name: "МДФ панели", categories: ["hozblok"], price: 500 },
             { id: "int_hz_pvc", name: "ПВХ панели", categories: ["hozblok"], price: 500 }
         ],
+        floor: [
+            { id: "floor_house_base", name: "Обрезная доска 25мм 1 сорт (базовая)", categories: ["house_high", "house_low"], price: 0 },
+            { id: "floor_cabin_base", name: "Обрезная доска 25мм (базовая)", categories: ["cabin", "hozblok"], price: 0 },
+            { id: "floor_cabin_osb12", name: "ОСБ 12мм", categories: ["cabin", "hozblok"], price: 500 },
+            { id: "floor_cabin_tongue28", name: "Шпунтованная доска 28мм", categories: ["cabin", "hozblok"], price: 1000 }
+        ],
+        exterior: {
+            houseHigh: [
+                { id: "ext_hh_vagonka", name: "Вагонка ВС", priceNoIns: 9500, priceWithIns: 12500 },
+                { id: "ext_hh_imitatsia", name: "Имитация бруса 'В'", priceNoIns: 10000, priceWithIns: 13000 }
+            ],
+            houseLow: {
+                noInsRate: 8500,
+                cheapBaseRate: 9500,
+                materials: [
+                    { id: "ext_hl_vagonka", name: "Вагонка ВС", mode: "base", price: 10000 },
+                    { id: "ext_hl_imitatsia", name: "Имитация бруса", mode: "base", price: 10000 },
+                    { id: "ext_hl_blockhouse", name: "Блок-хаус", mode: "addon", price: 1000 },
+                    { id: "ext_hl_proflist", name: "Профлист цветной", mode: "addon", price: 400 },
+                    { id: "ext_hl_osb", name: "ОСБ 12мм", mode: "addon", price: 300 }
+                ]
+            },
+            simple: [
+                { id: "ext_simple_vagonka", name: "Вагонка класса В", categories: ["cabin", "hozblok"], price: 0 },
+                { id: "ext_simple_imitatsia", name: "Имитация бруса", categories: ["cabin", "hozblok"], price: 250 },
+                { id: "ext_simple_blockhouse", name: "Блок-хаус", categories: ["cabin", "hozblok"], price: 1000 },
+                { id: "ext_simple_proflist", name: "Профлист цветной", categories: ["cabin", "hozblok"], price: 400 },
+                { id: "ext_simple_osb", name: "ОСБ 12мм", categories: ["cabin", "hozblok"], price: 300 }
+            ]
+        },
         additions: [
             { id: "win_lux_50_50_p", name: "Окно ПВХ 1-камерный 50х50 поворотное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 5500, hint: "none" },
             { id: "win_lux_50_50_po2", name: "Окно ПВХ 50х50 (2 камеры) поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 9000, hint: "none" },
@@ -108,7 +138,7 @@
             const res = await fetch('./materials.json', { cache: 'no-store' });
             if (!res.ok) throw new Error('HTTP ' + res.status);
             const data = await res.json();
-            if (!data || !Array.isArray(data.interior) || !Array.isArray(data.additions)) throw new Error('bad shape');
+            if (!data || !Array.isArray(data.interior) || !Array.isArray(data.floor) || !data.exterior || !Array.isArray(data.additions)) throw new Error('bad shape');
             MATERIALS = data;
         } catch (e) {
             console.warn('materials.json не загрузился, использую встроенные данные по умолчанию:', e);
@@ -120,7 +150,7 @@
             const draft = localStorage.getItem('mobistroy_materials_draft');
             if (draft) {
                 const parsed = JSON.parse(draft);
-                if (parsed && Array.isArray(parsed.interior) && Array.isArray(parsed.additions)) {
+                if (parsed && Array.isArray(parsed.interior) && Array.isArray(parsed.floor) && parsed.exterior && Array.isArray(parsed.additions)) {
                     MATERIALS = parsed;
                 }
             }
@@ -137,6 +167,30 @@
 
     function getInteriorRecord(id) {
         return MATERIALS.interior.find(r => r.id === id);
+    }
+
+    function getFloorOptions(category) {
+        return MATERIALS.floor.filter(r => r.categories.includes(category));
+    }
+
+    function getFloorRecord(id) {
+        return MATERIALS.floor.find(r => r.id === id);
+    }
+
+    function getExteriorHouseHighRecord(id) {
+        return MATERIALS.exterior.houseHigh.find(r => r.id === id);
+    }
+
+    function getExteriorHouseLowRecord(id) {
+        return MATERIALS.exterior.houseLow.materials.find(r => r.id === id);
+    }
+
+    function getExteriorSimpleOptions(category) {
+        return MATERIALS.exterior.simple.filter(r => r.categories.includes(category));
+    }
+
+    function getExteriorSimpleRecord(id) {
+        return MATERIALS.exterior.simple.find(r => r.id === id);
     }
 
     // Превращаем JSON-запись доп.опции в формат, который понимает остальной код (как SHARED_ADDITIONS)
@@ -205,6 +259,21 @@
         rate_int_mdf: 500,
         rate_int_pvc: 500,
         rate_ins_100: 450,
+        rate_ins_150: 3700,
+        rate_ins_200: 5600,
+        rate_ins_mix: 450,
+        premium_frame_150_hk: 2500,
+        premium_frame_200_hk: 4000,
+        premium_frame_100_kd: 2000,
+        premium_frame_150_kd: 4500,
+        premium_frame_200_kd: 6000,
+        rate_kd_150_real: 5700,
+        rate_kd_200_real: 7600,
+        price_frame_upgrade_normal: 2000,
+        price_frame_upgrade_no_ins: 2500,
+        price_wall_raise_100: 700,
+        price_wall_raise_150: 1000,
+        price_wall_raise_200: 1400,
         rate_ins_200_ceiling: 1000,
         rate_ins_200_floor: 1000,
         rate_floor_osb12: 500,
@@ -526,29 +595,22 @@
     function updateCustomDropdowns() {
         const type = state.customType;
         
-        // 1. Exterior Dropdown
+        // 1. Exterior Dropdown (данные из materials.json / MATERIALS.exterior — редактируется в админке)
         let extHTML = '';
         if (type === 'house_high') {
-            extHTML = `
-                <option value="none">Вагонка 'ВС' (базовая)</option>
-                <option value="imitation_a">Имитация бруса 'В' (базовая)</option>
-            `;
+            extHTML = MATERIALS.exterior.houseHigh.map(r =>
+                `<option value="${r.id}">${r.name} (${r.priceNoIns.toLocaleString('ru-RU')}/${r.priceWithIns.toLocaleString('ru-RU')} р/м²)</option>`
+            ).join('\n');
         } else if (type === 'house_low') {
-            extHTML = `
-                <option value="none">Вагонка 'ВС' (базовая, включена)</option>
-                <option value="imitation">Имитация бруса (+500 р/м²)</option>
-                <option value="blockhouse">Блок-хаус (+1000 р/м²)</option>
-                <option value="proflist">Профлист цветной (+400 р/м²)</option>
-                <option value="osb">ОСБ 12 мм (+300 р/м²)</option>
-            `;
+            extHTML = MATERIALS.exterior.houseLow.materials.map(r => {
+                const label = r.mode === 'base' ? `${r.name} (${r.price.toLocaleString('ru-RU')} р/м²)` : `${r.name} (+${r.price.toLocaleString('ru-RU')} р/м²)`;
+                return `<option value="${r.id}">${label}</option>`;
+            }).join('\n');
         } else { // cabin, hozblok
-            extHTML = `
-                <option value="none">Вагонка класса В (базовая, включена)</option>
-                <option value="imitation">Имитация бруса (+250 р/м²)</option>
-                <option value="blockhouse">Блок-хаус (+1000 р/м²)</option>
-                <option value="proflist">Профлист цветной (+400 р/м²)</option>
-                <option value="osb">ОСБ 12 мм (+300 р/м²)</option>
-            `;
+            extHTML = getExteriorSimpleOptions(type).map(r => {
+                const label = r.price > 0 ? `${r.name} (+${r.price.toLocaleString('ru-RU')} р/м²)` : `${r.name} (базовая, включена)`;
+                return `<option value="${r.id}">${label}</option>`;
+            }).join('\n');
         }
         
         const prevExt = selCustomExterior.value;
@@ -556,7 +618,7 @@
         if (selCustomExterior.querySelector(`option[value="${prevExt}"]`)) {
             selCustomExterior.value = prevExt;
         } else {
-            selCustomExterior.value = 'none';
+            selCustomExterior.value = selCustomExterior.options.length ? selCustomExterior.options[0].value : '';
         }
         state.selCustomExterior = selCustomExterior.value;
 
@@ -576,31 +638,44 @@
         }
         state.selCustomInterior = selCustomInterior.value;
 
-        // 3. Insulation Dropdown
+        // 3. Insulation Dropdown (цены в подписях считаются динамически из "Цены", а не зашиты текстом)
+        const p150 = customRates.rate_ins_150 || 3700;
+        const p200 = customRates.rate_ins_200 || 5600;
+        const pr150hk = customRates.premium_frame_150_hk || 2500;
+        const pr200hk = customRates.premium_frame_200_hk || 4000;
+        const pr100kd = customRates.premium_frame_100_kd || 2000;
+        const pr150kd = customRates.premium_frame_150_kd || 4500;
+        const pr200kd = customRates.premium_frame_200_kd || 6000;
+        const pKd150Real = customRates.rate_kd_150_real || 5700;
+        const pKd200Real = customRates.rate_kd_200_real || 7600;
+        const fmt = n => n.toLocaleString('ru-RU');
+
         let insHTML = '';
         if (type === 'house_high') {
+            const hhVagonka = MATERIALS.exterior.houseHigh.find(r => r.id === 'ext_hh_vagonka') || MATERIALS.exterior.houseHigh[0];
+            const hhImitatsia = MATERIALS.exterior.houseHigh.find(r => r.id === 'ext_hh_imitatsia') || MATERIALS.exterior.houseHigh[1] || hhVagonka;
             insHTML = `
                 <option value="100_base_min">100 мм мин. вата (базовая, включена)</option>
                 <option value="100">100 мм базальтовая плита (по формуле)</option>
-                <option value="150">150 мм базальтовая плита (+3 700 р/м²)</option>
-                <option value="200">200 мм базальтовая плита (+5 600 р/м²)</option>
+                <option value="150">150 мм базальтовая плита (+${fmt(p150)} р/м²)</option>
+                <option value="200">200 мм базальтовая плита (+${fmt(p200)} р/м²)</option>
                 <option value="mix_100">Утепление MIX: каркас 50/100 (баз. плита стены + мин. вата пол/потолок)</option>
-                <option value="cold">Каркас 50/100 ХК, без утепления (9 500 р/м² Вагонка ВС / 10 000 р/м² Имитация В)</option>
-                <option value="frame_150_hk">Каркас 50/150 ХК, без утепления (+2 500 р/м² к цене без утепления, с верандой)</option>
-                <option value="frame_200_hk">Каркас 50/200 ХК, без утепления (+4 000 р/м² к цене без утепления, с верандой)</option>
-                <option value="frame_100_kd">Каркас 50/100 "камерная сушка" ХК, без утепления (+2 000 р/м² к цене без утепления)</option>
-                <option value="frame_150_kd">Каркас 50/150 "камерная сушка" ХК, без утепления (+4 500 р/м² к цене без утепления, с верандой)</option>
-                <option value="frame_200_kd">Каркас 50/200 "камерная сушка" ХК, без утепления (+6 000 р/м² к цене без утепления, с верандой)</option>
-                <option value="kd_100_real">Каркас 50/100 "камерная сушка" + утепление 100мм баз. плита (по формуле + 2 000 р/м² каркас, с верандой)</option>
-                <option value="kd_150_real">Каркас 50/150 "камерная сушка" + утепление 150мм баз. плита (+5 700 р/м², с верандой)</option>
-                <option value="kd_200_real">Каркас 50/200 "камерная сушка" + утепление 200мм баз. плита (+7 600 р/м², с верандой)</option>
+                <option value="cold">Каркас 50/100 ХК, без утепления (${fmt(hhVagonka.priceNoIns)} р/м² Вагонка ВС / ${fmt(hhImitatsia.priceNoIns)} р/м² Имитация В)</option>
+                <option value="frame_150_hk">Каркас 50/150 ХК, без утепления (+${fmt(pr150hk)} р/м² к цене без утепления, с верандой)</option>
+                <option value="frame_200_hk">Каркас 50/200 ХК, без утепления (+${fmt(pr200hk)} р/м² к цене без утепления, с верандой)</option>
+                <option value="frame_100_kd">Каркас 50/100 "камерная сушка" ХК, без утепления (+${fmt(pr100kd)} р/м² к цене без утепления)</option>
+                <option value="frame_150_kd">Каркас 50/150 "камерная сушка" ХК, без утепления (+${fmt(pr150kd)} р/м² к цене без утепления, с верандой)</option>
+                <option value="frame_200_kd">Каркас 50/200 "камерная сушка" ХК, без утепления (+${fmt(pr200kd)} р/м² к цене без утепления, с верандой)</option>
+                <option value="kd_100_real">Каркас 50/100 "камерная сушка" + утепление 100мм баз. плита (по формуле + ${fmt(pr100kd)} р/м² каркас, с верандой)</option>
+                <option value="kd_150_real">Каркас 50/150 "камерная сушка" + утепление 150мм баз. плита (+${fmt(pKd150Real)} р/м², с верандой)</option>
+                <option value="kd_200_real">Каркас 50/200 "камерная сушка" + утепление 200мм баз. плита (+${fmt(pKd200Real)} р/м², с верандой)</option>
             `;
         } else if (type === 'cabin') {
             insHTML = `
                 <option value="50_min_wool">50 мм мин. вата (базовая, включена)</option>
-                <option value="100_min_wool">100 мм мин. вата (+550 р/м²)</option>
+                <option value="100_min_wool">100 мм мин. вата (+${fmt(customRates.rate_ins_100_min_wool || 550)} р/м²)</option>
                 <option value="100">100 мм базальтовая плита (по формуле)</option>
-                <option value="150">150 мм базальтовая плита (+3 700 р/м²)</option>
+                <option value="150">150 мм базальтовая плита (+${fmt(p150)} р/м²)</option>
                 <option value="0">Без утепления</option>
             `;
         } else if (type === 'hozblok') {
@@ -608,21 +683,22 @@
                 <option value="0">Без утепления (включено)</option>
             `;
         } else {
+            const hlNoIns = MATERIALS.exterior.houseLow.noInsRate;
             insHTML = `
                 <option value="100_base_min">100 мм мин. вата (в базовой)</option>
                 <option value="100">100 мм базальтовая плита (по формуле)</option>
-                <option value="150">150 мм базальтовая плита (+3 700 р/м²)</option>
-                <option value="200">200 мм базальтовая плита (+5 600 р/м²)</option>
+                <option value="150">150 мм базальтовая плита (+${fmt(p150)} р/м²)</option>
+                <option value="200">200 мм базальтовая плита (+${fmt(p200)} р/м²)</option>
                 <option value="mix_100">Утепление MIX: каркас 50/100 (баз. плита стены + мин. вата пол/потолок)</option>
-                <option value="0">Каркас 50/100 ХК, без утепления (8 500 р/м²)</option>
-                <option value="frame_150_hk">Каркас 50/150 ХК, без утепления (11 000 р/м², с верандой)</option>
-                <option value="frame_200_hk">Каркас 50/200 ХК, без утепления (12 500 р/м², с верандой)</option>
-                <option value="frame_100_kd">Каркас 50/100 "камерная сушка" ХК, без утепления (10 500 р/м², веранда 10 000 р/м²)</option>
-                <option value="frame_150_kd">Каркас 50/150 "камерная сушка" ХК, без утепления (13 000 р/м², с верандой)</option>
-                <option value="frame_200_kd">Каркас 50/200 "камерная сушка" ХК, без утепления (14 500 р/м², с верандой)</option>
-                <option value="kd_100_real">Каркас 50/100 "камерная сушка" + утепление 100мм баз. плита (по формуле + 2 000 р/м² каркас, с верандой)</option>
-                <option value="kd_150_real">Каркас 50/150 "камерная сушка" + утепление 150мм баз. плита (+5 700 р/м², с верандой)</option>
-                <option value="kd_200_real">Каркас 50/200 "камерная сушка" + утепление 200мм баз. плита (+7 600 р/м², с верандой)</option>
+                <option value="0">Каркас 50/100 ХК, без утепления (${fmt(hlNoIns)} р/м²)</option>
+                <option value="frame_150_hk">Каркас 50/150 ХК, без утепления (${fmt(hlNoIns + pr150hk)} р/м², с верандой)</option>
+                <option value="frame_200_hk">Каркас 50/200 ХК, без утепления (${fmt(hlNoIns + pr200hk)} р/м², с верандой)</option>
+                <option value="frame_100_kd">Каркас 50/100 "камерная сушка" ХК, без утепления (${fmt(hlNoIns + pr100kd)} р/м², веранда ${fmt(8000 + pr100kd)} р/м²)</option>
+                <option value="frame_150_kd">Каркас 50/150 "камерная сушка" ХК, без утепления (${fmt(hlNoIns + pr150kd)} р/м², с верандой)</option>
+                <option value="frame_200_kd">Каркас 50/200 "камерная сушка" ХК, без утепления (${fmt(hlNoIns + pr200kd)} р/м², с верандой)</option>
+                <option value="kd_100_real">Каркас 50/100 "камерная сушка" + утепление 100мм баз. плита (по формуле + ${fmt(pr100kd)} р/м² каркас, с верандой)</option>
+                <option value="kd_150_real">Каркас 50/150 "камерная сушка" + утепление 150мм баз. плита (+${fmt(pKd150Real)} р/м², с верандой)</option>
+                <option value="kd_200_real">Каркас 50/200 "камерная сушка" + утепление 200мм баз. плита (+${fmt(pKd200Real)} р/м², с верандой)</option>
             `;
         }
         
@@ -643,26 +719,19 @@
         }
         state.selCustomInsulation = selCustomInsulation.value;
 
-        // 4. Floor Dropdown
-        let floorHTML = '';
-        if (type === 'house_high' || type === 'house_low') {
-            floorHTML = `
-                <option value="none">Обрезная доска 25мм 1 сорт (базовая)</option>
-            `;
-        } else {
-            floorHTML = `
-                <option value="none">Обрезная доска 25мм (базовая)</option>
-                <option value="osb12">ОСБ 12мм (+500 р/м²)</option>
-                <option value="tongue28">Шпунтованная доска 28мм (+1000 р/м²)</option>
-            `;
-        }
+        // 4. Floor Dropdown (данные из materials.json / MATERIALS.floor — редактируется в админке)
+        const floorOptions = getFloorOptions(type);
+        let floorHTML = floorOptions.map(r => {
+            const label = r.price > 0 ? `${r.name} (+${r.price.toLocaleString('ru-RU')} р/м²)` : r.name;
+            return `<option value="${r.id}">${label}</option>`;
+        }).join('\n');
         
         const prevFloor = selCustomFloor.value;
         selCustomFloor.innerHTML = floorHTML;
         if (selCustomFloor.querySelector(`option[value="${prevFloor}"]`)) {
             selCustomFloor.value = prevFloor;
         } else {
-            selCustomFloor.value = 'none';
+            selCustomFloor.value = floorOptions.length ? floorOptions[0].id : '';
         }
         state.selCustomFloor = selCustomFloor.value;
     }
@@ -1223,19 +1292,18 @@
             const isHouseNoIns =
                 (state.customType === 'house_high' && (state.selCustomInsulation === 'cold' || state.selCustomInsulation === 'frame_100_kd')) ||
                 (state.customType === 'house_low' && (state.selCustomInsulation === '0' || state.selCustomInsulation === 'frame_100_kd'));
-            if (isHouseNoIns) return 2500;
+            if (isHouseNoIns) return customRates.price_frame_upgrade_no_ins || 2500;
         }
-        return 2000;
+        return customRates.price_frame_upgrade_normal || 2000;
     }
 
     // Поднятие высоты стен на 20 см: цена зависит от толщины каркаса
-    // (50/100 ХК = 700, 50/150 ХК = 1000, 50/200 ХК = 1400 р/м²; для остальных вариантов утепления — 700 р/м² по умолчанию)
     function getWallHeightRaisePrice() {
         if (state.calculatorMode === 'custom' && (state.customType === 'house_high' || state.customType === 'house_low')) {
-            if (['frame_150_hk', 'frame_150_kd', 'kd_150_real'].includes(state.selCustomInsulation)) return 1000;
-            if (['frame_200_hk', 'frame_200_kd', 'kd_200_real'].includes(state.selCustomInsulation)) return 1400;
+            if (['frame_150_hk', 'frame_150_kd', 'kd_150_real'].includes(state.selCustomInsulation)) return customRates.price_wall_raise_150 || 1000;
+            if (['frame_200_hk', 'frame_200_kd', 'kd_200_real'].includes(state.selCustomInsulation)) return customRates.price_wall_raise_200 || 1400;
         }
-        return 700;
+        return customRates.price_wall_raise_100 || 700;
     }
 
     // Единая проверка применимости доп.опции для текущего выбора (тип дома/бытовки, утепление, крыша и т.д.).
@@ -1360,56 +1428,54 @@
             let baseRate = 8000;
             let framePremiumRate = 0; // надбавка за ширину каркаса (50/150, 50/200) — считается от площади дом+веранда отдельно
             if (state.customType === 'house_low') {
+                const hlExt = getExteriorHouseLowRecord(state.selCustomExterior);
+                const hlNoInsRate = MATERIALS.exterior.houseLow.noInsRate;
+                const hlBaseRate = (hlExt && hlExt.mode === 'base') ? hlExt.price : MATERIALS.exterior.houseLow.cheapBaseRate;
                 if (state.selCustomInsulation === '0') {
-                    baseRate = 8500;
+                    baseRate = hlNoInsRate;
                 } else if (state.selCustomInsulation === 'frame_100_kd') {
-                    baseRate = 8500;
-                    framePremiumRate = 2000; // камерная сушка 50/100 = база без утепления + 2000 (площадь дом+веранда)
+                    baseRate = hlNoInsRate;
+                    framePremiumRate = customRates.premium_frame_100_kd || 2000;
                 } else if (state.selCustomInsulation === 'frame_150_hk') {
-                    baseRate = 8500;
-                    framePremiumRate = 2500;
+                    baseRate = hlNoInsRate;
+                    framePremiumRate = customRates.premium_frame_150_hk || 2500;
                 } else if (state.selCustomInsulation === 'frame_200_hk') {
-                    baseRate = 8500;
-                    framePremiumRate = 4000;
+                    baseRate = hlNoInsRate;
+                    framePremiumRate = customRates.premium_frame_200_hk || 4000;
                 } else if (state.selCustomInsulation === 'frame_150_kd') {
-                    baseRate = 8500;
-                    framePremiumRate = 4500;
+                    baseRate = hlNoInsRate;
+                    framePremiumRate = customRates.premium_frame_150_kd || 4500;
                 } else if (state.selCustomInsulation === 'frame_200_kd') {
-                    baseRate = 8500;
-                    framePremiumRate = 6000;
-                } else if (state.selCustomExterior === 'none' || state.selCustomExterior === 'imitation') {
-                    // Наружная: Вагонка ВС ИЛИ Имитация бруса => 10000 р/м², независимо от внутренней
-                    baseRate = customRates.rate_house_low_lining || 10000;
+                    baseRate = hlNoInsRate;
+                    framePremiumRate = customRates.premium_frame_200_kd || 6000;
                 } else {
-                    // Блок-хаус / Профлист / ОСБ => 9500 р/м²
-                    baseRate = customRates.rate_house_low_osb || 9500;
+                    // Реальное утепление: "своя база" материала (Вагонка ВС/Имитация бруса), либо база для
+                    // доплатных материалов (Блок-хаус/Профлист/ОСБ) — сама доплата считается отдельно в extCost.
+                    baseRate = hlBaseRate;
                 }
             } else if (state.customType === 'house_high') {
-                // Без утепления (база для всех каркасных ХК-вариантов): Вагонка ВС => 9500, Имитация В => 10000
-                const noInsBaseHigh = (state.selCustomExterior === 'imitation_a') ? 10000 : 9500;
+                const hhExt = getExteriorHouseHighRecord(state.selCustomExterior) || MATERIALS.exterior.houseHigh[0];
+                const noInsBaseHigh = hhExt ? hhExt.priceNoIns : 9500;
                 if (state.selCustomInsulation === 'cold') {
                     baseRate = noInsBaseHigh;
                 } else if (state.selCustomInsulation === 'frame_100_kd') {
                     baseRate = noInsBaseHigh;
-                    framePremiumRate = 2000; // камерная сушка = база без утепления + 2000 (площадь дом+веранда)
+                    framePremiumRate = customRates.premium_frame_100_kd || 2000;
                 } else if (state.selCustomInsulation === 'frame_150_hk') {
                     baseRate = noInsBaseHigh;
-                    framePremiumRate = 2500;
+                    framePremiumRate = customRates.premium_frame_150_hk || 2500;
                 } else if (state.selCustomInsulation === 'frame_200_hk') {
                     baseRate = noInsBaseHigh;
-                    framePremiumRate = 4000;
+                    framePremiumRate = customRates.premium_frame_200_hk || 4000;
                 } else if (state.selCustomInsulation === 'frame_150_kd') {
                     baseRate = noInsBaseHigh;
-                    framePremiumRate = 4500;
+                    framePremiumRate = customRates.premium_frame_150_kd || 4500;
                 } else if (state.selCustomInsulation === 'frame_200_kd') {
                     baseRate = noInsBaseHigh;
-                    framePremiumRate = 6000;
-                } else if (state.selCustomExterior === 'imitation_a') {
-                    // Наружная: Имитация бруса 'В' + внутренняя: Вагонка ВС => 13000 р/м²
-                    baseRate = 13000;
+                    framePremiumRate = customRates.premium_frame_200_kd || 6000;
                 } else {
-                    // Наружная: Вагонка ВС (базовая) => 12500 р/м²
-                    baseRate = customRates.rate_house_high || 12500;
+                    // Реальное утепление: базовая ставка целиком берётся из выбранной наружной отделки
+                    baseRate = hhExt ? hhExt.priceWithIns : 12500;
                 }
             } else {
                 baseRate = customRates[`rate_${state.customType}`] || 8000;
@@ -1436,17 +1502,17 @@
 
             // Veranda is now handled as an addition (доп. опция), no separate verandaCost here
 
-            // Exterior Finish Upgrade
+            // Exterior Finish Upgrade (доплата — только для дома низкого с материалом в режиме "Доплата",
+            // и для бытовки/хозблока; у дома высокого и у "базовых" материалов дома низкого цена уже в базовой ставке)
             let extCost = 0;
-            if (state.selCustomExterior !== 'none' && state.customType !== 'house_high') {
-                // For house_high, the exterior choice (Вагонка ВС / Имитация бруса 'В') is priced
-                // entirely via the base rate (12500 / 13000 р/м²), no separate addon here.
-                let rate;
-                if (state.customType === 'house_low' && state.selCustomExterior === 'imitation') {
-                    rate = 500; // Имитация бруса (наружная, дом низкий) — отдельная ставка от бытовок/хозблоков
-                } else {
-                    rate = customRates[`rate_ext_${state.selCustomExterior}`] || 0;
+            if (state.customType === 'house_low') {
+                const hlExt = getExteriorHouseLowRecord(state.selCustomExterior);
+                if (hlExt && hlExt.mode === 'addon') {
+                    extCost = extWallArea * hlExt.price;
                 }
+            } else if (state.customType === 'cabin' || state.customType === 'hozblok') {
+                const simpleExt = getExteriorSimpleRecord(state.selCustomExterior);
+                const rate = simpleExt ? (simpleExt.price || 0) : 0;
                 extCost = extWallArea * rate;
             }
 
@@ -1462,36 +1528,40 @@
             }
             floorSum += (extCost + intCost); // Group as finish upgrades
 
-            // Floor material Upgrade
+            // Floor material Upgrade (цена берётся из MATERIALS.floor — редактируется в админке)
             let floorMatCost = 0;
-            if (state.selCustomFloor !== 'none') {
-                const rate = customRates[`rate_floor_${state.selCustomFloor}`] || 0;
-                floorMatCost = (area + getVerandaArea()) * rate;
-                floorSum += floorMatCost;
+            {
+                const floorRecord = getFloorRecord(state.selCustomFloor);
+                const rate = floorRecord ? (floorRecord.price || 0) : 0;
+                if (rate > 0) {
+                    floorMatCost = (area + getVerandaArea()) * rate;
+                    floorSum += floorMatCost;
+                }
             }
 
             // Insulation Upgrade
             if (state.selCustomInsulation === '100') {
-                const insArea = (state.customWidth * 2 * 2.5) + (state.customLength * 2 * 2.5) + area + area;
+                // Формула по PDF заказчика: площадь стен = Ш×2×2.5 + Д×2×2.5 + 2×(Ш+Д) — только стены, без пола/потолка
+                const insArea = (state.customWidth * 2 * 2.5) + (state.customLength * 2 * 2.5) + 2 * (state.customWidth + state.customLength);
                 insulationSum = insArea * (customRates.rate_ins_100 || 450);
             } else if (state.selCustomInsulation === 'kd_100_real') {
-                const insArea = (state.customWidth * 2 * 2.5) + (state.customLength * 2 * 2.5) + area + area;
-                // Утепление по обычной формуле + надбавка за каркас "камерная сушка" (+2000 р/м² от площади дома+веранды)
-                insulationSum = insArea * (customRates.rate_ins_100 || 450) + 2000 * (area + getVerandaArea());
+                const insArea = (state.customWidth * 2 * 2.5) + (state.customLength * 2 * 2.5) + 2 * (state.customWidth + state.customLength);
+                // Утепление по обычной формуле + надбавка за каркас "камерная сушка" (площадь дома+веранды)
+                insulationSum = insArea * (customRates.rate_ins_100 || 450) + (customRates.premium_frame_100_kd || 2000) * (area + getVerandaArea());
             } else if (state.selCustomInsulation === '100_min_wool') {
                 insulationSum = area * (customRates.rate_ins_100_min_wool || 550);
             } else if (state.selCustomInsulation === '150') {
-                insulationSum = (area + getVerandaArea()) * 3700;
+                insulationSum = (area + getVerandaArea()) * (customRates.rate_ins_150 || 3700);
             } else if (state.selCustomInsulation === '200') {
-                insulationSum = (area + getVerandaArea()) * 5600;
+                insulationSum = (area + getVerandaArea()) * (customRates.rate_ins_200 || 5600);
             } else if (state.selCustomInsulation === 'kd_150_real') {
-                insulationSum = (area + getVerandaArea()) * 5700; // 1200 (баз. утепление) + 4500 (надбавка камерной сушки)
+                insulationSum = (area + getVerandaArea()) * (customRates.rate_kd_150_real || 5700);
             } else if (state.selCustomInsulation === 'kd_200_real') {
-                insulationSum = (area + getVerandaArea()) * 7600; // 1600 (баз. утепление) + 6000 (надбавка камерной сушки)
+                insulationSum = (area + getVerandaArea()) * (customRates.rate_kd_200_real || 7600);
             } else if (state.selCustomInsulation === 'mix_100') {
-                // Утепление MIX: каркас 50/100, баз. плита стены + мин. вата пол/потолок — 450 р/м² площади стен
-                const wallAreaMix = (state.customWidth * 2 * 2.5) + (state.customLength * 2 * 2.5);
-                insulationSum = wallAreaMix * 450;
+                // Утепление MIX: каркас 50/100, баз. плита стены + мин. вата пол/потолок (площадь стен по формуле PDF)
+                const wallAreaMix = (state.customWidth * 2 * 2.5) + (state.customLength * 2 * 2.5) + 2 * (state.customWidth + state.customLength);
+                insulationSum = wallAreaMix * (customRates.rate_ins_mix || 450);
             } else if (state.selCustomInsulation === '200_ceiling') {
                 insulationSum = area * (customRates.rate_ins_200_ceiling || 1000);
             } else if (state.selCustomInsulation === '200_floor') {
@@ -1865,15 +1935,18 @@
                 pvc: 'ПВХ панели',
                 imitation: 'Имитация бруса "В"'
             };
-            const floorNames = {
-                none: 'Обрезная доска 25мм',
-                osb12: 'ОСБ 12мм',
-                tongue28: 'Шпунтованная доска 28мм'
-            };
-            
-            text += `  - Снаружи: ${extNames[state.selCustomExterior] || 'Базовая'}\n`;
+            function getExteriorRecordForText() {
+                if (state.customType === 'house_high') return getExteriorHouseHighRecord(state.selCustomExterior);
+                if (state.customType === 'house_low') return getExteriorHouseLowRecord(state.selCustomExterior);
+                if (state.customType === 'cabin' || state.customType === 'hozblok') return getExteriorSimpleRecord(state.selCustomExterior);
+                return null;
+            }
+            const extRecForText = getExteriorRecordForText();
+            text += `  - Снаружи: ${extRecForText ? extRecForText.name : 'Базовая'}\n`;
             const intRecForText = getInteriorRecord(state.selCustomInterior);
             text += `  - Внутри: ${intRecForText ? intRecForText.name : 'Базовая'}\n`;
+            const floorRecForText = getFloorRecord(state.selCustomFloor);
+            text += `  - Пол: ${floorRecForText ? floorRecForText.name : 'Базовая'}\n`;
             let insText = '';
             if (state.selCustomInsulation === 'cold') {
                 insText = 'Холодный контур';
@@ -1891,7 +1964,6 @@
                 insText = state.selCustomInsulation + ' мм базальтовая плита';
             }
             text += `  - Утепление: ${insText}\n`;
-            text += `  - Пол: ${floorNames[state.selCustomFloor] || 'Базовая'}\n`;
             
             // Veranda is now in доп. опции — listed in selectedAdditionsText below
         }
@@ -1952,33 +2024,28 @@
             adminFormFields.innerHTML = `<h3>Редактирование тарифов конструктора (руб. за м²)</h3>`;
             
             const fields = [
-                { label: 'Тариф за Дом высокий (м² по полу)', key: 'rate_house_high', val: customRates.rate_house_high },
-                { label: 'Тариф за Дом низкий ОСБ (м² по полу)', key: 'rate_house_low_osb', val: customRates.rate_house_low_osb },
-                { label: 'Тариф за Дом низкий Вагонка (м² по полу)', key: 'rate_house_low_lining', val: customRates.rate_house_low_lining },
                 { label: 'Тариф за Бытовку (м² по полу)', key: 'rate_cabin', val: customRates.rate_cabin },
-                { label: 'Бытовка Внутрянка: Вагонка ВС (м²)', key: 'rate_int_cabin_lining', val: customRates.rate_int_cabin_lining || 120 },
-                { label: 'Бытовка Внутрянка: Имитация бруса В (м²)', key: 'rate_int_cabin_imitation', val: customRates.rate_int_cabin_imitation || 370 },
                 { label: 'Тариф за Хозблок (м² по полу)', key: 'rate_hozblok', val: customRates.rate_hozblok },
                 { label: 'Тариф за Блок-контейнер (м² по полу)', key: 'rate_container', val: customRates.rate_container },
-                { label: 'Стоимость веранды (м² веранды)', key: 'rate_veranda', val: customRates.rate_veranda },
-                { label: 'Наружка: Имитация бруса (м² стен)', key: 'rate_ext_imitation', val: customRates.rate_ext_imitation },
-                { label: 'Наружка: Блок-хаус (м² стен)', key: 'rate_ext_blockhouse', val: customRates.rate_ext_blockhouse },
-                { label: 'Наружка: Профлист цветной (м² стен)', key: 'rate_ext_proflist', val: customRates.rate_ext_proflist },
-                { label: 'Наружка: ОСБ 12 мм (м² стен)', key: 'rate_ext_osb', val: customRates.rate_ext_osb },
-                { label: 'Внутрянка: ОСБ 9 мм (м² стен)', key: 'rate_int_osb', val: customRates.rate_int_osb },
-                { label: 'Внутрянка: Вагонка В (м² стен)', key: 'rate_int_lining', val: customRates.rate_int_lining },
-                { label: 'Внутрянка: МДФ панели (м² стен)', key: 'rate_int_mdf', val: customRates.rate_int_mdf },
-                { label: 'Внутрянка: ПВХ панели (м² стен)', key: 'rate_int_pvc', val: customRates.rate_int_pvc },
                 { label: 'Утепление 100 мм базальтовая плита (м² по формуле)', key: 'rate_ins_100', val: customRates.rate_ins_100 },
+                { label: 'Утепление 150 мм базальтовая плита (м², с верандой)', key: 'rate_ins_150', val: customRates.rate_ins_150 || 3700 },
+                { label: 'Утепление 200 мм базальтовая плита (м², с верандой)', key: 'rate_ins_200', val: customRates.rate_ins_200 || 5600 },
+                { label: 'Утепление MIX (м² стен)', key: 'rate_ins_mix', val: customRates.rate_ins_mix || 450 },
+                { label: 'Надбавка каркас 50/150 ХК (м², с верандой)', key: 'premium_frame_150_hk', val: customRates.premium_frame_150_hk || 2500 },
+                { label: 'Надбавка каркас 50/200 ХК (м², с верандой)', key: 'premium_frame_200_hk', val: customRates.premium_frame_200_hk || 4000 },
+                { label: 'Надбавка каркас 50/100 "камерная сушка" (м², с верандой)', key: 'premium_frame_100_kd', val: customRates.premium_frame_100_kd || 2000 },
+                { label: 'Надбавка каркас 50/150 "камерная сушка" (м², с верандой)', key: 'premium_frame_150_kd', val: customRates.premium_frame_150_kd || 4500 },
+                { label: 'Надбавка каркас 50/200 "камерная сушка" (м², с верандой)', key: 'premium_frame_200_kd', val: customRates.premium_frame_200_kd || 6000 },
+                { label: 'Каркас 50/150 КС + утепление 150мм (м², с верандой)', key: 'rate_kd_150_real', val: customRates.rate_kd_150_real || 5700 },
+                { label: 'Каркас 50/200 КС + утепление 200мм (м², с верандой)', key: 'rate_kd_200_real', val: customRates.rate_kd_200_real || 7600 },
+                { label: 'Замена каркаса 50/100→50/150 (с реальным утеплением), р/м²', key: 'price_frame_upgrade_normal', val: customRates.price_frame_upgrade_normal || 2000 },
+                { label: 'Замена каркаса 50/100→50/150 (без утепления), р/м²', key: 'price_frame_upgrade_no_ins', val: customRates.price_frame_upgrade_no_ins || 2500 },
+                { label: 'Поднятие стен +20см, каркас 50/100, р/м²', key: 'price_wall_raise_100', val: customRates.price_wall_raise_100 || 700 },
+                { label: 'Поднятие стен +20см, каркас 50/150, р/м²', key: 'price_wall_raise_150', val: customRates.price_wall_raise_150 || 1000 },
+                { label: 'Поднятие стен +20см, каркас 50/200, р/м²', key: 'price_wall_raise_200', val: customRates.price_wall_raise_200 || 1400 },
                 { label: 'Утепление 100 мм мин. вата бытовка (м² пола)', key: 'rate_ins_100_min_wool', val: customRates.rate_ins_100_min_wool || 550 },
                 { label: 'Утепление 200 мм потолок (м²)', key: 'rate_ins_200_ceiling', val: customRates.rate_ins_200_ceiling || 1000 },
                 { label: 'Утепление 200 мм пол (м²)', key: 'rate_ins_200_floor', val: customRates.rate_ins_200_floor || 1000 },
-                { label: 'Пол: ОСБ 12 мм (м² пола)', key: 'rate_floor_osb12', val: customRates.rate_floor_osb12 },
-                { label: 'Пол: ОСБ 15 мм (м² пола)', key: 'rate_floor_osb15', val: customRates.rate_floor_osb15 || 700 },
-                { label: 'Пол: ОСБ 18 мм (м² пола)', key: 'rate_floor_osb18', val: customRates.rate_floor_osb18 },
-                { label: 'Пол: Шпунт 28 мм (м² пола)', key: 'rate_floor_tongue28', val: customRates.rate_floor_tongue28 },
-                { label: 'Пол: Шпунт 35 мм (м² пола)', key: 'rate_floor_tongue35', val: customRates.rate_floor_tongue35 || 1300 },
-                { label: 'Пол: Шпунт 36 мм (м² пола)', key: 'rate_floor_tongue36', val: customRates.rate_floor_tongue36 },
                 { label: 'Стоимость сборки (м² пола)', key: 'rate_assembly', val: customRates.rate_assembly },
                 { label: 'Доставка: Базовая дистанция (км)', key: 'delivery_base_dist', val: customRates.delivery_base_dist },
                 { label: 'Доставка: Минимальная цена (руб)', key: 'delivery_base_price', val: customRates.delivery_base_price },
@@ -2300,6 +2367,21 @@
                     rate_int_pvc: 500,
                     rate_ins_100: 450,
                     rate_ins_100_min_wool: 550,
+                    rate_ins_150: 3700,
+                    rate_ins_200: 5600,
+                    rate_ins_mix: 450,
+                    premium_frame_150_hk: 2500,
+                    premium_frame_200_hk: 4000,
+                    premium_frame_100_kd: 2000,
+                    premium_frame_150_kd: 4500,
+                    premium_frame_200_kd: 6000,
+                    rate_kd_150_real: 5700,
+                    rate_kd_200_real: 7600,
+                    price_frame_upgrade_normal: 2000,
+                    price_frame_upgrade_no_ins: 2500,
+                    price_wall_raise_100: 700,
+                    price_wall_raise_150: 1000,
+                    price_wall_raise_200: 1400,
                     rate_ins_200_ceiling: 1000,
                     rate_ins_200_floor: 1000,
                     rate_floor_osb12: 500,
@@ -2388,11 +2470,14 @@
     ];
 
     function getMatArray() {
-        return matActiveTab === 'interior' ? MATERIALS.interior : MATERIALS.additions;
+        if (matActiveTab === 'interior') return MATERIALS.interior;
+        if (matActiveTab === 'floor') return MATERIALS.floor;
+        if (matActiveTab === 'exterior') return MATERIALS.exterior.simple; // используется только для Бытовки/Хозблока
+        return MATERIALS.additions;
     }
 
     function priceLabel(r) {
-        if (matActiveTab === 'interior') {
+        if (matActiveTab === 'interior' || matActiveTab === 'floor') {
             return r.price > 0 ? r.price.toLocaleString('ru-RU') + ' р/м²' : 'без доплаты (базовая)';
         }
         const unitLabel = r.unit === 'area' ? 'р/м²' : 'р/шт';
@@ -2406,6 +2491,7 @@
     }
 
     function renderMatList() {
+        if (matActiveTab === 'exterior') { renderExteriorPanel(); return; }
         const cat = matCategoryFilter.value;
         let items = getMatArray().filter(r => r.categories.includes(cat));
         if (matActiveTab === 'additions') {
@@ -2441,6 +2527,8 @@
                 if (rec && confirm(`Удалить позицию "${rec.name}"?`)) {
                     if (matActiveTab === 'interior') {
                         MATERIALS.interior = MATERIALS.interior.filter(r => r.id !== id);
+                    } else if (matActiveTab === 'floor') {
+                        MATERIALS.floor = MATERIALS.floor.filter(r => r.id !== id);
                     } else {
                         MATERIALS.additions = MATERIALS.additions.filter(r => r.id !== id);
                     }
@@ -2451,6 +2539,166 @@
                 }
             });
         });
+    }
+
+    function renderExteriorPanel() {
+        const cat = matCategoryFilter.value;
+        btnMatAddNew.style.display = (cat === 'house_high' || cat === 'house_low') ? 'none' : 'inline-flex';
+
+        if (cat === 'house_high') {
+            matList.innerHTML = `
+                <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">
+                    Каждая строка — своя базовая ставка (полностью заменяет цену дома). Два числа: без утепления и с утеплением.
+                </div>
+                <table style="width:100%; border-collapse:collapse; font-size:13px;">
+                    <tr style="color:var(--text-muted);">
+                        <td style="padding:6px 4px;">Отделка</td>
+                        <td style="padding:6px 4px; text-align:center; width:110px;">Без утепления</td>
+                        <td style="padding:6px 4px; text-align:center; width:110px;">С утеплением</td>
+                        <td style="width:80px;"></td>
+                    </tr>
+                    ${MATERIALS.exterior.houseHigh.map((r, i) => `
+                        <tr style="border-top:0.5px solid var(--border);" data-hh-idx="${i}">
+                            <td style="padding:8px 4px;"><input type="text" class="hh-name" value="${r.name.replace(/"/g, '&quot;')}" style="width:100%;"></td>
+                            <td style="padding:8px 4px;"><input type="number" class="hh-no-ins" value="${r.priceNoIns}" style="width:100%; text-align:center;"></td>
+                            <td style="padding:8px 4px;"><input type="number" class="hh-with-ins" value="${r.priceWithIns}" style="width:100%; text-align:center;"></td>
+                            <td style="padding:8px 4px; text-align:right;"><button class="btn btn-secondary hh-del" style="padding:4px 8px; font-size:12px; border-color:#e74c3c; color:#e74c3c;">✕</button></td>
+                        </tr>
+                    `).join('')}
+                </table>
+                <div style="display:flex; gap:8px; margin-top:12px;">
+                    <button class="btn btn-secondary" id="btnHhAddRow" style="font-size:12px;">+ Добавить строку</button>
+                    <button class="btn btn-primary" id="btnHhSave" style="font-size:12px;">Сохранить</button>
+                </div>
+            `;
+            document.getElementById('btnHhAddRow').addEventListener('click', () => {
+                MATERIALS.exterior.houseHigh.push({ id: 'ext_hh_custom_' + Date.now(), name: 'Новая отделка', priceNoIns: 0, priceWithIns: 0 });
+                renderExteriorPanel();
+            });
+            matList.querySelectorAll('.hh-del').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = parseInt(e.target.closest('[data-hh-idx]').getAttribute('data-hh-idx'));
+                    if (MATERIALS.exterior.houseHigh.length <= 1) { alert('Должна остаться хотя бы одна позиция.'); return; }
+                    if (confirm('Удалить эту отделку?')) { MATERIALS.exterior.houseHigh.splice(idx, 1); renderExteriorPanel(); }
+                });
+            });
+            document.getElementById('btnHhSave').addEventListener('click', () => {
+                matList.querySelectorAll('[data-hh-idx]').forEach(row => {
+                    const idx = parseInt(row.getAttribute('data-hh-idx'));
+                    MATERIALS.exterior.houseHigh[idx].name = row.querySelector('.hh-name').value.trim() || 'Отделка';
+                    MATERIALS.exterior.houseHigh[idx].priceNoIns = parseFloat(row.querySelector('.hh-no-ins').value) || 0;
+                    MATERIALS.exterior.houseHigh[idx].priceWithIns = parseFloat(row.querySelector('.hh-with-ins').value) || 0;
+                });
+                saveMaterialsDraft();
+                renderModelUI();
+                alert('Сохранено.');
+            });
+
+        } else if (cat === 'house_low') {
+            const hl = MATERIALS.exterior.houseLow;
+            matList.innerHTML = `
+                <div style="display:flex; gap:16px; margin-bottom:14px;">
+                    <div style="flex:1;">
+                        <label style="font-size:12px; color:var(--text-secondary);">Ставка без утепления (не зависит от отделки)</label>
+                        <input type="number" id="hlNoInsRate" value="${hl.noInsRate}" style="width:100%; margin-top:4px;">
+                    </div>
+                    <div style="flex:1;">
+                        <label style="font-size:12px; color:var(--text-secondary);">База для доплатных материалов</label>
+                        <input type="number" id="hlCheapBaseRate" value="${hl.cheapBaseRate}" style="width:100%; margin-top:4px;">
+                    </div>
+                </div>
+                <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">
+                    "Своя база" — заменяет всю ставку дома. "Доплата" — добавляется к базе для доплатных материалов сверху, за площадь стен.
+                </div>
+                <table style="width:100%; border-collapse:collapse; font-size:13px;">
+                    <tr style="color:var(--text-muted);">
+                        <td style="padding:6px 4px;">Материал</td>
+                        <td style="padding:6px 4px; text-align:center; width:110px;">Режим</td>
+                        <td style="padding:6px 4px; text-align:center; width:90px;">Цена</td>
+                        <td style="width:40px;"></td>
+                    </tr>
+                    ${hl.materials.map((r, i) => `
+                        <tr style="border-top:0.5px solid var(--border);" data-hl-idx="${i}">
+                            <td style="padding:8px 4px;"><input type="text" class="hl-name" value="${r.name.replace(/"/g, '&quot;')}" style="width:100%;"></td>
+                            <td style="padding:8px 4px;">
+                                <select class="hl-mode" style="width:100%;">
+                                    <option value="base" ${r.mode === 'base' ? 'selected' : ''}>Своя база</option>
+                                    <option value="addon" ${r.mode === 'addon' ? 'selected' : ''}>Доплата</option>
+                                </select>
+                            </td>
+                            <td style="padding:8px 4px;"><input type="number" class="hl-price" value="${r.price}" style="width:100%; text-align:center;"></td>
+                            <td style="padding:8px 4px; text-align:right;"><button class="btn btn-secondary hl-del" style="padding:4px 8px; font-size:12px; border-color:#e74c3c; color:#e74c3c;">✕</button></td>
+                        </tr>
+                    `).join('')}
+                </table>
+                <div style="display:flex; gap:8px; margin-top:12px;">
+                    <button class="btn btn-secondary" id="btnHlAddRow" style="font-size:12px;">+ Добавить материал</button>
+                    <button class="btn btn-primary" id="btnHlSave" style="font-size:12px;">Сохранить</button>
+                </div>
+            `;
+            document.getElementById('btnHlAddRow').addEventListener('click', () => {
+                hl.materials.push({ id: 'ext_hl_custom_' + Date.now(), name: 'Новый материал', mode: 'addon', price: 0 });
+                renderExteriorPanel();
+            });
+            matList.querySelectorAll('.hl-del').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = parseInt(e.target.closest('[data-hl-idx]').getAttribute('data-hl-idx'));
+                    if (hl.materials.length <= 1) { alert('Должен остаться хотя бы один материал.'); return; }
+                    if (confirm('Удалить этот материал?')) { hl.materials.splice(idx, 1); renderExteriorPanel(); }
+                });
+            });
+            document.getElementById('btnHlSave').addEventListener('click', () => {
+                hl.noInsRate = parseFloat(document.getElementById('hlNoInsRate').value) || 0;
+                hl.cheapBaseRate = parseFloat(document.getElementById('hlCheapBaseRate').value) || 0;
+                matList.querySelectorAll('[data-hl-idx]').forEach(row => {
+                    const idx = parseInt(row.getAttribute('data-hl-idx'));
+                    hl.materials[idx].name = row.querySelector('.hl-name').value.trim() || 'Материал';
+                    hl.materials[idx].mode = row.querySelector('.hl-mode').value;
+                    hl.materials[idx].price = parseFloat(row.querySelector('.hl-price').value) || 0;
+                });
+                saveMaterialsDraft();
+                renderModelUI();
+                alert('Сохранено.');
+            });
+
+        } else {
+            // Бытовка / Хозблок — простой список, как внутренняя отделка
+            const items = getExteriorSimpleOptions(cat);
+            if (items.length === 0) {
+                matList.innerHTML = `<p style="color:var(--text-muted); font-size:13px;">Пока нет позиций для этой категории.</p>`;
+                return;
+            }
+            matList.innerHTML = items.map(r => `
+                <div class="option-row" style="justify-content: space-between;" data-mat-id="${r.id}">
+                    <div>
+                        <div style="font-weight:600;">${r.name}</div>
+                        <div style="font-size:12px; color:var(--text-muted);">${r.price > 0 ? r.price.toLocaleString('ru-RU') + ' р/м²' : 'без доплаты (базовая)'}</div>
+                    </div>
+                    <div style="display:flex; gap:6px;">
+                        <button class="btn btn-secondary mat-edit-btn" style="padding:4px 10px; font-size:12px;">Изменить</button>
+                        <button class="btn btn-secondary mat-del-btn" style="padding:4px 10px; font-size:12px; border-color:#e74c3c; color:#e74c3c;">Удалить</button>
+                    </div>
+                </div>
+            `).join('');
+            matList.querySelectorAll('.mat-edit-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.target.closest('[data-mat-id]').getAttribute('data-mat-id');
+                    openMatForm(id);
+                });
+            });
+            matList.querySelectorAll('.mat-del-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.target.closest('[data-mat-id]').getAttribute('data-mat-id');
+                    const rec = getExteriorSimpleRecord(id);
+                    if (rec && confirm(`Удалить позицию "${rec.name}"?`)) {
+                        MATERIALS.exterior.simple = MATERIALS.exterior.simple.filter(r => r.id !== id);
+                        saveMaterialsDraft();
+                        renderExteriorPanel();
+                        renderModelUI();
+                    }
+                });
+            });
+        }
     }
 
     function openMatForm(editId) {
@@ -2515,7 +2763,7 @@
                 <div>
                     <label style="font-weight:600; font-size:13px;">Показывать в категориях:</label>
                     <div style="display:flex; gap:14px; flex-wrap:wrap; margin-top:6px;">
-                        ${ALL_CATEGORIES.map(c => `
+                        ${(matActiveTab === 'exterior' ? ALL_CATEGORIES.filter(c => c.id === 'cabin' || c.id === 'hozblok') : ALL_CATEGORIES).map(c => `
                             <label style="display:flex; align-items:center; gap:5px; font-size:13px; cursor:pointer;">
                                 <input type="checkbox" class="matFieldCat" value="${c.id}" ${preselectedCats.includes(c.id) ? 'checked' : ''}>
                                 ${c.label}
@@ -2591,8 +2839,9 @@
                     pricesByCategory
                 });
             } else {
-                const newId = 'int_custom_' + Date.now();
-                MATERIALS.interior.push({ id: newId, name, price, categories: cats });
+                const prefix = matActiveTab === 'floor' ? 'floor_custom_' : matActiveTab === 'exterior' ? 'ext_simple_custom_' : 'int_custom_';
+                const newId = prefix + Date.now();
+                getMatArray().push({ id: newId, name, price, categories: cats });
             }
         }
         saveMaterialsDraft();
@@ -2602,6 +2851,43 @@
         renderModelUI();
     }
 
+    const MAT_TAB_INFO = {
+        interior: `
+            <b>Внутренняя отделка</b>
+            <ul>
+                <li>Одна запись = один пункт в выпадающем списке (например «Вагонка ВС», «Имитация бруса»)</li>
+                <li>Цена 0 = «базовая, включена» (без доплаты). Любое число больше 0 = доплата за м² к площади отделки</li>
+                <li>Категории — где показывать эту позицию. Можно отметить несколько сразу (например Бытовка + Хозблок), не нужно дублировать запись</li>
+                <li>Категория внизу списка выбирается автоматически как первая в списке — если хотите определённую «базовую» позицию, поставьте её первой</li>
+                <li>Удаление — сразу пропадёт из выпадающего списка на сайте, у кого уже был выбран этот вариант — переключится на первый доступный</li>
+            </ul>`,
+        exterior: `
+            <b>Наружная отделка</b>
+            <ul>
+                <li><b>Дом высокий</b> — каждая строка задаёт сразу ДВЕ ставки (без утепления / с утеплением). Эти числа полностью заменяют цену дома, отдельной доплаты сверху нет</li>
+                <li><b>Дом низкий</b> — два поля сверху (без утепления, база для доплатных материалов) общие для всех материалов. В таблице: «Своя база» = заменяет всю цену дома, «Доплата» = добавляется сверху за площадь стен</li>
+                <li><b>Бытовка / Хозблок</b> — обычный список, как у внутренней отделки: цена = доплата за м² стены</li>
+                <li>Кнопка «Добавить» скрыта для Дома высокого/низкого — там строки добавляются прямо в таблице (кнопка «+ Добавить строку/материал» внизу таблицы)</li>
+                <li>В доме высоком/низком должна остаться хотя бы одна строка — иначе список станет пустым</li>
+            </ul>`,
+        floor: `
+            <b>Настил пола</b>
+            <ul>
+                <li>Та же логика, что у внутренней отделки: цена 0 = базовая (без доплаты), больше 0 = доплата за м²</li>
+                <li>Площадь считается как дом + веранда (если веранда включена в разделе 2)</li>
+                <li>Категории — можно отметить сразу несколько типов построек одной записью</li>
+            </ul>`,
+        additions: `
+            <b>Доп.опции</b>
+            <ul>
+                <li><b>Единица измерения</b> — «за штуку» (окна, двери, сваи) или «за м²» (материалы отделки)</li>
+                <li><b>Группа</b> — определяет, на какой вкладке допов на сайте окажется позиция (Окна/Двери/Сваи/Отделка и полы/Прочее)</li>
+                <li><b>Подсказка площади</b> — кликабельная ссылка «Подставить», которая появится у поля количества на сайте: считает площадь дома, площадь дома+веранда или периметр автоматически</li>
+                <li><b>Разная цена по категориям</b> — включите, если одна и та же позиция должна стоить по-разному для дома высокого/низкого/бытовки/хозблока. Не заполненная категория берёт цену из общего поля «Цена» сверху</li>
+                <li>Фильтр сверху (категория + группа) — только чтобы удобнее искать позицию, на расчёт не влияет</li>
+            </ul>`
+    };
+
     function switchMatTab(tab) {
         matActiveTab = tab;
         closeMatForm();
@@ -2609,7 +2895,11 @@
             b.classList.toggle('active', b.getAttribute('data-tab') === tab);
         });
         matGroupFilter.style.display = (tab === 'additions') ? 'inline-block' : 'none';
-        materialsModalTitle.textContent = tab === 'additions' ? 'Материалы — Доп.опции' : 'Материалы — Внутренняя отделка';
+        btnMatAddNew.style.display = 'inline-flex';
+        const titles = { interior: 'Материалы — Внутренняя отделка', exterior: 'Материалы — Наружная отделка', floor: 'Материалы — Настил пола', additions: 'Материалы — Доп.опции' };
+        materialsModalTitle.textContent = titles[tab] || 'Материалы';
+        const infoEl = document.getElementById('materialsInfoTooltip');
+        if (infoEl) infoEl.innerHTML = MAT_TAB_INFO[tab] || '';
         renderMatList();
     }
 

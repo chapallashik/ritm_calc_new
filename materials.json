@@ -105,6 +105,143 @@
       "price": 500
     }
   ],
+  "floor": [
+    {
+      "id": "floor_house_base",
+      "name": "Обрезная доска 25мм 1 сорт (базовая)",
+      "categories": [
+        "house_high",
+        "house_low"
+      ],
+      "price": 0
+    },
+    {
+      "id": "floor_cabin_base",
+      "name": "Обрезная доска 25мм (базовая)",
+      "categories": [
+        "cabin",
+        "hozblok"
+      ],
+      "price": 0
+    },
+    {
+      "id": "floor_cabin_osb12",
+      "name": "ОСБ 12мм",
+      "categories": [
+        "cabin",
+        "hozblok"
+      ],
+      "price": 500
+    },
+    {
+      "id": "floor_cabin_tongue28",
+      "name": "Шпунтованная доска 28мм",
+      "categories": [
+        "cabin",
+        "hozblok"
+      ],
+      "price": 1000
+    }
+  ],
+  "exterior": {
+    "houseHigh": [
+      {
+        "id": "ext_hh_vagonka",
+        "name": "Вагонка ВС",
+        "priceNoIns": 9500,
+        "priceWithIns": 12500
+      },
+      {
+        "id": "ext_hh_imitatsia",
+        "name": "Имитация бруса 'В'",
+        "priceNoIns": 10000,
+        "priceWithIns": 13000
+      }
+    ],
+    "houseLow": {
+      "noInsRate": 8500,
+      "cheapBaseRate": 9500,
+      "materials": [
+        {
+          "id": "ext_hl_vagonka",
+          "name": "Вагонка ВС",
+          "mode": "base",
+          "price": 10000
+        },
+        {
+          "id": "ext_hl_imitatsia",
+          "name": "Имитация бруса",
+          "mode": "base",
+          "price": 10000
+        },
+        {
+          "id": "ext_hl_blockhouse",
+          "name": "Блок-хаус",
+          "mode": "addon",
+          "price": 1000
+        },
+        {
+          "id": "ext_hl_proflist",
+          "name": "Профлист цветной",
+          "mode": "addon",
+          "price": 400
+        },
+        {
+          "id": "ext_hl_osb",
+          "name": "ОСБ 12мм",
+          "mode": "addon",
+          "price": 300
+        }
+      ]
+    },
+    "simple": [
+      {
+        "id": "ext_simple_vagonka",
+        "name": "Вагонка класса В",
+        "categories": [
+          "cabin",
+          "hozblok"
+        ],
+        "price": 0
+      },
+      {
+        "id": "ext_simple_imitatsia",
+        "name": "Имитация бруса",
+        "categories": [
+          "cabin",
+          "hozblok"
+        ],
+        "price": 250
+      },
+      {
+        "id": "ext_simple_blockhouse",
+        "name": "Блок-хаус",
+        "categories": [
+          "cabin",
+          "hozblok"
+        ],
+        "price": 1000
+      },
+      {
+        "id": "ext_simple_proflist",
+        "name": "Профлист цветной",
+        "categories": [
+          "cabin",
+          "hozblok"
+        ],
+        "price": 400
+      },
+      {
+        "id": "ext_simple_osb",
+        "name": "ОСБ 12мм",
+        "categories": [
+          "cabin",
+          "hozblok"
+        ],
+        "price": 300
+      }
+    ]
+  },
   "additions": [
     {
       "id": "win_lux_50_50_p",

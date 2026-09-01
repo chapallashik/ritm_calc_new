@@ -523,6 +523,68 @@ header {
     font-weight: 700;
 }
 
+.info-icon-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.info-icon-btn {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--primary);
+    color: var(--primary);
+    background: transparent;
+    font-size: 12px;
+    font-weight: 700;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: help;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+.info-tooltip {
+    display: none;
+    position: absolute;
+    top: 28px;
+    left: 0;
+    z-index: 60;
+    width: 340px;
+    max-width: 80vw;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    font-weight: 400;
+    color: var(--text-primary);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+    white-space: normal;
+}
+
+.info-icon-wrap:hover .info-tooltip,
+.info-icon-wrap:focus-within .info-tooltip {
+    display: block;
+}
+
+.info-tooltip b {
+    font-weight: 700;
+}
+
+.info-tooltip ul {
+    margin: 6px 0 0;
+    padding-left: 18px;
+}
+
+.info-tooltip li {
+    margin-bottom: 4px;
+}
+
 .modal-body {
     padding: 20px;
     flex-grow: 1;

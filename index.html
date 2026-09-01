@@ -364,7 +364,23 @@
     <div class="modal" id="adminModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Редактирование цен</h2>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <h2>Редактирование цен</h2>
+                    <span class="info-icon-wrap">
+                        <span class="info-icon-btn">i</span>
+                        <div class="info-tooltip">
+                            <b>Что тут менять</b>
+                            <ul>
+                                <li>Каждая строка — отдельный тариф или ставка, участвующая в формулах расчёта (утепление, надбавки за каркас, замена каркаса, поднятие стен и т.д.)</li>
+                                <li>Меняете число → «Сохранить» → сумма в калькуляторе сразу пересчитается</li>
+                                <li>Названия дропдаунов утепления (например «150мм +3700 р/м²») обновятся автоматически — текст подписи не зашит вручную</li>
+                                <li>Удалить строку тут нельзя — список фиксированный, это именно тарифы, а не позиции для добавления/удаления (для этого — раздел «Материалы»)</li>
+                                <li>«Сбросить настройки» вернёт все цифры к значениям по умолчанию — необратимо для несохранённого на GitHub состояния</li>
+                                <li>Изменения видны только вам, пока не скачаете config.js и не замените им файл на GitHub</li>
+                            </ul>
+                        </div>
+                    </span>
+                </div>
                 <button class="close-btn" id="closeAdminBtn">&times;</button>
             </div>
             <div class="modal-body">
@@ -386,7 +402,13 @@
     <div class="modal" id="materialsModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="materialsModalTitle">Материалы — Внутренняя отделка</h2>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <h2 id="materialsModalTitle">Материалы — Внутренняя отделка</h2>
+                    <span class="info-icon-wrap">
+                        <span class="info-icon-btn">i</span>
+                        <div class="info-tooltip" id="materialsInfoTooltip"></div>
+                    </span>
+                </div>
                 <button class="close-btn" id="closeMaterialsBtn">&times;</button>
             </div>
             <div class="modal-body">
@@ -395,6 +417,8 @@
                 </p>
                 <div style="display:flex; gap:8px; margin-bottom: 14px;">
                     <button class="btn btn-secondary mat-tab-btn active" data-tab="interior" style="font-size:13px;">Внутренняя отделка</button>
+                    <button class="btn btn-secondary mat-tab-btn" data-tab="exterior" style="font-size:13px;">Наружная отделка</button>
+                    <button class="btn btn-secondary mat-tab-btn" data-tab="floor" style="font-size:13px;">Настил пола</button>
                     <button class="btn btn-secondary mat-tab-btn" data-tab="additions" style="font-size:13px;">Доп.опции</button>
                 </div>
                 <div style="display:flex; gap:8px; margin-bottom: 14px; flex-wrap: wrap;">
