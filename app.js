@@ -20,6 +20,86 @@
             { id: "int_hz_vagonka", name: "Вагонка класса В", categories: ["hozblok"], price: 400 },
             { id: "int_hz_mdf", name: "МДФ панели", categories: ["hozblok"], price: 500 },
             { id: "int_hz_pvc", name: "ПВХ панели", categories: ["hozblok"], price: 500 }
+        ],
+        additions: [
+            { id: "win_lux_50_50_p", name: "Окно ПВХ 1-камерный 50х50 поворотное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 5500, hint: "none" },
+            { id: "win_lux_50_50_po2", name: "Окно ПВХ 50х50 (2 камеры) поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 9000, hint: "none" },
+            { id: "win_lux_60_90_po", name: "Окно ПВХ 1-камерный 60х90 поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 7500, hint: "none" },
+            { id: "win_lux_60_120_po", name: "Окно ПВХ 1-камерный 60х120 поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 10000, hint: "none" },
+            { id: "win_lux_60_180_po", name: "Окно ПВХ 1-камерный 60х180 поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 12000, hint: "none" },
+            { id: "win_lux_100_100_po", name: "Окно ПВХ 1-камерный 100х100 поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 9000, hint: "none" },
+            { id: "win_lux_100_120_po1", name: "Окно ПВХ 1-камерный 100х120 поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 11000, hint: "none" },
+            { id: "win_lux_100_120_po2", name: "Окно ПВХ 100х120 (2 камеры) поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 14000, hint: "none" },
+            { id: "win_lux_120_120_po", name: "Окно ПВХ 1-камерный 120х120 поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 13000, hint: "none" },
+            { id: "win_lux_100_140_po", name: "Окно ПВХ 1-камерный 100х140 поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 14000, hint: "none" },
+            { id: "win_lux_100_150_po", name: "Окно ПВХ 1-камерный 100х150 поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 15000, hint: "none" },
+            { id: "win_lux_120_150_po", name: "Окно ПВХ 1-камерный 120х150 поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 16500, hint: "none" },
+            { id: "win_lux_140_150_po", name: "Окно ПВХ 1-камерный 140х150 поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 17000, hint: "none" },
+            { id: "win_lux_150_150_po", name: "Окно ПВХ 1-камерный 150х150 поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 17500, hint: "none" },
+            { id: "win_lux_150_100_po", name: "Окно ПВХ 1-камерный 150х100 поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 18000, hint: "none" },
+            { id: "win_lux_150_190_po", name: "Окно ПВХ 1-камерный 150х190 поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 25000, hint: "none" },
+            { id: "win_lux_180_190_po", name: "Окно ПВХ 1-камерный 180х190 поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 26000, hint: "none" },
+            { id: "win_lux_180_200_po", name: "Окно ПВХ 1-камерный 180х200 поворотно-откидное", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "windows", unit: "quantity", price: 30000, hint: "none" },
+            { id: "win_lux_60_90_po2", name: "Окно ПВХ 60х90 (2 камеры) поворотно-откидное", categories: ["house_high", "house_low"], group: "windows", unit: "quantity", price: 10500, hint: "none" },
+            { id: "win_lux_60_120_po2", name: "Окно ПВХ 60х120 (2 камеры) поворотно-откидное", categories: ["house_high", "house_low"], group: "windows", unit: "quantity", price: 13000, hint: "none" },
+            { id: "win_lux_60_180_po2", name: "Окно ПВХ 60х180 (2 камеры) поворотно-откидное", categories: ["house_high", "house_low"], group: "windows", unit: "quantity", price: 15000, hint: "none" },
+            { id: "win_lux_100_100_po2", name: "Окно ПВХ 100х100 (2 камеры) поворотно-откидное", categories: ["house_high", "house_low"], group: "windows", unit: "quantity", price: 12000, hint: "none" },
+            { id: "win_lux_120_120_po2", name: "Окно ПВХ 120х120 (2 камеры) поворотно-откидное", categories: ["house_high", "house_low"], group: "windows", unit: "quantity", price: 16000, hint: "none" },
+            { id: "win_lux_100_140_po2", name: "Окно ПВХ 100х140 (2 камеры) поворотно-откидное", categories: ["house_high", "house_low"], group: "windows", unit: "quantity", price: 17000, hint: "none" },
+            { id: "win_lux_100_150_po2", name: "Окно ПВХ 100х150 (2 камеры) поворотно-откидное", categories: ["house_high", "house_low"], group: "windows", unit: "quantity", price: 18000, hint: "none" },
+            { id: "win_lux_120_150_po2", name: "Окно ПВХ 120х150 (2 камеры) поворотно-откидное", categories: ["house_high", "house_low"], group: "windows", unit: "quantity", price: 19500, hint: "none" },
+            { id: "win_lux_140_150_po2", name: "Окно ПВХ 140х150 (2 камеры) поворотно-откидное", categories: ["house_high", "house_low"], group: "windows", unit: "quantity", price: 20000, hint: "none" },
+            { id: "win_lux_150_150_po2", name: "Окно ПВХ 150х150 (2 камеры) поворотно-откидное", categories: ["house_high", "house_low"], group: "windows", unit: "quantity", price: 20500, hint: "none" },
+            { id: "win_lux_150_100_po2", name: "Окно ПВХ 150х100 (2 камеры) поворотно-откидное", categories: ["house_high", "house_low"], group: "windows", unit: "quantity", price: 21000, hint: "none" },
+            { id: "win_lux_150_190_po2", name: "Окно ПВХ 150х190 (2 камеры) поворотно-откидное", categories: ["house_high", "house_low"], group: "windows", unit: "quantity", price: 28000, hint: "none" },
+            { id: "win_lux_180_190_po2", name: "Окно ПВХ 180х190 (2 камеры) поворотно-откидное", categories: ["house_high", "house_low"], group: "windows", unit: "quantity", price: 29000, hint: "none" },
+            { id: "win_lux_180_200_po2", name: "Окно ПВХ 180х200 (2 камеры) поворотно-откидное", categories: ["house_high", "house_low"], group: "windows", unit: "quantity", price: 33000, hint: "none" },
+            { id: "pile_76_1500", name: "Свая винтовая 76/1500", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "piles", unit: "quantity", price: 3550, hint: "none" },
+            { id: "pile_76_2000", name: "Свая винтовая 76/2000", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "piles", unit: "quantity", price: 3700, hint: "none" },
+            { id: "pile_76_2500", name: "Свая винтовая 76/2500", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "piles", unit: "quantity", price: 4000, hint: "none" },
+            { id: "pile_76_3000", name: "Свая винтовая 76/3000", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "piles", unit: "quantity", price: 4300, hint: "none" },
+            { id: "pile_89_2000", name: "Свая винтовая 89/2000", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "piles", unit: "quantity", price: 3900, hint: "none" },
+            { id: "pile_89_2500", name: "Свая винтовая 89/2500", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "piles", unit: "quantity", price: 4200, hint: "none" },
+            { id: "pile_89_3000", name: "Свая винтовая 89/3000", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "piles", unit: "quantity", price: 4600, hint: "none" },
+            { id: "pile_108_2000", name: "Свая винтовая 108/2000", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "piles", unit: "quantity", price: 4700, hint: "none" },
+            { id: "pile_108_2500", name: "Свая винтовая 108/2500", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "piles", unit: "quantity", price: 5100, hint: "none" },
+            { id: "pile_108_3000", name: "Свая винтовая 108/3000", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "piles", unit: "quantity", price: 5600, hint: "none" },
+            { id: "freestanding_porch", name: "Отдельностоящее крыльцо (за м²)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "other", unit: "quantity", price: 7500, hint: "none" },
+            { id: "partition_imitation_b", name: "Перегородка Имитация бруса \"В\" (за м.п.)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "other", unit: "quantity", price: 4000, hint: "none" },
+            { id: "partition_lining_bc_ins", name: "Перегородка Вагонка \"ВС\" с утеплителем (за м.п.)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "area", unit: "quantity", price: 4000, hint: "none" },
+            { id: "partition_lining_bc", name: "Перегородка Вагонка \"ВС\" (за м.п.)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "area", unit: "quantity", price: 3500, hint: "none" },
+            { id: "block_pads", name: "Подушки под блоки (за шт)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "other", unit: "quantity", price: 1200, hint: "none" },
+            { id: "veranda_ceiling_board", name: "Зашить потолок веранды (за м²)", categories: ["cabin", "hozblok"], group: "other", unit: "quantity", price: 1000, hint: "none" },
+            { id: "door_metal_12", name: "Дверь металлическая (Россия)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "doors", unit: "quantity", price: 12000, hint: "none" },
+            { id: "door_metal_7cm", name: "Дверь металлическая 7 см", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "doors", unit: "quantity", price: 20000, hint: "none" },
+            { id: "door_panel_6", name: "Дверь филенчатая деревянная", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "doors", unit: "quantity", price: 6000, hint: "none" },
+            { id: "door_pvc_35", name: "Дверь входная ПВХ", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "doors", unit: "quantity", price: 35000, hint: "none" },
+            { id: "door_wood_double", name: "Дверь деревянная распашная 1.4х1.9 м", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "doors", unit: "quantity", price: 3000, hint: "none" },
+            { id: "floor_hatch", name: "Люк в полу", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "doors", unit: "quantity", price: 10000, hint: "none" },
+            { id: "antiseptic_bottom", name: "Антисептик дна", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "area", unit: "area", price: 500, hint: "houseAndVeranda" },
+            { id: "rodent_mesh", name: "Сетка от грызунов", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "area", unit: "area", price: 600, hint: "houseAndVeranda" },
+            { id: "block_20_20_40", name: "Блок 20х20х40", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "other", unit: "quantity", price: 500, hint: "none" },
+            { id: "ramp_2m", name: "Пандус (до 2 м)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "other", unit: "quantity", price: 5000, hint: "none" },
+            { id: "floor_tongue_28_add", name: "Пол: Шпунтованная доска 28 мм (за м²)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "area", unit: "area", price: 1000, hint: "houseAndVeranda" },
+            { id: "floor_osb_12_add", name: "Пол: ОСБ 12 мм (за м²)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "area", unit: "area", price: 500, hint: "houseArea" },
+            { id: "floor_osb_15_add", name: "Пол: ОСБ 15 мм (за м²)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "area", unit: "area", price: 700, hint: "houseArea" },
+            { id: "floor_osb_18_add", name: "Пол: ОСБ 18 мм (за м²)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "area", unit: "area", price: 800, hint: "houseArea" },
+            { id: "floor_tongue_35_add", name: "Пол: Шпунтованная доска 35 мм (за м²)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "area", unit: "area", price: 1300, hint: "houseAndVeranda" },
+            { id: "floor_board_35_150_add", name: "Пол: Доска обрезная 35х150 мм (за м²)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "area", unit: "area", price: 500, hint: "houseAndVeranda" },
+            { id: "ins_basalt_ceiling_200", name: "Утепление: 200 мм базальтовая плита потолка (за м²)", categories: ["house_high", "house_low", "cabin"], group: "area", unit: "area", price: 1000, hint: "houseArea" },
+            { id: "ins_basalt_floor_200", name: "Утепление: 200 мм базальтовая плита пола (за м²)", categories: ["house_high", "house_low", "cabin"], group: "area", unit: "area", price: 1000, hint: "houseArea" },
+            { id: "roof_double_pitch_1800", name: "Крыша двухскатная с коньком 40-70 см", categories: ["cabin", "hozblok"], group: "area", unit: "area", price: 1800, hint: "houseArea" },
+            { id: "roof_double_pitch_flat", name: "Двухскатная крыша (увеличение стоимости)", categories: ["cabin"], group: "other", unit: "quantity", price: 10000, hint: "none" },
+            { id: "ceiling_osb_12_lath", name: "Настил на потолок ОСБ 12 мм с обрешеткой", categories: ["house_high"], group: "area", unit: "area", price: 1800, hint: "houseAndVeranda" },
+            { id: "vent_gap", name: "Вентзазор", categories: ["house_high", "house_low"], group: "area", unit: "area", price: 2000, hint: "perimeter" },
+            { id: "roof_overhangs", name: "Свесы на кровле +10 см", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "area", unit: "area", price: 1000, hint: "perimeter" },
+            { id: "ridge_raise", name: "Поднятие конька (за каждые +10 см, максимум +150 см)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "other", unit: "quantity", price: 3750, hint: "none" },
+            { id: "veranda_lined_rafters", name: "Потолок веранды подшитый по стропилам", categories: ["house_high"], group: "area", unit: "area", price: 2000, hint: "houseAndVeranda" },
+            { id: "generator_daily", name: "Генератор (сутки)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "other", unit: "quantity", price: 2500, hint: "none" },
+            { id: "material_carry", name: "Пронос материала свыше 20 м (за каждые 10 м)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "other", unit: "quantity", price: 10000, hint: "none" },
+            { id: "long_ladder", name: "Лестница на всю длину дома", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "other", unit: "quantity", price: 20000, hint: "none" },
+            { id: "step_with_railing", name: "Ступень с перилами", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "other", unit: "quantity", price: 20000, hint: "none" },
+            { id: "extension_room", name: "Пристройка", categories: ["house_high", "house_low"], group: "other", unit: "quantity", price: 20000, hint: "none" }
         ]
     };
 
@@ -28,7 +108,7 @@
             const res = await fetch('./materials.json', { cache: 'no-store' });
             if (!res.ok) throw new Error('HTTP ' + res.status);
             const data = await res.json();
-            if (!data || !Array.isArray(data.interior)) throw new Error('bad shape');
+            if (!data || !Array.isArray(data.interior) || !Array.isArray(data.additions)) throw new Error('bad shape');
             MATERIALS = data;
         } catch (e) {
             console.warn('materials.json не загрузился, использую встроенные данные по умолчанию:', e);
@@ -40,7 +120,7 @@
             const draft = localStorage.getItem('mobistroy_materials_draft');
             if (draft) {
                 const parsed = JSON.parse(draft);
-                if (parsed && Array.isArray(parsed.interior)) {
+                if (parsed && Array.isArray(parsed.interior) && Array.isArray(parsed.additions)) {
                     MATERIALS = parsed;
                 }
             }
@@ -59,108 +139,38 @@
         return MATERIALS.interior.find(r => r.id === id);
     }
 
+    // Превращаем JSON-запись доп.опции в формат, который понимает остальной код (как SHARED_ADDITIONS)
+    function materialsAdditionToAddition(r) {
+        const label = r.price > 0
+            ? `${r.name} (${r.unit === 'area' ? '+' : ''}${r.price.toLocaleString('ru-RU')} р${r.unit === 'area' ? '/м²' : ''})`
+            : r.name;
+        return {
+            id: r.id, name: label, price: r.price, type: r.unit, quantity: 0,
+            categories: r.categories, group: r.group, hint: r.hint, fromMaterials: true
+        };
+    }
+
+    // Добавляет/обновляет доп.опции из MATERIALS.additions во все модели активного конфига
+    function applyAdditionsMaterials() {
+        activeConfig.forEach(model => {
+            model.additions = model.additions.filter(a => !a.fromMaterials);
+            model.additions.push(...MATERIALS.additions.map(materialsAdditionToAddition));
+        });
+    }
+
     // 1. Data & State Initialization
     const SHARED_ADDITIONS = [
-        { id: "win_lux_50_50_p", name: "Окно ПВХ 1-камерный 50х50 поворотное", price: 5500, type: "quantity", quantity: 0 },
-        { id: "win_lux_50_50_po2", name: "Окно ПВХ 50х50 (2 камеры) поворотно-откидное", price: 9000, type: "quantity", quantity: 0 },
-        { id: "win_lux_60_90_po", name: "Окно ПВХ 1-камерный 60х90 поворотно-откидное", price: 7500, type: "quantity", quantity: 0 },
-        { id: "win_lux_60_120_po", name: "Окно ПВХ 1-камерный 60х120 поворотно-откидное", price: 10000, type: "quantity", quantity: 0 },
-        { id: "win_lux_60_180_po", name: "Окно ПВХ 1-камерный 60х180 поворотно-откидное", price: 12000, type: "quantity", quantity: 0 },
-        { id: "win_lux_100_100_po", name: "Окно ПВХ 1-камерный 100х100 поворотно-откидное", price: 9000, type: "quantity", quantity: 0 },
-        { id: "win_lux_100_120_po1", name: "Окно ПВХ 1-камерный 100х120 поворотно-откидное", price: 11000, type: "quantity", quantity: 0 },
-        { id: "win_lux_100_120_po2", name: "Окно ПВХ 100х120 (2 камеры) поворотно-откидное", price: 14000, type: "quantity", quantity: 0 },
-        { id: "win_lux_120_120_po", name: "Окно ПВХ 1-камерный 120х120 поворотно-откидное", price: 13000, type: "quantity", quantity: 0 },
-        { id: "win_lux_100_140_po", name: "Окно ПВХ 1-камерный 100х140 поворотно-откидное", price: 14000, type: "quantity", quantity: 0 },
-        { id: "win_lux_100_150_po", name: "Окно ПВХ 1-камерный 100х150 поворотно-откидное", price: 15000, type: "quantity", quantity: 0 },
-        { id: "win_lux_120_150_po", name: "Окно ПВХ 1-камерный 120х150 поворотно-откидное", price: 16500, type: "quantity", quantity: 0 },
-        { id: "win_lux_140_150_po", name: "Окно ПВХ 1-камерный 140х150 поворотно-откидное", price: 17000, type: "quantity", quantity: 0 },
-        { id: "win_lux_150_150_po", name: "Окно ПВХ 1-камерный 150х150 поворотно-откидное", price: 17500, type: "quantity", quantity: 0 },
-        { id: "win_lux_150_100_po", name: "Окно ПВХ 1-камерный 150х100 поворотно-откидное", price: 18000, type: "quantity", quantity: 0 },
-        { id: "win_lux_150_190_po", name: "Окно ПВХ 1-камерный 150х190 поворотно-откидное", price: 25000, type: "quantity", quantity: 0 },
-        { id: "win_lux_180_190_po", name: "Окно ПВХ 1-камерный 180х190 поворотно-откидное", price: 26000, type: "quantity", quantity: 0 },
-        { id: "win_lux_180_200_po", name: "Окно ПВХ 1-камерный 180х200 поворотно-откидное", price: 30000, type: "quantity", quantity: 0 },
-
-        { id: "win_lux_60_90_po2", name: "Окно ПВХ 60х90 (2 камеры) поворотно-откидное", price: 10500, type: "quantity", quantity: 0 },
-        { id: "win_lux_60_120_po2", name: "Окно ПВХ 60х120 (2 камеры) поворотно-откидное", price: 13000, type: "quantity", quantity: 0 },
-        { id: "win_lux_60_180_po2", name: "Окно ПВХ 60х180 (2 камеры) поворотно-откидное", price: 15000, type: "quantity", quantity: 0 },
-        { id: "win_lux_100_100_po2", name: "Окно ПВХ 100х100 (2 камеры) поворотно-откидное", price: 12000, type: "quantity", quantity: 0 },
-        { id: "win_lux_120_120_po2", name: "Окно ПВХ 120х120 (2 камеры) поворотно-откидное", price: 16000, type: "quantity", quantity: 0 },
-        { id: "win_lux_100_140_po2", name: "Окно ПВХ 100х140 (2 камеры) поворотно-откидное", price: 17000, type: "quantity", quantity: 0 },
-        { id: "win_lux_100_150_po2", name: "Окно ПВХ 100х150 (2 камеры) поворотно-откидное", price: 18000, type: "quantity", quantity: 0 },
-        { id: "win_lux_120_150_po2", name: "Окно ПВХ 120х150 (2 камеры) поворотно-откидное", price: 19500, type: "quantity", quantity: 0 },
-        { id: "win_lux_140_150_po2", name: "Окно ПВХ 140х150 (2 камеры) поворотно-откидное", price: 20000, type: "quantity", quantity: 0 },
-        { id: "win_lux_150_150_po2", name: "Окно ПВХ 150х150 (2 камеры) поворотно-откидное", price: 20500, type: "quantity", quantity: 0 },
-        { id: "win_lux_150_100_po2", name: "Окно ПВХ 150х100 (2 камеры) поворотно-откидное", price: 21000, type: "quantity", quantity: 0 },
-        { id: "win_lux_150_190_po2", name: "Окно ПВХ 150х190 (2 камеры) поворотно-откидное", price: 28000, type: "quantity", quantity: 0 },
-        { id: "win_lux_180_190_po2", name: "Окно ПВХ 180х190 (2 камеры) поворотно-откидное", price: 29000, type: "quantity", quantity: 0 },
-        { id: "win_lux_180_200_po2", name: "Окно ПВХ 180х200 (2 камеры) поворотно-откидное", price: 33000, type: "quantity", quantity: 0 },
- 
-        { id: "pile_76_1500", name: "Свая винтовая 76/1500", price: 3550, type: "quantity", quantity: 0 },
-        { id: "pile_76_2000", name: "Свая винтовая 76/2000", price: 3700, type: "quantity", quantity: 0 },
-        { id: "pile_76_2500", name: "Свая винтовая 76/2500", price: 4000, type: "quantity", quantity: 0 },
-        { id: "pile_76_3000", name: "Свая винтовая 76/3000", price: 4300, type: "quantity", quantity: 0 },
-        { id: "pile_89_2000", name: "Свая винтовая 89/2000", price: 3900, type: "quantity", quantity: 0 },
-        { id: "pile_89_2500", name: "Свая винтовая 89/2500", price: 4200, type: "quantity", quantity: 0 },
-        { id: "pile_89_3000", name: "Свая винтовая 89/3000", price: 4600, type: "quantity", quantity: 0 },
-        { id: "pile_108_2000", name: "Свая винтовая 108/2000", price: 4700, type: "quantity", quantity: 0 },
-        { id: "pile_108_2500", name: "Свая винтовая 108/2500", price: 5100, type: "quantity", quantity: 0 },
-        { id: "pile_108_3000", name: "Свая винтовая 108/3000", price: 5600, type: "quantity", quantity: 0 },
-        { id: "pile_delivery", name: "Доставка свай (70 р/км)", price: 70, type: "quantity", quantity: 0 },
- 
-        { id: "freestanding_porch", name: "Отдельностоящее крыльцо (за м²)", price: 7500, type: "quantity", quantity: 0 },
-        { id: "partition_imitation_b", name: "Перегородка Имитация бруса \"В\" (за м.п.)", price: 4000, type: "quantity", quantity: 0 },
-        { id: "partition_lining_bc_ins", name: "Перегородка Вагонка \"ВС\" с утеплителем (за м.п.)", price: 4000, type: "quantity", quantity: 0 },
-        { id: "partition_lining_bc", name: "Перегородка Вагонка \"ВС\" (за м.п.)", price: 3500, type: "quantity", quantity: 0 },
-        { id: "roof_end_door", name: "Дверца в торце крыши", price: 5000, type: "quantity", quantity: 0 },
- 
-        { id: "block_pads", name: "Подушки под блоки (за шт)", price: 1200, type: "quantity", quantity: 0 },
-        { id: "veranda_ceiling_board", name: "Зашить потолок веранды (за м²)", price: 1000, type: "quantity", quantity: 0 },
-        { id: "door_metal_12", name: "Дверь металлическая (Россия) (12 000 р)", price: 12000, type: "quantity", quantity: 0 },
-        { id: "door_metal_7cm", name: "Дверь металлическая 7 см", price: 20000, type: "quantity", quantity: 0 },
-        { id: "door_panel_6", name: "Дверь филенчатая деревянная (6 000 р)", price: 6000, type: "quantity", quantity: 0 },
-        { id: "door_pvc_35", name: "Дверь входная ПВХ (35 000 р)", price: 35000, type: "quantity", quantity: 0 },
-        { id: "door_wood_double", name: "Дверь деревянная распашная 1.4х1.9 м", price: 3000, type: "quantity", quantity: 0 },
-        { id: "floor_hatch", name: "Люк в полу", price: 10000, type: "quantity", quantity: 0 },
-        { id: "antiseptic_bottom", name: "Антисептик дна", price: 500, type: "area", quantity: 0 },
-        { id: "rodent_mesh", name: "Сетка от грызунов", price: 600, type: "area", quantity: 0 },
-        { id: "block_20_20_40", name: "Блок 20х20х40", price: 500, type: "quantity", quantity: 0 },
-        { id: "ramp_2m", name: "Пандус (до 2 м)", price: 5000, type: "quantity", quantity: 0 },
- 
-        { id: "floor_tongue_28_add", name: "Пол: Шпунтованная доска 28 мм (за м²)", price: 1000, type: "area", quantity: 0 },
-        { id: "floor_osb_12_add", name: "Пол: ОСБ 12 мм (за м²)", price: 500, type: "area", quantity: 0 },
-        { id: "floor_osb_15_add", name: "Пол: ОСБ 15 мм (за м²)", price: 700, type: "area", quantity: 0 },
-        { id: "floor_osb_18_add", name: "Пол: ОСБ 18 мм (за м²)", price: 800, type: "area", quantity: 0 },
-        { id: "floor_tongue_35_add", name: "Пол: Шпунтованная доска 35 мм (за м²)", price: 1300, type: "area", quantity: 0 },
-        { id: "floor_board_35_150_add", name: "Пол: Доска обрезная 35х150 мм (за м²)", price: 500, type: "area", quantity: 0 },
- 
-        { id: "ins_basalt_ceiling_200", name: "Утепление: 200 мм базальтовая плита потолка (за м²)", price: 1000, type: "area", quantity: 0 },
-        { id: "ins_basalt_floor_200", name: "Утепление: 200 мм базальтовая плита пола (за м²)", price: 1000, type: "area", quantity: 0 },
- 
-        { id: "roof_double_pitch_1800", name: "Крыша двухскатная с коньком 40-70 см (+1800 р/м² площади)", price: 1800, type: "area", quantity: 0 },
-        { id: "roof_double_pitch_flat", name: "Двухскатная крыша (увеличение стоимости) (10 000 р)", price: 10000, type: "quantity", quantity: 0 },
- 
-        { id: "profile_harness", name: "Обвязка свай профилем 20х40 одной линией (периметр * 450 р)", price: 450, type: "area", quantity: 0 },
- 
-        { id: "roof_metal", name: "Кровля: Металлочерепица (+1500 р/м²)", price: 1500, type: "area", quantity: 0 },
-        { id: "roof_proflist_low", name: "Кровля: Профлист С8 цветной низкая крыша (+500 р/м²)", price: 500, type: "area", quantity: 0 },
-        { id: "roof_proflist_high", name: "Кровля: Профлист С8 цветной (выбор) или ондулин высокая крыша (+750 р/м²)", price: 750, type: "area", quantity: 0 },
         { id: "frame_upgrade", name: "Замена каркаса 50/100 на 50/150", price: 2000, type: "area", quantity: 0 },
-        { id: "ceiling_osb_12_lath", name: "Настил на потолок ОСБ 12 мм с обрешеткой (+1 800 р/м²)", price: 1800, type: "area", quantity: 0 },
-        { id: "vent_gap", name: "Вентзазор (периметр * 2000 р)", price: 2000, type: "area", quantity: 0 },
-        { id: "roof_overhangs", name: "Свесы на кровле +10 см (периметр * 1000 р)", price: 1000, type: "area", quantity: 0 },
-        { id: "ridge_raise", name: "Поднятие конька (за каждые +10 см, максимум +150 см)", price: 3750, type: "quantity", quantity: 0 },
-
+        { id: "wall_height_raise_20", name: "Поднятие высоты стен на 20 см", price: 700, type: "area", quantity: 0 },
         { id: "veranda_high", name: "Веранда (высокая крыша, 9 500 р/м²)", price: 9500, type: "area", quantity: 0 },
-        { id: "veranda_lined_rafters", name: "Потолок веранды подшитый по стропилам", price: 2000, type: "area", quantity: 0 },
         { id: "veranda_low", name: "Веранда (низкая крыша, 8 000 р/м²)", price: 8000, type: "area", quantity: 0 },
         { id: "veranda_cabin", name: "Веранда (7 500 р/м²)", price: 7500, type: "area", quantity: 0 },
-
-        { id: "generator_daily", name: "Генератор (сутки)", price: 2500, type: "quantity", quantity: 0 },
-        { id: "material_carry", name: "Пронос материала свыше 20 м (за каждые 10 м)", price: 10000, type: "quantity", quantity: 0 },
-        { id: "long_ladder", name: "Лестница на всю длину дома", price: 20000, type: "quantity", quantity: 0 },
-        { id: "step_with_railing", name: "Ступень с перилами", price: 20000, type: "quantity", quantity: 0 },
-        { id: "extension_room", name: "Пристройка", price: 20000, type: "quantity", quantity: 0 },
-        { id: "wall_height_raise_20", name: "Поднятие высоты стен на 20 см", price: 700, type: "area", quantity: 0 }
+        { id: "pile_delivery", name: "Доставка свай (70 р/км)", price: 70, type: "quantity", quantity: 0 },
+        { id: "profile_harness", name: "Обвязка свай профилем 20х40 одной линией (периметр * 450 р)", price: 450, type: "area", quantity: 0 },
+        { id: "roof_proflist_low", name: "Кровля: Профлист С8 цветной низкая крыша (+500 р/м²)", price: 500, type: "area", quantity: 0 },
+        { id: "roof_proflist_high", name: "Кровля: Профлист С8 цветной (выбор) или ондулин высокая крыша (+750 р/м²)", price: 750, type: "area", quantity: 0 },
+        { id: "roof_metal", name: "Кровля: Металлочерепица (+1500 р/м²)", price: 1500, type: "area", quantity: 0 },
+        { id: "roof_end_door", name: "Дверца в торце крыши", price: 5000, type: "quantity", quantity: 0 },
     ];
 
     let activeConfig = [];
@@ -979,6 +989,10 @@
 
             // Apply filtering logic
             if (activeAdditionFilter !== 'all') {
+                if (add.fromMaterials) {
+                    // JSON-позиции (доп.опции из админки) — фильтруем строго по полю group, без угадывания по названию
+                    if (add.group !== activeAdditionFilter) return;
+                } else {
                 const nameLower = add.name.toLowerCase();
                 if (activeAdditionFilter === 'windows') {
                     if (!nameLower.includes('окн')) return;
@@ -991,6 +1005,7 @@
                     if (!nameLower.includes('сва') && !nameLower.includes('обвязк')) return;
                 } else if (activeAdditionFilter === 'other') {
                     if (add.id !== 'veranda_cabin' && (nameLower.includes('окн') || nameLower.includes('двер') || add.type === 'area' || nameLower.includes('пол') || nameLower.includes('ваг') || nameLower.includes('осб') || nameLower.includes('стена') || nameLower.includes('покраск') || nameLower.includes('сва') || nameLower.includes('обвязк'))) return;
+                }
                 }
             }
 
@@ -1077,7 +1092,20 @@
 
             if (add.type === 'area') {
                 const nameLower = add.name.toLowerCase();
-                if (add.id === 'wall_height_raise_20') {
+                if (add.fromMaterials) {
+                    // JSON-позиции — подсказка берётся из поля hint записи, без угадывания по названию
+                    if (add.hint === 'houseAndVeranda') {
+                        recQty = Math.ceil(area + getVerandaArea());
+                        recText = `Площадь: ${recQty} м²`;
+                    } else if (add.hint === 'perimeter') {
+                        recQty = Math.ceil(calcPerimeter);
+                        recText = `Периметр: ${recQty} м`;
+                    } else if (add.hint === 'houseArea') {
+                        recQty = Math.ceil(area);
+                        recText = `Площадь: ${recQty} м²`;
+                    }
+                    // hint === 'none' — подсказку не показываем (recQty/recText остаются пустыми)
+                } else if (add.id === 'wall_height_raise_20') {
                     // Явно проверяем ID раньше, чем общее совпадение по слову "стен" —
                     // иначе попадает в ветку "площадь стен" (периметр×высота) вместо площади дома.
                     recQty = Math.ceil(area + getVerandaArea());
@@ -1092,12 +1120,6 @@
                 } else if (add.id === 'roof_metal' || add.id === 'roof_proflist_low' || add.id === 'roof_proflist_high') {
                     const porchArea = state.additionQuantities['freestanding_porch'] || 0;
                     recQty = Math.ceil(area + getVerandaArea() + porchArea);
-                    recText = `Площадь: ${recQty} м²`;
-                } else if (add.id === 'frame_upgrade' || add.id === 'ceiling_osb_12_lath'
-                           || add.id === 'floor_tongue_28_add' || add.id === 'floor_board_35_150_add' || add.id === 'floor_tongue_35_add'
-                           || add.id === 'veranda_lined_rafters'
-                           || add.id === 'rodent_mesh' || add.id === 'antiseptic_bottom') {
-                    recQty = Math.ceil(area + getVerandaArea());
                     recText = `Площадь: ${recQty} м²`;
                 } else {
                     recQty = Math.ceil(area);
@@ -1213,6 +1235,21 @@
         if (add.id === 'veranda_high') return isHouseHigh;
         if (add.id === 'veranda_low') return isHouseLow;
         if (add.id === 'veranda_cabin') return isCabinOrHoz;
+
+        // Позиции из materials.json (доп.опции, редактируемые через админку) — видимость по списку категорий записи
+        if (add.fromMaterials && Array.isArray(add.categories)) {
+            const isHozblokOnly = (state.calculatorMode === 'custom' && state.customType === 'hozblok') ||
+                                   (state.calculatorMode === 'standard' && model.name.includes("Хозблок"));
+            const isCabinOnly = (state.calculatorMode === 'custom' && state.customType === 'cabin') ||
+                                 (state.calculatorMode === 'standard' && model.name.includes("Бытовка") && !model.name.includes("Хозблок"));
+            const catMatch = {
+                house_high: isHouseHigh,
+                house_low: isHouseLow,
+                cabin: isCabinOnly,
+                hozblok: isHozblokOnly
+            };
+            return add.categories.some(c => catMatch[c]);
+        }
 
         if (isHouse) {
             if (add.id === 'roof_double_pitch_1800' || add.id === 'roof_double_pitch_flat' || add.id === 'veranda_ceiling_board') {
@@ -2261,6 +2298,7 @@
                 localStorage.removeItem('mobistroy_config');
             }
             loadConfig();
+            applyAdditionsMaterials();
             adminModal.style.display = 'none';
             alert("Цены успешно сброшены.");
             renderTabs();
@@ -2293,31 +2331,69 @@
         URL.revokeObjectURL(url);
     });
 
-    // ==================== Панель "Материалы" (внутренняя отделка) ====================
+    // ==================== Панель "Материалы" (внутренняя отделка + доп.опции) ====================
     const materialsToggleBtn = document.getElementById('materialsToggleBtn');
     const materialsModal = document.getElementById('materialsModal');
+    const materialsModalTitle = document.getElementById('materialsModalTitle');
     const closeMaterialsBtn = document.getElementById('closeMaterialsBtn');
     const matCategoryFilter = document.getElementById('matCategoryFilter');
+    const matGroupFilter = document.getElementById('matGroupFilter');
     const matList = document.getElementById('matList');
     const matAddForm = document.getElementById('matAddForm');
     const btnMatAddNew = document.getElementById('btnMatAddNew');
     const btnMatDownload = document.getElementById('btnMatDownload');
     const btnMatResetDrafts = document.getElementById('btnMatResetDrafts');
 
+    let matActiveTab = 'interior'; // 'interior' | 'additions'
     let matEditingId = null; // null = добавление новой записи, иначе — id редактируемой
+
+    const ALL_CATEGORIES = [
+        { id: 'house_high', label: 'Дом высокий' },
+        { id: 'house_low', label: 'Дом низкий' },
+        { id: 'cabin', label: 'Бытовка' },
+        { id: 'hozblok', label: 'Хозблок' }
+    ];
+    const ALL_GROUPS = [
+        { id: 'windows', label: 'Окна' },
+        { id: 'doors', label: 'Двери' },
+        { id: 'area', label: 'Отделка и полы' },
+        { id: 'piles', label: 'Сваи' },
+        { id: 'other', label: 'Прочее' }
+    ];
+    const ALL_HINTS = [
+        { id: 'none', label: 'Без подсказки' },
+        { id: 'houseArea', label: 'Площадь дома' },
+        { id: 'houseAndVeranda', label: 'Площадь дома + веранда' },
+        { id: 'perimeter', label: 'Периметр дома' }
+    ];
+
+    function getMatArray() {
+        return matActiveTab === 'interior' ? MATERIALS.interior : MATERIALS.additions;
+    }
+
+    function priceLabel(r) {
+        if (matActiveTab === 'interior') {
+            return r.price > 0 ? r.price.toLocaleString('ru-RU') + ' р/м²' : 'без доплаты (базовая)';
+        }
+        const unitLabel = r.unit === 'area' ? 'р/м²' : 'р/шт';
+        return r.price.toLocaleString('ru-RU') + ' ' + unitLabel;
+    }
 
     function renderMatList() {
         const cat = matCategoryFilter.value;
-        const items = MATERIALS.interior.filter(r => r.categories.includes(cat));
+        let items = getMatArray().filter(r => r.categories.includes(cat));
+        if (matActiveTab === 'additions') {
+            items = items.filter(r => r.group === matGroupFilter.value);
+        }
         if (items.length === 0) {
-            matList.innerHTML = `<p style="color:var(--text-muted); font-size:13px;">Пока нет позиций для этой категории.</p>`;
+            matList.innerHTML = `<p style="color:var(--text-muted); font-size:13px;">Пока нет позиций для этого фильтра.</p>`;
             return;
         }
         matList.innerHTML = items.map(r => `
             <div class="option-row" style="justify-content: space-between;" data-mat-id="${r.id}">
                 <div>
                     <div style="font-weight:600;">${r.name}</div>
-                    <div style="font-size:12px; color:var(--text-muted);">${r.price > 0 ? r.price.toLocaleString('ru-RU') + ' р/м²' : 'без доплаты (базовая)'}</div>
+                    <div style="font-size:12px; color:var(--text-muted);">${priceLabel(r)}</div>
                 </div>
                 <div style="display:flex; gap:6px;">
                     <button class="btn btn-secondary mat-edit-btn" style="padding:4px 10px; font-size:12px;">Изменить</button>
@@ -2335,10 +2411,15 @@
         matList.querySelectorAll('.mat-del-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const id = e.target.closest('[data-mat-id]').getAttribute('data-mat-id');
-                const rec = MATERIALS.interior.find(r => r.id === id);
+                const rec = getMatArray().find(r => r.id === id);
                 if (rec && confirm(`Удалить позицию "${rec.name}"?`)) {
-                    MATERIALS.interior = MATERIALS.interior.filter(r => r.id !== id);
+                    if (matActiveTab === 'interior') {
+                        MATERIALS.interior = MATERIALS.interior.filter(r => r.id !== id);
+                    } else {
+                        MATERIALS.additions = MATERIALS.additions.filter(r => r.id !== id);
+                    }
                     saveMaterialsDraft();
+                    if (matActiveTab === 'additions') applyAdditionsMaterials();
                     renderMatList();
                     renderModelUI();
                 }
@@ -2346,17 +2427,11 @@
         });
     }
 
-    const ALL_CATEGORIES = [
-        { id: 'house_high', label: 'Дом высокий' },
-        { id: 'house_low', label: 'Дом низкий' },
-        { id: 'cabin', label: 'Бытовка' },
-        { id: 'hozblok', label: 'Хозблок' }
-    ];
-
     function openMatForm(editId) {
         matEditingId = editId || null;
-        const rec = matEditingId ? MATERIALS.interior.find(r => r.id === matEditingId) : null;
+        const rec = matEditingId ? getMatArray().find(r => r.id === matEditingId) : null;
         const preselectedCats = rec ? rec.categories : [matCategoryFilter.value];
+        const isAdd = matActiveTab === 'additions';
 
         matAddForm.innerHTML = `
             <div style="display:flex; flex-direction:column; gap:10px;">
@@ -2366,10 +2441,31 @@
                         style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border-color,#ccc); margin-top:4px;">
                 </div>
                 <div>
-                    <label style="font-weight:600; font-size:13px;">Цена, р/м² (0 — без доплаты / базовая)</label>
+                    <label style="font-weight:600; font-size:13px;">Цена, р.${isAdd ? '' : '/м² (0 — без доплаты / базовая)'}</label>
                     <input type="number" id="matFieldPrice" value="${rec ? rec.price : 0}" min="0" step="10"
                         style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border-color,#ccc); margin-top:4px;">
                 </div>
+                ${isAdd ? `
+                <div>
+                    <label style="font-weight:600; font-size:13px;">Единица измерения</label>
+                    <select id="matFieldUnit" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border-color,#ccc); margin-top:4px;">
+                        <option value="quantity" ${rec && rec.unit === 'quantity' ? 'selected' : ''}>За штуку</option>
+                        <option value="area" ${rec && rec.unit === 'area' ? 'selected' : ''}>За м²</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-weight:600; font-size:13px;">Группа (вкладка в доп.опциях)</label>
+                    <select id="matFieldGroup" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border-color,#ccc); margin-top:4px;">
+                        ${ALL_GROUPS.map(g => `<option value="${g.id}" ${rec && rec.group === g.id ? 'selected' : (!rec && matGroupFilter.value === g.id ? 'selected' : '')}>${g.label}</option>`).join('')}
+                    </select>
+                </div>
+                <div>
+                    <label style="font-weight:600; font-size:13px;">Подсказка площади (кликабельная ссылка "Подставить")</label>
+                    <select id="matFieldHint" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border-color,#ccc); margin-top:4px;">
+                        ${ALL_HINTS.map(h => `<option value="${h.id}" ${rec && rec.hint === h.id ? 'selected' : (!rec && h.id === 'none' ? 'selected' : '')}>${h.label}</option>`).join('')}
+                    </select>
+                </div>
+                ` : ''}
                 <div>
                     <label style="font-weight:600; font-size:13px;">Показывать в категориях:</label>
                     <div style="display:flex; gap:14px; flex-wrap:wrap; margin-top:6px;">
@@ -2403,30 +2499,61 @@
         const name = document.getElementById('matFieldName').value.trim();
         const price = parseFloat(document.getElementById('matFieldPrice').value) || 0;
         const cats = Array.from(document.querySelectorAll('.matFieldCat:checked')).map(el => el.value);
+        const isAdd = matActiveTab === 'additions';
 
         if (!name) { alert('Введите название позиции.'); return; }
         if (cats.length === 0) { alert('Выберите хотя бы одну категорию.'); return; }
 
         if (matEditingId) {
-            const rec = MATERIALS.interior.find(r => r.id === matEditingId);
+            const rec = getMatArray().find(r => r.id === matEditingId);
             rec.name = name;
             rec.price = price;
             rec.categories = cats;
+            if (isAdd) {
+                rec.unit = document.getElementById('matFieldUnit').value;
+                rec.group = document.getElementById('matFieldGroup').value;
+                rec.hint = document.getElementById('matFieldHint').value;
+            }
         } else {
-            const newId = 'int_custom_' + Date.now();
-            MATERIALS.interior.push({ id: newId, name, price, categories: cats });
+            if (isAdd) {
+                const newId = 'add_custom_' + Date.now();
+                MATERIALS.additions.push({
+                    id: newId, name, price, categories: cats,
+                    unit: document.getElementById('matFieldUnit').value,
+                    group: document.getElementById('matFieldGroup').value,
+                    hint: document.getElementById('matFieldHint').value
+                });
+            } else {
+                const newId = 'int_custom_' + Date.now();
+                MATERIALS.interior.push({ id: newId, name, price, categories: cats });
+            }
         }
         saveMaterialsDraft();
+        if (isAdd) applyAdditionsMaterials();
         closeMatForm();
         renderMatList();
         renderModelUI();
     }
 
+    function switchMatTab(tab) {
+        matActiveTab = tab;
+        closeMatForm();
+        document.querySelectorAll('.mat-tab-btn').forEach(b => {
+            b.classList.toggle('active', b.getAttribute('data-tab') === tab);
+        });
+        matGroupFilter.style.display = (tab === 'additions') ? 'inline-block' : 'none';
+        materialsModalTitle.textContent = tab === 'additions' ? 'Материалы — Доп.опции' : 'Материалы — Внутренняя отделка';
+        renderMatList();
+    }
+
+    document.querySelectorAll('.mat-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => switchMatTab(btn.getAttribute('data-tab')));
+    });
+
     if (materialsToggleBtn) {
         materialsToggleBtn.addEventListener('click', () => {
             matCategoryFilter.value = (state.calculatorMode === 'custom' && state.customType) ? state.customType : 'house_high';
-            closeMatForm();
-            renderMatList();
+            switchMatTab('interior');
             materialsModal.style.display = 'flex';
         });
     }
@@ -2437,6 +2564,7 @@
         if (e.target === materialsModal) materialsModal.style.display = 'none';
     });
     matCategoryFilter.addEventListener('change', () => { closeMatForm(); renderMatList(); });
+    matGroupFilter.addEventListener('change', () => { closeMatForm(); renderMatList(); });
     btnMatAddNew.addEventListener('click', () => openMatForm(null));
 
     btnMatDownload.addEventListener('click', () => {
@@ -2454,6 +2582,7 @@
         if (confirm('Сбросить все несохранённые правки материалов и перезагрузить с сайта?')) {
             localStorage.removeItem('mobistroy_materials_draft');
             await loadMaterials();
+            applyAdditionsMaterials();
             closeMatForm();
             renderMatList();
             renderModelUI();
@@ -2550,6 +2679,7 @@
     renderTabs();
     (async () => {
         await loadMaterials();
+        applyAdditionsMaterials();
         if (activeConfig.length > 0) {
             state.selectedSizeId = activeConfig[0].sizes[0]?.id || '';
             renderModelUI();

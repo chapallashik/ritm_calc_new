@@ -386,19 +386,30 @@
     <div class="modal" id="materialsModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Материалы — Внутренняя отделка</h2>
+                <h2 id="materialsModalTitle">Материалы — Внутренняя отделка</h2>
                 <button class="close-btn" id="closeMaterialsBtn">&times;</button>
             </div>
             <div class="modal-body">
                 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">
                     Изменения видны только вам, пока не скачаете <code>materials.json</code> и не замените им файл на GitHub — тогда обновится для всех посетителей сайта.
                 </p>
+                <div style="display:flex; gap:8px; margin-bottom: 14px;">
+                    <button class="btn btn-secondary mat-tab-btn active" data-tab="interior" style="font-size:13px;">Внутренняя отделка</button>
+                    <button class="btn btn-secondary mat-tab-btn" data-tab="additions" style="font-size:13px;">Доп.опции</button>
+                </div>
                 <div style="display:flex; gap:8px; margin-bottom: 14px; flex-wrap: wrap;">
                     <select id="matCategoryFilter" style="padding:6px 10px; border-radius:8px; border:1px solid var(--border-color,#ccc);">
                         <option value="house_high">Дом высокий</option>
                         <option value="house_low">Дом низкий</option>
                         <option value="cabin">Бытовка</option>
                         <option value="hozblok">Хозблок</option>
+                    </select>
+                    <select id="matGroupFilter" style="display:none; padding:6px 10px; border-radius:8px; border:1px solid var(--border-color,#ccc);">
+                        <option value="windows">Окна</option>
+                        <option value="doors">Двери</option>
+                        <option value="area">Отделка и полы</option>
+                        <option value="piles">Сваи</option>
+                        <option value="other">Прочее</option>
                     </select>
                     <button class="btn btn-secondary" id="btnMatAddNew" style="font-size:13px;">+ Добавить позицию</button>
                 </div>
