@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Строительный калькулятор</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="light">
+
+<!-- =================== ЭКРАН ВХОДА =================== -->
+<div id="loginScreen" class="login-screen">
+    <div class="login-card">
+        <div class="login-logo">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <h1>Строительный калькулятор</h1>
+        </div>
+        <p class="login-subtitle">Выберите режим входа</p>
+        <div class="login-buttons">
+            <button class="btn btn-primary" id="btnGuestLogin">
+                Войти как гость
+            </button>
+            <button class="btn btn-secondary" id="btnShowAdminForm">
+                Войти как администратор
+            </button>
+        </div>
+        <div id="adminLoginForm" style="display:none; margin-top: 20px;">
+            <div class="form-group">
+                <label>Логин</label>
+                <input type="text" id="adminLoginInput" placeholder="Логин" autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" id="adminPasswordInput" placeholder="Пароль" autocomplete="current-password">
+            </div>
+            <div id="loginError" class="login-error" style="display:none;">Неверный логин или пароль</div>
+            <button class="btn btn-primary" id="btnAdminLogin" style="width:100%; margin-top:10px;">Войти</button>
+            <button class="btn btn-link" id="btnCancelAdmin" style="width:100%; margin-top:8px;">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<!-- =================== ОСНОВНОЕ ПРИЛОЖЕНИЕ =================== -->
+<div id="appContainer" class="app-container" style="display:none;">
+
+    <header>
+        <div class="logo-section">
+            <h1>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                Строительный калькулятор
+            </h1>
+            <p>Расчет стоимости бытовок, домиков и блок-контейнеров</p>
+        </div>
+        <div class="header-controls">
+            <span class="admin-badge" id="adminBadge" style="display:none;">РЕДАКТОР</span>
+            <button class="btn btn-secondary" id="adminToggleBtn" style="display:none;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                Цены
+            </button>
+            <button class="btn btn-secondary" id="btnLogout" style="font-size:12px;">
+                Выйти
+            </button>
+            <button class="btn-theme" id="themeToggleBtn" aria-label="Смена темы">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Переключатель режима -->
+    <div class="tabs-container" id="modeTabs" style="margin-bottom: 15px; background: rgba(0, 128, 128, 0.05); padding: 8px;">
+        <button class="tab-btn active" id="btnModeCustom" style="font-size: 15px; font-weight: 700; padding: 12px 20px;">
+            Индивидуальный расчет
+        </button>
+        <button class="tab-btn" id="btnModeStandard" style="font-size: 15px; font-weight: 700; padding: 12px 20px;">
+            Стандартные проекты
+        </button>
+    </div>
+
+    <!-- Вкладки продуктов (только в стандартном режиме) -->
+    <div class="tabs-container" id="productTabs" style="display: none;"></div>
+
+    <main class="main-grid">
+        <div class="config-panel">
+
+            <!-- СЕКЦИЯ А: Конструктор (по умолчанию) -->
+            <div id="customConstructorArea">
+                <section class="card">
+                    <h2>1. Параметры строения</h2>
+                    <div class="options-list">
+                        <div class="option-row" style="flex-direction: column; align-items: stretch; gap: 10px;">
+                            <label style="font-weight: 600;">Категория:</label>
+                            <div class="option-grid" id="customTypeSelector">
+                                <div class="selector-card active" data-type="house_high" data-rate="12500">
+                                    <div class="title">Дом высокий</div>
+                                    <div class="sub">12 500 р/м²</div>
+                                </div>
+                                <div class="selector-card" data-type="house_low" data-rate="9500">
+                                    <div class="title">Дом низкий</div>
+                                    <div class="sub">9 500 / 10 000 р/м²</div>
+                                </div>
+                                <div class="selector-card" data-type="cabin" data-rate="8000">
+                                    <div class="title">Бытовка</div>
+                                    <div class="sub">8 000 р/м²</div>
+                                </div>
+                                <div class="selector-card" data-type="hozblok" data-rate="5500">
+                                    <div class="title">Хозблок</div>
+                                    <div class="sub">5 500 р/м²</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="option-row" style="flex-direction: column; align-items: stretch; gap: 8px;">
+                            <div style="display: flex; justify-content: space-between; font-weight: 600;">
+                                <span>Длина:</span>
+                                <span id="lblCustomLength" style="color:var(--primary); font-weight:800;">6.0 м</span>
+                            </div>
+                            <div class="range-wrap">
+                                <input type="range" id="customLengthSlider" min="2" max="12" step="1" value="6">
+                            </div>
+                        </div>
+                        <div class="option-row" style="flex-direction: column; align-items: stretch; gap: 8px;">
+                            <div style="display: flex; justify-content: space-between; font-weight: 600;">
+                                <span>Ширина:</span>
+                                <span id="lblCustomWidth" style="color:var(--primary); font-weight:800;">3.0 м</span>
+                            </div>
+                            <div class="range-wrap">
+                                <input type="range" id="customWidthSlider" min="2" max="10" step="1" value="3">
+                            </div>
+                        </div>
+                        <div class="option-row" style="flex-direction: column; align-items: stretch; gap: 8px;">
+                            <div style="display: flex; justify-content: space-between; font-weight: 600;">
+                                <span>Высота стен:</span>
+                                <span id="lblCustomHeight" style="color:var(--primary); font-weight:800;">2.4 м</span>
+                            </div>
+                            <div class="range-wrap">
+                                <input type="range" id="customHeightSlider" min="2" max="4" step="0.1" value="2.4">
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <section class="card">
+                    <h2>2. Материалы и комплектация</h2>
+                    <div class="options-list">
+                        <div class="option-row" style="flex-direction: column; align-items: stretch; gap: 6px;">
+                            <label style="font-weight: 600;">Наружная отделка:</label>
+                            <select id="selCustomExterior" style="padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); color:var(--text-main); font-weight: 500;">
+                                <option value="none">Имитация бруса 'В' (базовая, включена)</option>
+                                <option value="osb">ОСБ 12 мм (+50 р/м²)</option>
+                                <option value="lining_a">Вагонка 'А' класс (+380 р/м²)</option>
+                                <option value="imitation_a">Имитация бруса 'А' (+150 р/м²)</option>
+                                <option value="blockhouse">Блок-хаус (+750 р/м²)</option>
+                            </select>
+                        </div>
+                        <div class="option-row" style="flex-direction: column; align-items: stretch; gap: 6px;">
+                            <label style="font-weight: 600;">Внутренняя отделка:</label>
+                            <select id="selCustomInterior" style="padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); color:var(--text-main); font-weight: 500;">
+                                <option value="none">Вагонка 'ВС' (базовая, включена)</option>
+                                <option value="imitation">Имитация бруса (+250 р/м²)</option>
+                            </select>
+                        </div>
+                        <div class="option-row" style="flex-direction: column; align-items: stretch; gap: 6px;">
+                            <label style="font-weight: 600;">Утепление:</label>
+                            <select id="selCustomInsulation" style="padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); color:var(--text-main); font-weight: 500;">
+                                <option value="100_base_min">100 мм мин. вата (в базовой)</option>
+                                <option value="100">100 мм базальтовая плита (по формуле)</option>
+                                <option value="150">150 мм базальтовая плита (+3 500 р/м²)</option>
+                                <option value="0">Без утепления</option>
+                            </select>
+                        </div>
+                        <div class="option-row" style="flex-direction: column; align-items: stretch; gap: 6px;">
+                            <label style="font-weight: 600;">Настил пола:</label>
+                            <select id="selCustomFloor" style="padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); color:var(--text-main); font-weight: 500;">
+                                <option value="none">Обрезная доска 25мм (включена в базовую цену)</option>
+                                <option value="osb12">ОСБ 12мм (+500 р/м² пола)</option>
+                                <option value="osb18">ОСБ 18мм (+700 р/м² пола)</option>
+                                <option value="tongue28">Шпунтованная доска 28мм (+1000 р/м² пола)</option>
+                                <option value="tongue36">Шпунтованная доска 36мм (+1250 р/м² пола)</option>
+                            </select>
+                        </div>
+                        <div class="option-row" style="justify-content: space-between; align-items: center; margin-top: 5px;">
+                            <div class="option-info">
+                                <input type="checkbox" id="chkCustomAssembly">
+                                <label for="chkCustomAssembly" class="option-label" style="font-weight:600; cursor:pointer;">Сборка на участке</label>
+                            </div>
+                            <div class="option-price" id="lblCustomAssemblyPrice">+0 руб.</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- СЕКЦИЯ Б: Стандартные проекты (скрыта по умолчанию) -->
+            <div id="standardProjectsArea" style="display: none;">
+                <section class="card" id="sizesCard">
+                    <h2>1. Размер строения</h2>
+                    <div class="option-grid" id="sizesList"></div>
+                </section>
+
+                <section class="card" id="finishesCard">
+                    <h2>2. Отделка и комплектация</h2>
+                    <div class="options-list" id="finishesList"></div>
+                </section>
+
+                <section class="card" id="houseTypeCard" style="display: none;">
+                    <h2>Тип и высота дома</h2>
+                    <div class="option-grid" id="houseTypeList">
+                        <div class="selector-card active" data-rate="12500" data-height="3.5" id="rateHigh">
+                            <div class="title">Высокий дом</div>
+                            <div class="sub">12 500 руб/м²</div>
+                        </div>
+                        <div class="selector-card" data-rate="9500" data-height="2.2" id="rateLowOsb">
+                            <div class="title">Низкий (ОСБ)</div>
+                            <div class="sub">9 500 руб/м²</div>
+                        </div>
+                        <div class="selector-card" data-rate="10000" data-height="2.2" id="rateLowLining">
+                            <div class="title">Низкий (Ваг)</div>
+                            <div class="sub">10 000 руб/м²</div>
+                        </div>
+                        <div class="selector-card" data-rate="9500" data-height="3.5" id="rateCold">
+                            <div class="title">Хол. контур (высок.)</div>
+                            <div class="sub">9 500/м²</div>
+                        </div>
+                        <div class="selector-card" data-rate="8000" data-height="2.2" id="rateColdLow">
+                            <div class="title">Хол. контур (низк.)</div>
+                            <div class="sub">8 000 руб/м²</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card" id="coreOptionsCard">
+                    <h2>3. Параметры конструкции</h2>
+                    <div class="options-list">
+                        <div class="option-row" id="assemblyRow" style="display: none;">
+                            <div class="option-info">
+                                <input type="checkbox" id="optAssembly">
+                                <label for="optAssembly" class="option-label" style="cursor:pointer;">Сборка на участке</label>
+                            </div>
+                            <div class="option-price" id="assemblyPriceText">0 руб.</div>
+                        </div>
+                        <div id="floorOptionsContainer" class="options-list" style="margin-top: 10px;"></div>
+                        <div id="insulationContainer" class="options-list" style="margin-top: 10px;"></div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Дополнительные опции -->
+            <section class="card" id="additionsCard">
+                <h2>3. Дополнительные опции</h2>
+                <div class="additions-filter-container" id="additionFilters">
+                    <button class="filter-btn active" data-filter="all">Все</button>
+                    <button class="filter-btn" data-filter="windows">Окна</button>
+                    <button class="filter-btn" data-filter="doors">Двери</button>
+                    <button class="filter-btn" data-filter="area">Отделка и полы</button>
+                    <button class="filter-btn" data-filter="piles">Сваи</button>
+                    <button class="filter-btn" data-filter="other">Прочее</button>
+                </div>
+                <div class="options-list" id="additionsList"></div>
+            </section>
+
+            <!-- Доставка -->
+            <section class="card" id="deliveryCard">
+                <h2>4. Доставка</h2>
+                <div class="delivery-container">
+                    <label style="font-weight: 600; font-size: 14px;" id="deliveryTerms">Условия доставки</label>
+                    <div class="range-wrap">
+                        <input type="range" id="deliverySlider" min="0" max="300" value="0">
+                        <input type="number" id="deliveryInput" min="0" max="300" value="0">
+                        <span style="font-weight: bold; font-size: 14px;">км</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Итоговый расчёт (фиксированный) -->
+        <div class="sticky-estimate">
+            <div class="card">
+                <h2>Итоговый расчет</h2>
+                <div class="total-display">
+                    <span>Итого к оплате</span>
+                    <h3 id="totalPriceText">0 руб.</h3>
+                </div>
+
+                <div class="calculation-summary" id="invoiceSummary"></div>
+
+                <div class="actions-block">
+                    <button class="btn btn-primary" id="btnCopyClipboard">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        Скопировать расчет
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.print()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                        Распечатать / PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Модал: Панель администратора -->
+    <div class="modal" id="adminModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Редактирование цен</h2>
+                <button class="close-btn" id="closeAdminBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">
+                    Измените цену и нажмите «Сохранить». Скачайте config.js и залейте на GitHub — цены обновятся для всех.
+                </p>
+                <div class="admin-grid-edit" id="adminFormFields"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnResetConfig" style="border-color: var(--accent); color: var(--accent);">Сбросить настройки</button>
+                <button class="btn btn-secondary" id="btnResetCache" style="border-color: #e67e22; color: #e67e22;">Сбросить кэш</button>
+                <button class="btn btn-secondary" id="btnExportConfig">Скачать config.js</button>
+                <button class="btn btn-primary" id="btnSaveConfig">Сохранить изменения</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="config.js"></script>
+<script src="auth.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
