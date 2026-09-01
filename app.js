@@ -2550,20 +2550,20 @@
                 <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">
                     Каждая строка — своя базовая ставка (полностью заменяет цену дома). Два числа: без утепления и с утеплением.
                 </div>
+                <div style="display:flex; align-items:center; gap:8px; padding:0 15px; margin-bottom:4px;">
+                    <div style="flex:1; font-size:11px; color:var(--text-muted);">Отделка</div>
+                    <div style="width:90px; font-size:11px; color:var(--text-muted); text-align:center;">Без утепления</div>
+                    <div style="width:90px; font-size:11px; color:var(--text-muted); text-align:center;">С утеплением</div>
+                    <div style="width:34px;"></div>
+                </div>
                 <div style="display:flex; flex-direction:column; gap:8px;">
                     ${MATERIALS.exterior.houseHigh.map((r, i) => `
-                        <div class="option-row" style="flex-wrap:wrap; gap:10px 14px;" data-hh-idx="${i}">
+                        <div class="option-row" style="flex-wrap:nowrap; gap:8px;" data-hh-idx="${i}">
                             <input type="text" class="hh-name" value="${r.name.replace(/"/g, '&quot;')}"
-                                style="flex:1 1 160px; min-width:120px; padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); font-weight:500;">
-                            <div style="display:flex; flex-direction:column; gap:2px;">
-                                <label style="font-size:11px; color:var(--text-muted);">Без утепления</label>
-                                <input type="number" class="hh-no-ins" value="${r.priceNoIns}" style="width:100px; padding:6px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); text-align:center;">
-                            </div>
-                            <div style="display:flex; flex-direction:column; gap:2px;">
-                                <label style="font-size:11px; color:var(--text-muted);">С утеплением</label>
-                                <input type="number" class="hh-with-ins" value="${r.priceWithIns}" style="width:100px; padding:6px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); text-align:center;">
-                            </div>
-                            <button class="btn btn-secondary hh-del" style="padding:6px 10px; font-size:12px; border-color:#e74c3c; color:#e74c3c;">✕</button>
+                                style="flex:1; min-width:0; padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); font-weight:500;">
+                            <input type="number" class="hh-no-ins" value="${r.priceNoIns}" style="width:90px; flex-shrink:0; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); text-align:center;">
+                            <input type="number" class="hh-with-ins" value="${r.priceWithIns}" style="width:90px; flex-shrink:0; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); text-align:center;">
+                            <button class="btn btn-secondary hh-del" style="flex-shrink:0; width:34px; padding:6px 0; font-size:12px; border-color:#e74c3c; color:#e74c3c;">✕</button>
                         </div>
                     `).join('')}
                 </div>
@@ -2611,23 +2611,23 @@
                 <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">
                     «Своя база» — заменяет всю ставку дома. «Доплата» — добавляется к базе для доплатных материалов сверху, за площадь стен.
                 </div>
+                <div style="display:flex; align-items:center; gap:8px; padding:0 15px; margin-bottom:4px;">
+                    <div style="flex:1; font-size:11px; color:var(--text-muted);">Материал</div>
+                    <div style="width:110px; font-size:11px; color:var(--text-muted); text-align:center;">Режим</div>
+                    <div style="width:90px; font-size:11px; color:var(--text-muted); text-align:center;">Цена</div>
+                    <div style="width:34px;"></div>
+                </div>
                 <div style="display:flex; flex-direction:column; gap:8px;">
                     ${hl.materials.map((r, i) => `
-                        <div class="option-row" style="flex-wrap:wrap; gap:10px 14px;" data-hl-idx="${i}">
+                        <div class="option-row" style="flex-wrap:nowrap; gap:8px;" data-hl-idx="${i}">
                             <input type="text" class="hl-name" value="${r.name.replace(/"/g, '&quot;')}"
-                                style="flex:1 1 140px; min-width:120px; padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); font-weight:500;">
-                            <div style="display:flex; flex-direction:column; gap:2px;">
-                                <label style="font-size:11px; color:var(--text-muted);">Режим</label>
-                                <select class="hl-mode" style="padding:6px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card);">
-                                    <option value="base" ${r.mode === 'base' ? 'selected' : ''}>Своя база</option>
-                                    <option value="addon" ${r.mode === 'addon' ? 'selected' : ''}>Доплата</option>
-                                </select>
-                            </div>
-                            <div style="display:flex; flex-direction:column; gap:2px;">
-                                <label style="font-size:11px; color:var(--text-muted);">Цена</label>
-                                <input type="number" class="hl-price" value="${r.price}" style="width:100px; padding:6px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); text-align:center;">
-                            </div>
-                            <button class="btn btn-secondary hl-del" style="padding:6px 10px; font-size:12px; border-color:#e74c3c; color:#e74c3c;">✕</button>
+                                style="flex:1; min-width:0; padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); font-weight:500;">
+                            <select class="hl-mode" style="width:110px; flex-shrink:0; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card);">
+                                <option value="base" ${r.mode === 'base' ? 'selected' : ''}>Своя база</option>
+                                <option value="addon" ${r.mode === 'addon' ? 'selected' : ''}>Доплата</option>
+                            </select>
+                            <input type="number" class="hl-price" value="${r.price}" style="width:90px; flex-shrink:0; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); text-align:center;">
+                            <button class="btn btn-secondary hl-del" style="flex-shrink:0; width:34px; padding:6px 0; font-size:12px; border-color:#e74c3c; color:#e74c3c;">✕</button>
                         </div>
                     `).join('')}
                 </div>
