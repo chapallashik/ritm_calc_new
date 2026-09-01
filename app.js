@@ -272,7 +272,52 @@
     const lblCustomWidth = document.getElementById('lblCustomWidth');
     const customHeightSlider = document.getElementById('customHeightSlider');
     const lblCustomHeight = document.getElementById('lblCustomHeight');
-    // veranda moved to additions — no separate DOM refs needed
+
+    // --- Веранда (отдельный раздел) ---
+    const chkVerandaEnabled = document.getElementById('chkVerandaEnabled');
+    const verandaParamsWrap = document.getElementById('verandaParamsWrap');
+    const verandaLengthSlider = document.getElementById('verandaLengthSlider');
+    const lblVerandaLength = document.getElementById('lblVerandaLength');
+    const verandaWidthSlider = document.getElementById('verandaWidthSlider');
+    const lblVerandaWidth = document.getElementById('lblVerandaWidth');
+    const verandaHeightSlider = document.getElementById('verandaHeightSlider');
+    const lblVerandaHeight = document.getElementById('lblVerandaHeight');
+    const verandaAttachSelector = document.getElementById('verandaAttachSelector');
+    const lblVerandaSummary = document.getElementById('lblVerandaSummary');
+    const verandaSection = document.getElementById('verandaSection');
+
+    state.verandaEnabled = false;
+    state.verandaLength = 6;
+    state.verandaWidth = 2;
+    state.verandaHeight = 2.4;
+    state.verandaAttachSide = 'length'; // 'length' | 'width' — какой своей стороной веранда примыкает к дому
+
+    // Прокидываем площадь веранды в уже существующий механизм ценообразования
+    // (veranda_high/veranda_low в доп.опциях), чтобы вся логика расчёта (утепление,
+    // каркасы, подсказки площади и т.д.) продолжала работать без переделки.
+    function syncVerandaToAdditions() {
+        const isHouse = (state.customType === 'house_high' || state.customType === 'house_low');
+        const area = (isHouse && state.verandaEnabled) ? (state.verandaLength * state.verandaWidth) : 0;
+        state.additionQuantities['veranda_high'] = (state.customType === 'house_high') ? area : 0;
+        state.additionQuantities['veranda_low'] = (state.customType === 'house_low') ? area : 0;
+    }
+
+    function updateVerandaSummary() {
+        if (!lblVerandaSummary) return;
+        const area = state.verandaLength * state.verandaWidth;
+        const housePerimeter = 2 * (state.customLength + state.customWidth);
+        const verandaPerimeter = 2 * (state.verandaLength + state.verandaWidth);
+        const adjacentSide = (state.verandaAttachSide === 'length') ? state.verandaLength : state.verandaWidth;
+        const combinedPerimeter = housePerimeter + verandaPerimeter - adjacentSide;
+        state.verandaCombinedPerimeter = combinedPerimeter; // на будущее — для других расчётов (свесы, вентзазор и т.п.)
+        lblVerandaSummary.textContent = `Площадь веранды: ${area.toFixed(1)} м² · Общий периметр (дом+веранда): ${combinedPerimeter.toFixed(1)} м`;
+    }
+
+    function updateVerandaSectionVisibility() {
+        if (!verandaSection) return;
+        const isHouse = (state.customType === 'house_high' || state.customType === 'house_low');
+        verandaSection.style.display = isHouse ? '' : 'none';
+    }
     const selCustomExterior = document.getElementById('selCustomExterior');
     const selCustomInterior = document.getElementById('selCustomInterior');
     const selCustomFloor = document.getElementById('selCustomFloor');
@@ -566,6 +611,9 @@
     // 4. Model UI Rendering Engine
     function renderModelUI() {
         if (state.calculatorMode === 'custom') {
+            updateVerandaSectionVisibility();
+            syncVerandaToAdditions();
+            updateVerandaSummary();
             if (state.customType === 'house_high') {
                 customHeightSlider.disabled = true;
                 state.customHeight = 2.4;
@@ -878,6 +926,11 @@
         }
 
         model.additions.forEach(add => {
+            // Веранда для домов теперь редактируется в отдельном разделе "2. Веранда" —
+            // строку в доп.опциях больше не показываем, но количество (и цена) продолжают
+            // считаться через тот же механизм (см. syncVerandaToAdditions).
+            if (add.id === 'veranda_high' || add.id === 'veranda_low') return;
+
             // Единая проверка: если позиция не применима для текущего выбора — обнуляем
             // сохранённое количество (чтобы оно не "всплыло" в итоге при переключении) и скрываем строку.
             if (!isAdditionApplicable(add, model)) {
@@ -2021,6 +2074,59 @@
     customHeightSlider.addEventListener('input', (e) => {
         state.customHeight = parseFloat(e.target.value) || 2;
         renderModelUI();
+    });
+
+    // --- Веранда: обработчики ---
+    chkVerandaEnabled.addEventListener('change', (e) => {
+        state.verandaEnabled = e.target.checked;
+        verandaParamsWrap.style.display = state.verandaEnabled ? '' : 'none';
+        if (state.verandaEnabled) {
+            // Значения по умолчанию — как в разделе "Параметры строения"
+            state.verandaLength = state.customLength;
+            state.verandaWidth = state.customWidth;
+            state.verandaHeight = state.customHeight;
+            verandaLengthSlider.value = state.verandaLength;
+            verandaWidthSlider.value = state.verandaWidth;
+            verandaHeightSlider.value = state.verandaHeight;
+            lblVerandaLength.textContent = `${state.verandaLength.toFixed(1)} м`;
+            lblVerandaWidth.textContent = `${state.verandaWidth.toFixed(1)} м`;
+            lblVerandaHeight.textContent = `${state.verandaHeight.toFixed(1)} м`;
+        }
+        syncVerandaToAdditions();
+        updateVerandaSummary();
+        renderModelUI();
+    });
+
+    verandaLengthSlider.addEventListener('input', (e) => {
+        state.verandaLength = parseFloat(e.target.value) || 1;
+        lblVerandaLength.textContent = `${state.verandaLength.toFixed(1)} м`;
+        syncVerandaToAdditions();
+        updateVerandaSummary();
+        renderModelUI();
+    });
+
+    verandaWidthSlider.addEventListener('input', (e) => {
+        state.verandaWidth = parseFloat(e.target.value) || 1;
+        lblVerandaWidth.textContent = `${state.verandaWidth.toFixed(1)} м`;
+        syncVerandaToAdditions();
+        updateVerandaSummary();
+        renderModelUI();
+    });
+
+    verandaHeightSlider.addEventListener('input', (e) => {
+        state.verandaHeight = parseFloat(e.target.value) || 2;
+        lblVerandaHeight.textContent = `${state.verandaHeight.toFixed(1)} м`;
+        updateVerandaSummary();
+        // Высота веранды пока не влияет на цену напрямую — сохраняется в state.verandaHeight про запас, для будущих формул.
+    });
+
+    verandaAttachSelector.querySelectorAll('.selector-card').forEach(card => {
+        card.addEventListener('click', () => {
+            verandaAttachSelector.querySelectorAll('.selector-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+            state.verandaAttachSide = card.getAttribute('data-side');
+            updateVerandaSummary();
+        });
     });
 
     // Custom Selects updates
