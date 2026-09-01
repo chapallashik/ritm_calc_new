@@ -2547,26 +2547,27 @@
 
         if (cat === 'house_high') {
             matList.innerHTML = `
-                <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">
+                <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">
                     Каждая строка — своя базовая ставка (полностью заменяет цену дома). Два числа: без утепления и с утеплением.
                 </div>
-                <table style="width:100%; border-collapse:collapse; font-size:13px;">
-                    <tr style="color:var(--text-muted);">
-                        <td style="padding:6px 4px;">Отделка</td>
-                        <td style="padding:6px 4px; text-align:center; width:110px;">Без утепления</td>
-                        <td style="padding:6px 4px; text-align:center; width:110px;">С утеплением</td>
-                        <td style="width:80px;"></td>
-                    </tr>
+                <div style="display:flex; flex-direction:column; gap:8px;">
                     ${MATERIALS.exterior.houseHigh.map((r, i) => `
-                        <tr style="border-top:0.5px solid var(--border);" data-hh-idx="${i}">
-                            <td style="padding:8px 4px;"><input type="text" class="hh-name" value="${r.name.replace(/"/g, '&quot;')}" style="width:100%;"></td>
-                            <td style="padding:8px 4px;"><input type="number" class="hh-no-ins" value="${r.priceNoIns}" style="width:100%; text-align:center;"></td>
-                            <td style="padding:8px 4px;"><input type="number" class="hh-with-ins" value="${r.priceWithIns}" style="width:100%; text-align:center;"></td>
-                            <td style="padding:8px 4px; text-align:right;"><button class="btn btn-secondary hh-del" style="padding:4px 8px; font-size:12px; border-color:#e74c3c; color:#e74c3c;">✕</button></td>
-                        </tr>
+                        <div class="option-row" style="flex-wrap:wrap; gap:10px 14px;" data-hh-idx="${i}">
+                            <input type="text" class="hh-name" value="${r.name.replace(/"/g, '&quot;')}"
+                                style="flex:1 1 160px; min-width:120px; padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); font-weight:500;">
+                            <div style="display:flex; flex-direction:column; gap:2px;">
+                                <label style="font-size:11px; color:var(--text-muted);">Без утепления</label>
+                                <input type="number" class="hh-no-ins" value="${r.priceNoIns}" style="width:100px; padding:6px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); text-align:center;">
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:2px;">
+                                <label style="font-size:11px; color:var(--text-muted);">С утеплением</label>
+                                <input type="number" class="hh-with-ins" value="${r.priceWithIns}" style="width:100px; padding:6px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); text-align:center;">
+                            </div>
+                            <button class="btn btn-secondary hh-del" style="padding:6px 10px; font-size:12px; border-color:#e74c3c; color:#e74c3c;">✕</button>
+                        </div>
                     `).join('')}
-                </table>
-                <div style="display:flex; gap:8px; margin-top:12px;">
+                </div>
+                <div style="display:flex; gap:8px; margin-top:14px;">
                     <button class="btn btn-secondary" id="btnHhAddRow" style="font-size:12px;">+ Добавить строку</button>
                     <button class="btn btn-primary" id="btnHhSave" style="font-size:12px;">Сохранить</button>
                 </div>
@@ -2597,41 +2598,40 @@
         } else if (cat === 'house_low') {
             const hl = MATERIALS.exterior.houseLow;
             matList.innerHTML = `
-                <div style="display:flex; gap:16px; margin-bottom:14px;">
-                    <div style="flex:1;">
-                        <label style="font-size:12px; color:var(--text-secondary);">Ставка без утепления (не зависит от отделки)</label>
-                        <input type="number" id="hlNoInsRate" value="${hl.noInsRate}" style="width:100%; margin-top:4px;">
+                <div class="option-row" style="flex-wrap:wrap; gap:14px; margin-bottom:12px;">
+                    <div style="display:flex; flex-direction:column; gap:2px; flex:1 1 160px;">
+                        <label style="font-size:11px; color:var(--text-muted);">Ставка без утепления (не зависит от отделки)</label>
+                        <input type="number" id="hlNoInsRate" value="${hl.noInsRate}" style="padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card);">
                     </div>
-                    <div style="flex:1;">
-                        <label style="font-size:12px; color:var(--text-secondary);">База для доплатных материалов</label>
-                        <input type="number" id="hlCheapBaseRate" value="${hl.cheapBaseRate}" style="width:100%; margin-top:4px;">
+                    <div style="display:flex; flex-direction:column; gap:2px; flex:1 1 160px;">
+                        <label style="font-size:11px; color:var(--text-muted);">База для доплатных материалов</label>
+                        <input type="number" id="hlCheapBaseRate" value="${hl.cheapBaseRate}" style="padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card);">
                     </div>
                 </div>
-                <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">
-                    "Своя база" — заменяет всю ставку дома. "Доплата" — добавляется к базе для доплатных материалов сверху, за площадь стен.
+                <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">
+                    «Своя база» — заменяет всю ставку дома. «Доплата» — добавляется к базе для доплатных материалов сверху, за площадь стен.
                 </div>
-                <table style="width:100%; border-collapse:collapse; font-size:13px;">
-                    <tr style="color:var(--text-muted);">
-                        <td style="padding:6px 4px;">Материал</td>
-                        <td style="padding:6px 4px; text-align:center; width:110px;">Режим</td>
-                        <td style="padding:6px 4px; text-align:center; width:90px;">Цена</td>
-                        <td style="width:40px;"></td>
-                    </tr>
+                <div style="display:flex; flex-direction:column; gap:8px;">
                     ${hl.materials.map((r, i) => `
-                        <tr style="border-top:0.5px solid var(--border);" data-hl-idx="${i}">
-                            <td style="padding:8px 4px;"><input type="text" class="hl-name" value="${r.name.replace(/"/g, '&quot;')}" style="width:100%;"></td>
-                            <td style="padding:8px 4px;">
-                                <select class="hl-mode" style="width:100%;">
+                        <div class="option-row" style="flex-wrap:wrap; gap:10px 14px;" data-hl-idx="${i}">
+                            <input type="text" class="hl-name" value="${r.name.replace(/"/g, '&quot;')}"
+                                style="flex:1 1 140px; min-width:120px; padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); font-weight:500;">
+                            <div style="display:flex; flex-direction:column; gap:2px;">
+                                <label style="font-size:11px; color:var(--text-muted);">Режим</label>
+                                <select class="hl-mode" style="padding:6px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card);">
                                     <option value="base" ${r.mode === 'base' ? 'selected' : ''}>Своя база</option>
                                     <option value="addon" ${r.mode === 'addon' ? 'selected' : ''}>Доплата</option>
                                 </select>
-                            </td>
-                            <td style="padding:8px 4px;"><input type="number" class="hl-price" value="${r.price}" style="width:100%; text-align:center;"></td>
-                            <td style="padding:8px 4px; text-align:right;"><button class="btn btn-secondary hl-del" style="padding:4px 8px; font-size:12px; border-color:#e74c3c; color:#e74c3c;">✕</button></td>
-                        </tr>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:2px;">
+                                <label style="font-size:11px; color:var(--text-muted);">Цена</label>
+                                <input type="number" class="hl-price" value="${r.price}" style="width:100px; padding:6px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); text-align:center;">
+                            </div>
+                            <button class="btn btn-secondary hl-del" style="padding:6px 10px; font-size:12px; border-color:#e74c3c; color:#e74c3c;">✕</button>
+                        </div>
                     `).join('')}
-                </table>
-                <div style="display:flex; gap:8px; margin-top:12px;">
+                </div>
+                <div style="display:flex; gap:8px; margin-top:14px;">
                     <button class="btn btn-secondary" id="btnHlAddRow" style="font-size:12px;">+ Добавить материал</button>
                     <button class="btn btn-primary" id="btnHlSave" style="font-size:12px;">Сохранить</button>
                 </div>
