@@ -303,14 +303,15 @@
     }
 
     function updateVerandaSummary() {
-        if (!lblVerandaSummary) return;
         const area = state.verandaLength * state.verandaWidth;
         const housePerimeter = 2 * (state.customLength + state.customWidth);
         const verandaPerimeter = 2 * (state.verandaLength + state.verandaWidth);
         const adjacentSide = (state.verandaAttachSide === 'length') ? state.verandaLength : state.verandaWidth;
         const combinedPerimeter = housePerimeter + verandaPerimeter - adjacentSide;
         state.verandaCombinedPerimeter = combinedPerimeter; // на будущее — для других расчётов (свесы, вентзазор и т.п.)
-        lblVerandaSummary.textContent = `Площадь веранды: ${area.toFixed(1)} м² · Общий периметр (дом+веранда): ${combinedPerimeter.toFixed(1)} м`;
+        if (lblVerandaSummary) {
+            lblVerandaSummary.textContent = `Площадь веранды: ${area.toFixed(1)} м² · Общий периметр (дом+веранда): ${combinedPerimeter.toFixed(1)} м`;
+        }
     }
 
     function updateVerandaSectionVisibility() {
@@ -2079,7 +2080,7 @@
     // --- Веранда: обработчики ---
     chkVerandaEnabled.addEventListener('change', (e) => {
         state.verandaEnabled = e.target.checked;
-        verandaParamsWrap.style.display = state.verandaEnabled ? '' : 'none';
+        verandaParamsWrap.style.display = state.verandaEnabled ? 'flex' : 'none';
         if (state.verandaEnabled) {
             // Значения по умолчанию — как в разделе "Параметры строения"
             state.verandaLength = state.customLength;

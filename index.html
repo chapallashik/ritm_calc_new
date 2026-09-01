@@ -156,7 +156,7 @@
                                 <label for="chkVerandaEnabled" class="option-label" style="font-weight:600; cursor:pointer;">Добавить веранду</label>
                             </div>
                         </div>
-                        <div id="verandaParamsWrap" style="display:none;">
+                        <div id="verandaParamsWrap" style="display:none; flex-direction:column; gap:10px;">
                             <div class="option-row" style="flex-direction: column; align-items: stretch; gap: 8px;">
                                 <div style="display: flex; justify-content: space-between; font-weight: 600;">
                                     <span>Длина веранды:</span>
@@ -188,17 +188,12 @@
                                 <label style="font-weight: 600;">Прилегающая сторона (какой стороной веранда примыкает к дому):</label>
                                 <div class="option-grid" id="verandaAttachSelector">
                                     <div class="selector-card active" data-side="length">
-                                        <div class="title">Длинная сторона</div>
-                                        <div class="sub">по длине дома</div>
+                                        <div class="title">По длине</div>
                                     </div>
                                     <div class="selector-card" data-side="width">
-                                        <div class="title">Короткая сторона</div>
-                                        <div class="sub">по ширине дома</div>
+                                        <div class="title">По ширине</div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="option-row" style="justify-content: space-between; font-size: 13px; color: #666; padding-top: 4px;">
-                                <span id="lblVerandaSummary">Площадь веранды: 12.0 м² · Общий периметр (дом+веранда): — м</span>
                             </div>
                         </div>
                     </div>
