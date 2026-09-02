@@ -33,14 +33,14 @@
                 { id: "ext_hh_imitatsia", name: "Имитация бруса 'В'", priceNoIns: 10000, priceWithIns: 13000 }
             ],
             houseLow: {
-                noInsRate: 8500,
+                noInsRate: 8000,
                 cheapBaseRate: 9500,
                 materials: [
                     { id: "ext_hl_vagonka", name: "Вагонка ВС", mode: "base", price: 10000 },
                     { id: "ext_hl_imitatsia", name: "Имитация бруса", mode: "base", price: 10000 },
                     { id: "ext_hl_blockhouse", name: "Блок-хаус", mode: "addon", price: 1000 },
                     { id: "ext_hl_proflist", name: "Профлист цветной", mode: "addon", price: 400 },
-                    { id: "ext_hl_osb", name: "ОСБ 12мм", mode: "addon", price: 300 }
+                    { id: "ext_hl_osb", name: "ОСБ 12мм", mode: "addon", price: 400 }
                 ]
             },
             simple: [
@@ -116,15 +116,14 @@
             { id: "floor_osb_18_add", name: "Пол: ОСБ 18 мм (за м²)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "area", unit: "area", price: 800, hint: "houseArea" },
             { id: "floor_tongue_35_add", name: "Пол: Шпунтованная доска 35 мм (за м²)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "area", unit: "area", price: 1300, hint: "houseAndVeranda" },
             { id: "floor_board_35_150_add", name: "Пол: Доска обрезная 35х150 мм (за м²)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "area", unit: "area", price: 500, hint: "houseAndVeranda" },
-            { id: "ins_basalt_ceiling_200", name: "Утепление: 200 мм базальтовая плита потолка (за м²)", categories: ["house_high", "house_low", "cabin"], group: "area", unit: "area", price: 1000, hint: "houseArea" },
-            { id: "ins_basalt_floor_200", name: "Утепление: 200 мм базальтовая плита пола (за м²)", categories: ["house_high", "house_low", "cabin"], group: "area", unit: "area", price: 1000, hint: "houseArea" },
+            { id: "ins_basalt_ceiling_200", name: "Утепление: 200 мм базальтовая плита потолка (за м²)", categories: ["house_high", "house_low", "cabin"], group: "area", unit: "area", price: 1000, hint: "houseAndVeranda" },
+            { id: "ins_basalt_floor_200", name: "Утепление: 200 мм базальтовая плита пола (за м²)", categories: ["house_high", "house_low", "cabin"], group: "area", unit: "area", price: 1000, hint: "houseAndVeranda" },
             { id: "roof_double_pitch_1800", name: "Крыша двухскатная с коньком 40-70 см", categories: ["cabin", "hozblok"], group: "area", unit: "area", price: 1800, hint: "houseArea" },
             { id: "roof_double_pitch_flat", name: "Двухскатная крыша (увеличение стоимости)", categories: ["cabin"], group: "other", unit: "quantity", price: 10000, hint: "none" },
             { id: "ceiling_osb_12_lath", name: "Настил на потолок ОСБ 12 мм с обрешеткой", categories: ["house_high"], group: "area", unit: "area", price: 1800, hint: "houseAndVeranda" },
             { id: "vent_gap", name: "Вентзазор", categories: ["house_high", "house_low"], group: "area", unit: "area", price: 2000, hint: "perimeter" },
-            { id: "roof_overhangs", name: "Свесы на кровле +10 см", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "area", unit: "area", price: 1000, hint: "perimeter" },
             { id: "ridge_raise", name: "Поднятие конька (за каждые +10 см, максимум +150 см)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "other", unit: "quantity", price: 3750, hint: "none" },
-            { id: "veranda_lined_rafters", name: "Потолок веранды подшитый по стропилам", categories: ["house_high"], group: "area", unit: "area", price: 2000, hint: "houseAndVeranda" },
+            { id: "veranda_lined_rafters", name: "Потолок веранды подшитый по стропилам", categories: ["house_high"], group: "area", unit: "area", price: 2000, hint: "verandaOnly" },
             { id: "generator_daily", name: "Генератор (сутки)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "other", unit: "quantity", price: 2500, hint: "none" },
             { id: "material_carry", name: "Пронос материала свыше 20 м (за каждые 10 м)", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "other", unit: "quantity", price: 10000, hint: "none" },
             { id: "long_ladder", name: "Лестница на всю длину дома", categories: ["house_high", "house_low", "cabin", "hozblok"], group: "other", unit: "quantity", price: 20000, hint: "none" },
@@ -237,6 +236,7 @@
         { id: "roof_proflist_high", name: "Кровля: Профлист С8 цветной (выбор) или ондулин высокая крыша (+750 р/м²)", price: 750, type: "area", quantity: 0 },
         { id: "roof_metal", name: "Кровля: Металлочерепица (+1500 р/м²)", price: 1500, type: "area", quantity: 0 },
         { id: "roof_end_door", name: "Дверца в торце крыши", price: 5000, type: "quantity", quantity: 0 },
+        { id: "roof_overhangs", name: "Свесы на кровле (15 см включены, база; далее — за каждые +10 см)", price: 1000, type: "quantity", quantity: 0 },
     ];
 
     let activeConfig = [];
@@ -274,6 +274,7 @@
         price_wall_raise_100: 700,
         price_wall_raise_150: 1000,
         price_wall_raise_200: 1400,
+        rate_svesy: 1000,
         rate_ins_200_ceiling: 1000,
         rate_ins_200_floor: 1000,
         rate_floor_osb12: 500,
@@ -1101,6 +1102,7 @@
             const qty = state.additionQuantities[add.id] || 0;
             const price = (add.id === 'frame_upgrade') ? getFrameUpgradePrice()
                 : (add.id === 'wall_height_raise_20') ? getWallHeightRaisePrice()
+                : (add.id === 'roof_overhangs') ? getSvesyPrice()
                 : add.fromMaterials ? getMaterialsAdditionPrice(add)
                 : (add.price || 0);
             
@@ -1190,6 +1192,9 @@
                     } else if (add.hint === 'houseArea') {
                         recQty = Math.ceil(area);
                         recText = `Площадь: ${recQty} м²`;
+                    } else if (add.hint === 'verandaOnly') {
+                        recQty = Math.ceil(getVerandaArea());
+                        recText = `Площадь веранды: ${recQty} м²`;
                     }
                     // hint === 'none' — подсказку не показываем (recQty/recText остаются пустыми)
                 } else if (add.id === 'wall_height_raise_20') {
@@ -1304,6 +1309,20 @@
             if (['frame_200_hk', 'frame_200_kd', 'kd_200_real'].includes(state.selCustomInsulation)) return customRates.price_wall_raise_200 || 1400;
         }
         return customRates.price_wall_raise_100 || 700;
+    }
+
+    // Свесы на кровле: цена за каждые +10 см (сверх базовых бесплатных 15 см) = ставка × общий периметр
+    // (периметр дома + периметр веранды, БЕЗ вычета смежной стороны — так посчитано в формуле заказчика).
+    function getSvesyPrice() {
+        const rate = customRates.rate_svesy || 1000;
+        let combinedPerimeter = (state.calculatorMode === 'custom')
+            ? 2 * (state.customLength + state.customWidth)
+            : 0;
+        if (state.calculatorMode === 'custom' && state.verandaEnabled &&
+            (state.customType === 'house_high' || state.customType === 'house_low')) {
+            combinedPerimeter += 2 * (state.verandaLength + state.verandaWidth);
+        }
+        return rate * combinedPerimeter;
     }
 
     // Единая проверка применимости доп.опции для текущего выбора (тип дома/бытовки, утепление, крыша и т.д.).
@@ -1522,7 +1541,9 @@
                 const intRecord = getInteriorRecord(state.selCustomInterior);
                 const rate = intRecord ? (intRecord.price || 0) : 0;
                 if (rate > 0) {
-                    const intArea = (state.customLength * 2 * 2.5) + (state.customWidth * 2 * 2.5) + area;
+                    // Дом низкий — по формуле заказчика с двойным членом площади; для остальных категорий — одинарным.
+                    const areaTerm = (state.customType === 'house_low') ? (area * 2) : area;
+                    const intArea = (state.customLength * 2 * 2.5) + (state.customWidth * 2 * 2.5) + areaTerm;
                     intCost = intArea * rate;
                 }
             }
@@ -1708,8 +1729,19 @@
         const subtotal = basePrice + assemblyPrice + floorSum + insulationSum;
 
         // Additions sum
+        // Сваи, обвязка, доставка свай, подушки/блоки — отдельная сумма по просьбе заказчика:
+        // не входит в базу для скидки 3% / наценки "Сборка" 20%, добавляется к итогу напрямую.
+        const SEPARATE_TOTAL_IDS = new Set([
+            'pile_76_1500', 'pile_76_2000', 'pile_76_2500', 'pile_76_3000',
+            'pile_89_2000', 'pile_89_2500', 'pile_89_3000',
+            'pile_108_2000', 'pile_108_2500', 'pile_108_3000',
+            'profile_harness', 'pile_delivery', 'block_pads', 'block_20_20_40'
+        ]);
+
         let additionsSum = 0;
+        let separateSum = 0;
         const selectedAdditionsText = [];
+        const selectedSeparateText = [];
         model.additions.forEach(add => {
             // Скрытая для текущего выбора позиция никогда не должна попадать в сумму,
             // даже если у неё осталось сохранённое количество от другого выбора (например, другого типа дома).
@@ -1723,6 +1755,7 @@
             if (qty > 0) {
                 const effectivePrice = (add.id === 'frame_upgrade') ? getFrameUpgradePrice()
                     : (add.id === 'wall_height_raise_20') ? getWallHeightRaisePrice()
+                    : (add.id === 'roof_overhangs') ? getSvesyPrice()
                     : add.fromMaterials ? getMaterialsAdditionPrice(add)
                     : add.price;
                 let total = qty * effectivePrice;
@@ -1745,13 +1778,23 @@
                 } else if (add.id === 'pile_delivery') {
                     total = Math.max(5000, qty * effectivePrice);
                 }
-                additionsSum += total;
-                selectedAdditionsText.push({
-                    name: add.name,
-                    qty: qty,
-                    price: effectivePrice,
-                    total: total
-                });
+                if (SEPARATE_TOTAL_IDS.has(add.id)) {
+                    separateSum += total;
+                    selectedSeparateText.push({
+                        name: add.name,
+                        qty: qty,
+                        price: effectivePrice,
+                        total: total
+                    });
+                } else {
+                    additionsSum += total;
+                    selectedAdditionsText.push({
+                        name: add.name,
+                        qty: qty,
+                        price: effectivePrice,
+                        total: total
+                    });
+                }
             }
         });
 
@@ -1801,7 +1844,7 @@
             deliveryPrice = Math.max(minPrice, state.deliveryDistance * kmRate);
         }
 
-        const finalTotal = rawTotal - discountVal + vatVal + deliveryPrice;
+        const finalTotal = rawTotal - discountVal + vatVal + deliveryPrice + separateSum;
 
         // Save to state for buildReportText() to consume
         state.basePrice = basePrice;
@@ -1809,6 +1852,8 @@
         state.floorSum = floorSum;
         state.insulationSum = insulationSum;
         state.additionsSum = additionsSum;
+        state.separateSum = separateSum;
+        state.selectedSeparateText = selectedSeparateText;
         state.deliveryPrice = deliveryPrice;
         state.discountVal = discountVal;
         state.vatVal = vatVal;
@@ -1890,6 +1935,15 @@
                 <div>Доставка (${state.deliveryDistance} км):</div>
                 <div style="font-weight:600;">${deliveryPrice > 0 ? deliveryPrice.toLocaleString('ru-RU') + ' р.' : 'Самовывоз / 0 р.'}</div>
             </div>
+            ${separateSum > 0 ? `
+            <div class="summary-item bold" style="margin-top: 5px; padding-top: 5px; border-top: 1px dashed var(--border-color); color:var(--primary);">
+                <div>Сваи/блоки/доставка свай (${selectedSeparateText.length} шт):</div>
+                <div>${separateSum.toLocaleString('ru-RU')} р.</div>
+            </div>
+            <div style="font-size:11px; color:var(--text-muted); padding-left: 10px; max-height:100px; overflow-y:auto; margin-bottom:5px;">
+                ${selectedSeparateText.map(item => `• ${item.name} (${item.qty} шт) - ${item.total.toLocaleString('ru-RU')} р.<br>`).join('')}
+                <i>Без скидки 3% и наценки "Сборка" — прибавляется к итогу напрямую</i>
+            </div>` : ''}
         `;
 
         // Event hooks for sidepanel calculations toggles
@@ -2005,6 +2059,15 @@
         }
         if (state.isVatChecked) {
             text += `🛠️ Сборка 20%: +${vatVal.toLocaleString('ru-RU')} руб.\n`;
+        }
+
+        // Separate group: сваи, обвязка, доставка свай, подушки/блоки — без скидки/наценки
+        if (state.selectedSeparateText && state.selectedSeparateText.length > 0) {
+            text += `🔩 Сваи/блоки/доставка свай (отдельно, без скидки и наценки):\n`;
+            state.selectedSeparateText.forEach(item => {
+                text += `  - ${item.name}: ${item.qty} шт. (${item.total.toLocaleString('ru-RU')} руб.)\n`;
+            });
+            text += `  Итого по этой группе: ${(state.separateSum || 0).toLocaleString('ru-RU')} руб.\n`;
         }
 
         text += `------------------------------------\n`;
@@ -2365,6 +2428,7 @@
                     price_wall_raise_100: 700,
                     price_wall_raise_150: 1000,
                     price_wall_raise_200: 1400,
+                    rate_svesy: 1000,
                     rate_ins_200_ceiling: 1000,
                     rate_ins_200_floor: 1000,
                     rate_floor_osb12: 500,
@@ -2448,6 +2512,7 @@
         { id: 'none', label: 'Без подсказки' },
         { id: 'houseArea', label: 'Площадь дома' },
         { id: 'houseAndVeranda', label: 'Площадь дома + веранда' },
+        { id: 'verandaOnly', label: 'Только площадь веранды' },
         { id: 'perimeter', label: 'Периметр дома' },
         { id: 'perimeterAndVeranda', label: 'Периметр дома + веранда' }
     ];
@@ -2702,7 +2767,8 @@
         { key: 'price_frame_upgrade_no_ins', label: 'Замена каркаса 50/100→50/150 (без утепления)', def: 2500 },
         { key: 'price_wall_raise_100', label: 'Поднятие стен +20см, каркас 50/100', def: 700 },
         { key: 'price_wall_raise_150', label: 'Поднятие стен +20см, каркас 50/150', def: 1000 },
-        { key: 'price_wall_raise_200', label: 'Поднятие стен +20см, каркас 50/200', def: 1400 }
+        { key: 'price_wall_raise_200', label: 'Поднятие стен +20см, каркас 50/200', def: 1400 },
+        { key: 'rate_svesy', label: 'Свесы на кровле, за каждые +10 см (× периметр дома+веранды)', def: 1000 }
     ];
 
     function renderInsulationPanel() {

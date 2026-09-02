@@ -159,7 +159,7 @@
       }
     ],
     "houseLow": {
-      "noInsRate": 8500,
+      "noInsRate": 8000,
       "cheapBaseRate": 9500,
       "materials": [
         {
@@ -190,7 +190,7 @@
           "id": "ext_hl_osb",
           "name": "ОСБ 12мм",
           "mode": "addon",
-          "price": 300
+          "price": 400
         }
       ]
     },
@@ -1120,7 +1120,7 @@
       "group": "area",
       "unit": "area",
       "price": 1000,
-      "hint": "houseArea"
+      "hint": "houseAndVeranda"
     },
     {
       "id": "ins_basalt_floor_200",
@@ -1133,7 +1133,7 @@
       "group": "area",
       "unit": "area",
       "price": 1000,
-      "hint": "houseArea"
+      "hint": "houseAndVeranda"
     },
     {
       "id": "roof_double_pitch_1800",
@@ -1182,20 +1182,6 @@
       "hint": "perimeter"
     },
     {
-      "id": "roof_overhangs",
-      "name": "Свесы на кровле +10 см",
-      "categories": [
-        "house_high",
-        "house_low",
-        "cabin",
-        "hozblok"
-      ],
-      "group": "area",
-      "unit": "area",
-      "price": 1000,
-      "hint": "perimeter"
-    },
-    {
       "id": "ridge_raise",
       "name": "Поднятие конька (за каждые +10 см, максимум +150 см)",
       "categories": [
@@ -1218,7 +1204,7 @@
       "group": "area",
       "unit": "area",
       "price": 2000,
-      "hint": "houseAndVeranda"
+      "hint": "verandaOnly"
     },
     {
       "id": "generator_daily",
