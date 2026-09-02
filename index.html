@@ -67,6 +67,10 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
                 Редактирование сайта
             </button>
+            <button class="btn btn-secondary" id="syncToggleBtn" style="display:none;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+                Публикация
+            </button>
             <button class="btn btn-secondary" id="btnLogout" style="font-size:12px;">
                 Выйти
             </button>
@@ -432,6 +436,7 @@
                         <option value="house_low">Дом низкий</option>
                         <option value="cabin">Бытовка</option>
                         <option value="hozblok">Хозблок</option>
+                        <option value="chalet">Шале</option>
                     </select>
                     <select id="matGroupFilter" style="display:none; padding:6px 10px; border-radius:8px; border:1px solid var(--border-color,#ccc);">
                         <option value="windows">Окна</option>
@@ -448,6 +453,69 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" id="btnMatResetDrafts" style="border-color: #e67e22; color: #e67e22;">Сбросить черновик</button>
                 <button class="btn btn-primary" id="btnMatDownload">Скачать materials.json</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модал: Публикация на GitHub (сохранение материалов на все устройства сразу) -->
+    <div class="modal" id="syncModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <h2>Публикация</h2>
+                    <span class="info-icon-wrap">
+                        <span class="info-icon-btn">i</span>
+                        <div class="info-tooltip">
+                            <b>Как это работает</b>
+                            <ul>
+                                <li>Пока вы просто редактируете материалы — изменения видны только в вашем браузере (черновик)</li>
+                                <li>«Опубликовать» сохраняет <code>materials.json</code> прямо в репозиторий на GitHub — после этого изменения увидят все посетители сайта, на любом устройстве</li>
+                                <li>Токен нужен один раз — введите и нажмите «Запомнить на этом устройстве», чтобы не вводить каждый раз (хранится только в этом браузере, никуда не отправляется, кроме самого GitHub)</li>
+                                <li>Как получить токen: GitHub → Settings → Developer settings → Personal access tokens → Generate new token (classic) → отметьте право <b>repo</b></li>
+                                <li>«Проверить подключение» — безопасно проверяет логин/токен/репозиторий, ничего не публикует</li>
+                            </ul>
+                        </div>
+                    </span>
+                </div>
+                <button class="close-btn" id="closeSyncBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    <div>
+                        <label style="font-weight:600; font-size:13px;">Владелец репозитория (username или организация)</label>
+                        <input type="text" id="syncOwner" placeholder="например, chapallashik"
+                            style="width:100%; padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); margin-top:4px;">
+                    </div>
+                    <div>
+                        <label style="font-weight:600; font-size:13px;">Название репозитория</label>
+                        <input type="text" id="syncRepo" placeholder="например, stroy-calc"
+                            style="width:100%; padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); margin-top:4px;">
+                    </div>
+                    <div>
+                        <label style="font-weight:600; font-size:13px;">Ветка</label>
+                        <input type="text" id="syncBranch" value="main"
+                            style="width:100%; padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); margin-top:4px;">
+                    </div>
+                    <div>
+                        <label style="font-weight:600; font-size:13px;">GitHub Personal Access Token</label>
+                        <input type="password" id="syncToken" placeholder="ghp_..."
+                            style="width:100%; padding:8px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); margin-top:4px;">
+                    </div>
+                    <label style="display:flex; align-items:center; gap:6px; font-size:13px; cursor:pointer;">
+                        <input type="checkbox" id="syncRemember">
+                        Запомнить на этом устройстве
+                    </label>
+
+                    <div style="display:flex; gap:8px; margin-top:6px;">
+                        <button class="btn btn-secondary" id="btnSyncTest" style="font-size:13px;">Проверить подключение</button>
+                        <button class="btn btn-secondary" id="btnSyncForget" style="font-size:13px; border-color:#e67e22; color:#e67e22;">Забыть токен</button>
+                    </div>
+
+                    <div id="syncStatus" style="display:none; padding:10px 12px; border-radius:var(--radius-sm); font-size:13px;"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="btnSyncPublish">Опубликовать materials.json на GitHub</button>
             </div>
         </div>
     </div>

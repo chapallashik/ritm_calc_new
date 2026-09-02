@@ -1373,7 +1373,8 @@
                 house_high: isHouseHigh,
                 house_low: isHouseLow,
                 cabin: isCabinOnly,
-                hozblok: isHozblokOnly
+                hozblok: isHozblokOnly,
+                chalet: (state.calculatorMode === 'custom' && state.customType === 'chalet')
             };
             return add.categories.some(c => catMatch[c]);
         }
@@ -2529,7 +2530,8 @@
         { id: 'house_high', label: 'Дом высокий' },
         { id: 'house_low', label: 'Дом низкий' },
         { id: 'cabin', label: 'Бытовка' },
-        { id: 'hozblok', label: 'Хозблок' }
+        { id: 'hozblok', label: 'Хозблок' },
+        { id: 'chalet', label: 'Шале' }
     ];
     const ALL_GROUPS = [
         { id: 'windows', label: 'Окна' },
@@ -3083,6 +3085,196 @@
             closeMatForm();
             renderMatList();
             renderModelUI();
+        }
+    });
+
+    // ==================== Панель "Публикация" (сохранение materials.json на GitHub через API) ====================
+    const syncToggleBtn = document.getElementById('syncToggleBtn');
+    const syncModal = document.getElementById('syncModal');
+    const closeSyncBtn = document.getElementById('closeSyncBtn');
+    const syncOwner = document.getElementById('syncOwner');
+    const syncRepo = document.getElementById('syncRepo');
+    const syncBranch = document.getElementById('syncBranch');
+    const syncToken = document.getElementById('syncToken');
+    const syncRemember = document.getElementById('syncRemember');
+    const syncStatus = document.getElementById('syncStatus');
+    const btnSyncTest = document.getElementById('btnSyncTest');
+    const btnSyncForget = document.getElementById('btnSyncForget');
+    const btnSyncPublish = document.getElementById('btnSyncPublish');
+
+    const SYNC_SETTINGS_KEY = 'mobistroy_sync_settings'; // owner/repo/branch — не секретные, можно хранить всегда
+    const SYNC_TOKEN_KEY = 'mobistroy_sync_token';        // токен — только если явно попросили запомнить
+
+    function loadSyncSettings() {
+        try {
+            const raw = localStorage.getItem(SYNC_SETTINGS_KEY);
+            if (raw) {
+                const s = JSON.parse(raw);
+                syncOwner.value = s.owner || '';
+                syncRepo.value = s.repo || '';
+                syncBranch.value = s.branch || 'main';
+            }
+        } catch (e) { /* ignore */ }
+        const savedToken = localStorage.getItem(SYNC_TOKEN_KEY);
+        if (savedToken) {
+            syncToken.value = savedToken;
+            syncRemember.checked = true;
+        }
+    }
+
+    function saveSyncSettings() {
+        localStorage.setItem(SYNC_SETTINGS_KEY, JSON.stringify({
+            owner: syncOwner.value.trim(),
+            repo: syncRepo.value.trim(),
+            branch: syncBranch.value.trim() || 'main'
+        }));
+        if (syncRemember.checked && syncToken.value.trim()) {
+            localStorage.setItem(SYNC_TOKEN_KEY, syncToken.value.trim());
+        } else if (!syncRemember.checked) {
+            localStorage.removeItem(SYNC_TOKEN_KEY);
+        }
+    }
+
+    function showSyncStatus(message, kind) {
+        // kind: 'ok' | 'error' | 'info'
+        syncStatus.style.display = 'block';
+        syncStatus.textContent = message;
+        const colors = {
+            ok: { bg: '#d9f2e0', text: '#1e7d3c' },
+            error: { bg: '#fadbd8', text: '#c0392b' },
+            info: { bg: 'var(--bg-app)', text: 'var(--text-primary)' }
+        };
+        const c = colors[kind] || colors.info;
+        syncStatus.style.background = c.bg;
+        syncStatus.style.color = c.text;
+    }
+
+    function utf8ToBase64(str) {
+        return btoa(unescape(encodeURIComponent(str)));
+    }
+
+    function getSyncConfig() {
+        return {
+            owner: syncOwner.value.trim(),
+            repo: syncRepo.value.trim(),
+            branch: syncBranch.value.trim() || 'main',
+            token: syncToken.value.trim()
+        };
+    }
+
+    async function githubApiRequest(path, options) {
+        const res = await fetch(`https://api.github.com${path}`, {
+            ...options,
+            headers: {
+                'Accept': 'application/vnd.github+json',
+                'Authorization': `Bearer ${getSyncConfig().token}`,
+                ...(options && options.headers ? options.headers : {})
+            }
+        });
+        return res;
+    }
+
+    if (syncToggleBtn) {
+        syncToggleBtn.addEventListener('click', () => {
+            loadSyncSettings();
+            syncStatus.style.display = 'none';
+            syncModal.style.display = 'flex';
+        });
+    }
+    if (closeSyncBtn) {
+        closeSyncBtn.addEventListener('click', () => { syncModal.style.display = 'none'; });
+    }
+    window.addEventListener('click', (e) => {
+        if (e.target === syncModal) syncModal.style.display = 'none';
+    });
+
+    btnSyncForget.addEventListener('click', () => {
+        localStorage.removeItem(SYNC_TOKEN_KEY);
+        syncToken.value = '';
+        syncRemember.checked = false;
+        showSyncStatus('Токен забыт (удалён из этого браузера).', 'info');
+    });
+
+    btnSyncTest.addEventListener('click', async () => {
+        const cfg = getSyncConfig();
+        if (!cfg.owner || !cfg.repo || !cfg.token) {
+            showSyncStatus('Заполните владельца, репозиторий и токен.', 'error');
+            return;
+        }
+        showSyncStatus('Проверяю подключение...', 'info');
+        try {
+            const res = await githubApiRequest(`/repos/${cfg.owner}/${cfg.repo}`, { method: 'GET' });
+            if (res.status === 401 || res.status === 403) {
+                showSyncStatus('Токен неверный или не хватает прав (нужно право "repo").', 'error');
+                return;
+            }
+            if (res.status === 404) {
+                showSyncStatus('Репозиторий не найден — проверьте владельца и название.', 'error');
+                return;
+            }
+            if (!res.ok) {
+                showSyncStatus(`Ошибка GitHub: ${res.status}`, 'error');
+                return;
+            }
+            const data = await res.json();
+            showSyncStatus(`Подключение работает: репозиторий "${data.full_name}" найден.`, 'ok');
+            saveSyncSettings();
+        } catch (e) {
+            showSyncStatus('Не удалось связаться с GitHub: ' + e.message, 'error');
+        }
+    });
+
+    btnSyncPublish.addEventListener('click', async () => {
+        const cfg = getSyncConfig();
+        if (!cfg.owner || !cfg.repo || !cfg.token) {
+            showSyncStatus('Заполните владельца, репозиторий и токен.', 'error');
+            return;
+        }
+        if (!confirm('Опубликовать materials.json на GitHub? Изменения станут видны всем посетителям сайта.')) return;
+
+        showSyncStatus('Публикую...', 'info');
+        btnSyncPublish.disabled = true;
+        try {
+            const filePath = 'materials.json';
+            const content = JSON.stringify(MATERIALS, null, 2);
+
+            // 1. Узнаём текущий sha файла (обязательно для обновления существующего файла)
+            let sha = null;
+            const getRes = await githubApiRequest(
+                `/repos/${cfg.owner}/${cfg.repo}/contents/${filePath}?ref=${encodeURIComponent(cfg.branch)}`,
+                { method: 'GET' }
+            );
+            if (getRes.ok) {
+                const getData = await getRes.json();
+                sha = getData.sha;
+            } else if (getRes.status !== 404) {
+                const errData = await getRes.json().catch(() => ({}));
+                throw new Error(errData.message || `Не удалось прочитать текущий файл (${getRes.status})`);
+            }
+
+            // 2. Публикуем (создаём или обновляем)
+            const putRes = await githubApiRequest(`/repos/${cfg.owner}/${cfg.repo}/contents/${filePath}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: `Обновление materials.json из админ-панели (${new Date().toLocaleString('ru-RU')})`,
+                    content: utf8ToBase64(content),
+                    branch: cfg.branch,
+                    ...(sha ? { sha } : {})
+                })
+            });
+
+            if (!putRes.ok) {
+                const errData = await putRes.json().catch(() => ({}));
+                throw new Error(errData.message || `Ошибка публикации (${putRes.status})`);
+            }
+
+            saveSyncSettings();
+            showSyncStatus('Готово! materials.json опубликован — изменения появятся на сайте у всех посетителей в течение пары минут.', 'ok');
+        } catch (e) {
+            showSyncStatus('Не удалось опубликовать: ' + e.message, 'error');
+        } finally {
+            btnSyncPublish.disabled = false;
         }
     });
 

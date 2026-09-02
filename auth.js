@@ -21,6 +21,7 @@
     const adminBadge   = document.getElementById('adminBadge');
     const adminToggleBtn = document.getElementById('adminToggleBtn');
     const materialsToggleBtn = document.getElementById('materialsToggleBtn');
+    const syncToggleBtn = document.getElementById('syncToggleBtn');
     const btnLogout    = document.getElementById('btnLogout');
 
     const btnGuestLogin    = document.getElementById('btnGuestLogin');
@@ -50,10 +51,12 @@
             adminBadge.style.display     = 'inline-flex';
             adminToggleBtn.style.display = 'inline-flex';
             if (materialsToggleBtn) materialsToggleBtn.style.display = 'inline-flex';
+            if (syncToggleBtn) syncToggleBtn.style.display = 'inline-flex';
         } else {
             adminBadge.style.display     = 'none';
             adminToggleBtn.style.display = 'none';
             if (materialsToggleBtn) materialsToggleBtn.style.display = 'none';
+            if (syncToggleBtn) syncToggleBtn.style.display = 'none';
         }
     }
 
