@@ -103,6 +103,14 @@
         "hozblok"
       ],
       "price": 500
+    },
+    {
+      "id": "int_chalet_vagonka",
+      "name": "Вагонка 'ВС' (базовая, включена)",
+      "categories": [
+        "chalet"
+      ],
+      "price": 0
     }
   ],
   "floor": [
@@ -111,7 +119,8 @@
       "name": "Обрезная доска 25мм 1 сорт (базовая)",
       "categories": [
         "house_high",
-        "house_low"
+        "house_low",
+        "chalet"
       ],
       "price": 0
     },
@@ -239,6 +248,22 @@
           "hozblok"
         ],
         "price": 300
+      },
+      {
+        "id": "ext_chalet_vagonka",
+        "name": "Вагонка ВС",
+        "categories": [
+          "chalet"
+        ],
+        "price": 14500
+      },
+      {
+        "id": "ext_chalet_imitatsia",
+        "name": "Имитация бруса В",
+        "categories": [
+          "chalet"
+        ],
+        "price": 15000
       }
     ]
   },

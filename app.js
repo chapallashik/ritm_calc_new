@@ -19,10 +19,11 @@
             { id: "int_hz_osb", name: "ОСБ 9 мм", categories: ["hozblok"], price: 300 },
             { id: "int_hz_vagonka", name: "Вагонка класса В", categories: ["hozblok"], price: 400 },
             { id: "int_hz_mdf", name: "МДФ панели", categories: ["hozblok"], price: 500 },
-            { id: "int_hz_pvc", name: "ПВХ панели", categories: ["hozblok"], price: 500 }
+            { id: "int_hz_pvc", name: "ПВХ панели", categories: ["hozblok"], price: 500 },
+            { id: "int_chalet_vagonka", name: "Вагонка 'ВС' (базовая, включена)", categories: ["chalet"], price: 0 }
         ],
         floor: [
-            { id: "floor_house_base", name: "Обрезная доска 25мм 1 сорт (базовая)", categories: ["house_high", "house_low"], price: 0 },
+            { id: "floor_house_base", name: "Обрезная доска 25мм 1 сорт (базовая)", categories: ["house_high", "house_low", "chalet"], price: 0 },
             { id: "floor_cabin_base", name: "Обрезная доска 25мм (базовая)", categories: ["cabin", "hozblok"], price: 0 },
             { id: "floor_cabin_osb12", name: "ОСБ 12мм", categories: ["cabin", "hozblok"], price: 500 },
             { id: "floor_cabin_tongue28", name: "Шпунтованная доска 28мм", categories: ["cabin", "hozblok"], price: 1000 }
@@ -48,7 +49,9 @@
                 { id: "ext_simple_imitatsia", name: "Имитация бруса", categories: ["cabin", "hozblok"], price: 250 },
                 { id: "ext_simple_blockhouse", name: "Блок-хаус", categories: ["cabin", "hozblok"], price: 1000 },
                 { id: "ext_simple_proflist", name: "Профлист цветной", categories: ["cabin", "hozblok"], price: 400 },
-                { id: "ext_simple_osb", name: "ОСБ 12мм", categories: ["cabin", "hozblok"], price: 300 }
+                { id: "ext_simple_osb", name: "ОСБ 12мм", categories: ["cabin", "hozblok"], price: 300 },
+                { id: "ext_chalet_vagonka", name: "Вагонка ВС", categories: ["chalet"], price: 14500 },
+                { id: "ext_chalet_imitatsia", name: "Имитация бруса В", categories: ["chalet"], price: 15000 }
             ]
         },
         additions: [
@@ -228,6 +231,7 @@
         { id: "frame_upgrade", name: "Замена каркаса 50/100 на 50/150", price: 2000, type: "area", quantity: 0 },
         { id: "wall_height_raise_20", name: "Поднятие высоты стен на 20 см", price: 700, type: "area", quantity: 0 },
         { id: "veranda_high", name: "Веранда (высокая крыша, 9 500 р/м²)", price: 9500, type: "area", quantity: 0 },
+        { id: "veranda_chalet", name: "Веранда (Шале, 12 500 р/м²)", price: 12500, type: "area", quantity: 0 },
         { id: "veranda_low", name: "Веранда (низкая крыша, 8 000 р/м²)", price: 8000, type: "area", quantity: 0 },
         { id: "veranda_cabin", name: "Веранда (7 500 р/м²)", price: 7500, type: "area", quantity: 0 },
         { id: "pile_delivery", name: "Доставка свай (70 р/км)", price: 70, type: "quantity", quantity: 0 },
@@ -446,10 +450,11 @@
     // (veranda_high/veranda_low в доп.опциях), чтобы вся логика расчёта (утепление,
     // каркасы, подсказки площади и т.д.) продолжала работать без переделки.
     function syncVerandaToAdditions() {
-        const isHouse = (state.customType === 'house_high' || state.customType === 'house_low');
+        const isHouse = (state.customType === 'house_high' || state.customType === 'house_low' || state.customType === 'chalet');
         const area = (isHouse && state.verandaEnabled) ? (state.verandaLength * state.verandaWidth) : 0;
         state.additionQuantities['veranda_high'] = (state.customType === 'house_high') ? area : 0;
         state.additionQuantities['veranda_low'] = (state.customType === 'house_low') ? area : 0;
+        state.additionQuantities['veranda_chalet'] = (state.customType === 'chalet') ? area : 0;
     }
 
     function updateVerandaSummary() {
@@ -466,7 +471,7 @@
 
     function updateVerandaSectionVisibility() {
         if (!verandaSection) return;
-        const isHouse = (state.customType === 'house_high' || state.customType === 'house_low');
+        const isHouse = (state.customType === 'house_high' || state.customType === 'house_low' || state.customType === 'chalet');
         verandaSection.style.display = isHouse ? '' : 'none';
     }
     const selCustomExterior = document.getElementById('selCustomExterior');
@@ -683,6 +688,10 @@
             insHTML = `
                 <option value="0">Без утепления (включено)</option>
             `;
+        } else if (type === 'chalet') {
+            insHTML = `
+                <option value="100_base_min">100 мм мин. вата (базовая, включена)</option>
+            `;
         } else {
             const hlNoIns = MATERIALS.exterior.houseLow.noInsRate;
             insHTML = `
@@ -755,8 +764,19 @@
                 customHeightSlider.disabled = true;
                 state.customHeight = 2.0;
                 customHeightSlider.value = 2.0;
+            } else if (state.customType === 'chalet') {
+                // Высота у Шале не влияет на цену (нет данных на этот счёт), но диапазон — как просил заказчик (2.2–3.0 м)
+                customHeightSlider.disabled = false;
+                customHeightSlider.min = '2.2';
+                customHeightSlider.max = '3.0';
+                if (state.customHeight < 2.2 || state.customHeight > 3.0) {
+                    state.customHeight = 2.4;
+                    customHeightSlider.value = 2.4;
+                }
             } else {
                 customHeightSlider.disabled = false;
+                customHeightSlider.min = '2';
+                customHeightSlider.max = '4';
             }
             // Render Custom Constructor sliders labels
             lblCustomLength.textContent = `${Math.round(state.customLength)} м`;
@@ -1058,7 +1078,7 @@
             // Веранда для домов теперь редактируется в отдельном разделе "2. Веранда" —
             // строку в доп.опциях больше не показываем, но количество (и цена) продолжают
             // считаться через тот же механизм (см. syncVerandaToAdditions).
-            if (add.id === 'veranda_high' || add.id === 'veranda_low') return;
+            if (add.id === 'veranda_high' || add.id === 'veranda_low' || add.id === 'veranda_chalet') return;
 
             // Единая проверка: если позиция не применима для текущего выбора — обнуляем
             // сохранённое количество (чтобы оно не "всплыло" в итоге при переключении) и скрываем строку.
@@ -1287,6 +1307,7 @@
         if (state.calculatorMode !== 'custom') return 0;
         if (state.customType === 'house_high') return state.additionQuantities['veranda_high'] || 0;
         if (state.customType === 'house_low') return state.additionQuantities['veranda_low'] || 0;
+        if (state.customType === 'chalet') return state.additionQuantities['veranda_chalet'] || 0;
         return 0;
     }
 
@@ -1340,6 +1361,7 @@
         if (add.id === 'veranda_high') return isHouseHigh;
         if (add.id === 'veranda_low') return isHouseLow;
         if (add.id === 'veranda_cabin') return isCabinOrHoz;
+        if (add.id === 'veranda_chalet') return (state.calculatorMode === 'custom' && state.customType === 'chalet');
 
         // Позиции из materials.json (доп.опции, редактируемые через админку) — видимость по списку категорий записи
         if (add.fromMaterials && Array.isArray(add.categories)) {
@@ -1496,6 +1518,11 @@
                     // Реальное утепление: базовая ставка целиком берётся из выбранной наружной отделки
                     baseRate = hhExt ? hhExt.priceWithIns : 12500;
                 }
+            } else if (state.customType === 'chalet') {
+                // Шале: как и у дома высокого — выбранная наружная отделка целиком задаёт базовую ставку,
+                // но без деления на "с утеплением/без" (утепление у Шале одно, базовое, 100мм мин. вата).
+                const chExt = getExteriorSimpleRecord(state.selCustomExterior);
+                baseRate = chExt ? chExt.price : 14500;
             } else {
                 baseRate = customRates[`rate_${state.customType}`] || 8000;
             }
@@ -2354,6 +2381,9 @@
             } else if (state.customType === 'cabin' || state.customType === 'hozblok') {
                 state.customHeight = 2.0;
                 customHeightSlider.value = 2.0;
+            } else if (state.customType === 'chalet') {
+                state.customHeight = 2.4;
+                customHeightSlider.value = 2.4;
             } else {
                 state.customHeight = 2.1;
                 customHeightSlider.value = 2.1;
