@@ -409,17 +409,6 @@
     
     // Custom Constructor DOM
     const customTypeSelector = document.getElementById('customTypeSelector');
-    // Подписи на карточках категорий в разметке устарели — обновляем текст под актуальные тарифы.
-    if (customTypeSelector) {
-        const houseHighCard = customTypeSelector.querySelector('[data-type="house_high"] .sub');
-        if (houseHighCard) {
-            houseHighCard.textContent = '12 500 / 13 000 р/м²';
-        }
-        const houseLowCard = customTypeSelector.querySelector('[data-type="house_low"] .sub');
-        if (houseLowCard) {
-            houseLowCard.textContent = '10 000 р/м²';
-        }
-    }
     const customLengthSlider = document.getElementById('customLengthSlider');
     const lblCustomLength = document.getElementById('lblCustomLength');
     const customWidthSlider = document.getElementById('customWidthSlider');
@@ -1326,9 +1315,11 @@
     // Поднятие высоты стен на 20 см: цена зависит от толщины каркаса
     function getWallHeightRaisePrice() {
         if (state.calculatorMode === 'custom' && (state.customType === 'house_high' || state.customType === 'house_low')) {
+            if (['cold', '0', 'frame_100_kd'].includes(state.selCustomInsulation)) return customRates.price_wall_raise_100 || 700;
             if (['frame_150_hk', 'frame_150_kd', 'kd_150_real'].includes(state.selCustomInsulation)) return customRates.price_wall_raise_150 || 1000;
             if (['frame_200_hk', 'frame_200_kd', 'kd_200_real'].includes(state.selCustomInsulation)) return customRates.price_wall_raise_200 || 1400;
         }
+        // Каркас явно не указан (обычное утепление без ХК/КС) — базовая цена 700
         return customRates.price_wall_raise_100 || 700;
     }
 
