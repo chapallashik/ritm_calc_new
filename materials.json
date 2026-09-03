@@ -54,7 +54,7 @@
       "categories": [
         "cabin"
       ],
-      "price": 120
+      "price": 500
     },
     {
       "id": "int_cabin_imitatsia",
@@ -62,7 +62,7 @@
       "categories": [
         "cabin"
       ],
-      "price": 370
+      "price": 500
     },
     {
       "id": "int_hz_none",
@@ -214,15 +214,6 @@
         "price": 0
       },
       {
-        "id": "ext_simple_imitatsia",
-        "name": "Имитация бруса",
-        "categories": [
-          "cabin",
-          "hozblok"
-        ],
-        "price": 250
-      },
-      {
         "id": "ext_simple_blockhouse",
         "name": "Блок-хаус",
         "categories": [
@@ -264,6 +255,22 @@
           "chalet"
         ],
         "price": 15000
+      },
+      {
+        "id": "ext_simple_imitatsia_cabin",
+        "name": "Имитация бруса",
+        "categories": [
+          "cabin"
+        ],
+        "price": 500
+      },
+      {
+        "id": "ext_simple_imitatsia_hozblok",
+        "name": "Имитация бруса",
+        "categories": [
+          "hozblok"
+        ],
+        "price": 250
       }
     ]
   },

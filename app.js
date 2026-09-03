@@ -13,8 +13,8 @@
             { id: "int_hl_vagonka", name: "Вагонка 'ВС' (базовая, включена)", categories: ["house_low"], price: 0 },
             { id: "int_hl_imitatsia", name: "Имитация бруса 'В'", categories: ["house_low"], price: 500 },
             { id: "int_cabin_osb", name: "ОСБ 9 мм (базовая, включена)", categories: ["cabin"], price: 0 },
-            { id: "int_cabin_vagonka", name: "Вагонка 'ВС'", categories: ["cabin"], price: 120 },
-            { id: "int_cabin_imitatsia", name: "Имитация бруса 'В'", categories: ["cabin"], price: 370 },
+            { id: "int_cabin_vagonka", name: "Вагонка 'ВС'", categories: ["cabin"], price: 500 },
+            { id: "int_cabin_imitatsia", name: "Имитация бруса 'В'", categories: ["cabin"], price: 500 },
             { id: "int_hz_none", name: "Без отделки (базовая, включена)", categories: ["hozblok"], price: 0 },
             { id: "int_hz_osb", name: "ОСБ 9 мм", categories: ["hozblok"], price: 300 },
             { id: "int_hz_vagonka", name: "Вагонка класса В", categories: ["hozblok"], price: 400 },
@@ -46,7 +46,8 @@
             },
             simple: [
                 { id: "ext_simple_vagonka", name: "Вагонка класса В", categories: ["cabin", "hozblok"], price: 0 },
-                { id: "ext_simple_imitatsia", name: "Имитация бруса", categories: ["cabin", "hozblok"], price: 250 },
+                { id: "ext_simple_imitatsia_cabin", name: "Имитация бруса", categories: ["cabin"], price: 500 },
+                { id: "ext_simple_imitatsia_hozblok", name: "Имитация бруса", categories: ["hozblok"], price: 250 },
                 { id: "ext_simple_blockhouse", name: "Блок-хаус", categories: ["cabin", "hozblok"], price: 1000 },
                 { id: "ext_simple_proflist", name: "Профлист цветной", categories: ["cabin", "hozblok"], price: 400 },
                 { id: "ext_simple_osb", name: "ОСБ 12мм", categories: ["cabin", "hozblok"], price: 300 },
@@ -249,9 +250,10 @@
         rate_house_low_osb: 9500,
         rate_house_low_lining: 10000,
         rate_cabin: 9000,
+        rate_cabin_no_ins: 7500,
         rate_int_cabin_lining: 120,
         rate_int_cabin_imitation: 370,
-        rate_ins_100_min_wool: 550,
+        rate_ins_100_min_wool: 0,
         rate_hozblok: 7500,
         rate_veranda: 9000,
         rate_ext_imitation: 250,
@@ -668,7 +670,7 @@
         } else if (type === 'cabin') {
             insHTML = `
                 <option value="50_min_wool">50 мм мин. вата (базовая, включена)</option>
-                <option value="100_min_wool">100 мм мин. вата (+${fmt(customRates.rate_ins_100_min_wool || 550)} р/м²)</option>
+                <option value="100_min_wool">100 мм мин. вата (${customRates.rate_ins_100_min_wool > 0 ? '+' + fmt(customRates.rate_ins_100_min_wool) + ' р/м²' : 'базовая, включена'})</option>
                 <option value="100">100 мм базальтовая плита (по формуле)</option>
                 <option value="150">150 мм базальтовая плита (+${fmt(p150)} р/м²)</option>
                 <option value="0">Без утепления</option>
@@ -1515,6 +1517,9 @@
                 // но без деления на "с утеплением/без" (утепление у Шале одно, базовое, 100мм мин. вата).
                 const chExt = getExteriorSimpleRecord(state.selCustomExterior);
                 baseRate = chExt ? chExt.price : 14500;
+            } else if (state.customType === 'cabin' && state.selCustomInsulation === '0') {
+                // Бытовка без утепления — своя, пониженная ставка (не 9000, а отдельное число)
+                baseRate = customRates.rate_cabin_no_ins || 7500;
             } else {
                 baseRate = customRates[`rate_${state.customType}`] || 8000;
             }
@@ -1589,7 +1594,7 @@
                 // Утепление по обычной формуле + надбавка за каркас "камерная сушка" (площадь дома+веранды)
                 insulationSum = insArea * (customRates.rate_ins_100 || 450) + (customRates.premium_frame_100_kd || 2000) * (area + getVerandaArea());
             } else if (state.selCustomInsulation === '100_min_wool') {
-                insulationSum = area * (customRates.rate_ins_100_min_wool || 550);
+                insulationSum = area * (customRates.rate_ins_100_min_wool != null ? customRates.rate_ins_100_min_wool : 550);
             } else if (state.selCustomInsulation === '150') {
                 insulationSum = (area + getVerandaArea()) * (customRates.rate_ins_150 || 3700);
             } else if (state.selCustomInsulation === '200') {
@@ -2420,6 +2425,7 @@
                     rate_house_low_osb: 9500,
                     rate_house_low_lining: 10000,
                     rate_cabin: 9000,
+                    rate_cabin_no_ins: 7500,
                     rate_int_cabin_lining: 120,
                     rate_int_cabin_imitation: 370,
                     rate_hozblok: 7500,
@@ -2434,7 +2440,7 @@
                     rate_int_mdf: 500,
                     rate_int_pvc: 500,
                     rate_ins_100: 450,
-                    rate_ins_100_min_wool: 550,
+                    rate_ins_100_min_wool: 0,
                     rate_ins_150: 3700,
                     rate_ins_200: 5600,
                     rate_ins_mix: 450,
@@ -2775,7 +2781,8 @@
 
     const INSULATION_FIELDS = [
         { key: 'rate_ins_100', label: 'Утепление 100 мм баз. плита (по формуле)', def: 450 },
-        { key: 'rate_ins_100_min_wool', label: 'Утепление 100 мм мин. вата (бытовка)', def: 550 },
+        { key: 'rate_ins_100_min_wool', label: 'Утепление 100 мм мин. вата (бытовка)', def: 0 },
+        { key: 'rate_cabin_no_ins', label: 'Бытовка без утепления, база р/м²', def: 7500 },
         { key: 'rate_ins_150', label: 'Утепление 150 мм баз. плита', def: 3700 },
         { key: 'rate_ins_200', label: 'Утепление 200 мм баз. плита', def: 5600 },
         { key: 'rate_ins_mix', label: 'Утепление MIX (каркас 50/100)', def: 450 },
