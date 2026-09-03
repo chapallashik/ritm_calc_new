@@ -3276,6 +3276,183 @@
         }
     });
 
+    // Общая функция публикации произвольного JSON-файла на GitHub (переиспользуется и для materials.json, и для staff.json)
+    async function publishJsonFileToGitHub(filePath, jsonObject, commitLabel) {
+        const cfg = getSyncConfig();
+        if (!cfg.owner || !cfg.repo || !cfg.token) {
+            throw new Error('Заполните владельца, репозиторий и токен во вкладке "Публикация".');
+        }
+        const content = JSON.stringify(jsonObject, null, 2);
+
+        let sha = null;
+        const getRes = await githubApiRequest(
+            `/repos/${cfg.owner}/${cfg.repo}/contents/${filePath}?ref=${encodeURIComponent(cfg.branch)}`,
+            { method: 'GET' }
+        );
+        if (getRes.ok) {
+            const getData = await getRes.json();
+            sha = getData.sha;
+        } else if (getRes.status !== 404) {
+            const errData = await getRes.json().catch(() => ({}));
+            throw new Error(errData.message || `Не удалось прочитать текущий файл (${getRes.status})`);
+        }
+
+        const putRes = await githubApiRequest(`/repos/${cfg.owner}/${cfg.repo}/contents/${filePath}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: `${commitLabel} (${new Date().toLocaleString('ru-RU')})`,
+                content: utf8ToBase64(content),
+                branch: cfg.branch,
+                ...(sha ? { sha } : {})
+            })
+        });
+        if (!putRes.ok) {
+            const errData = await putRes.json().catch(() => ({}));
+            throw new Error(errData.message || `Ошибка публикации (${putRes.status})`);
+        }
+        saveSyncSettings();
+    }
+
+    // ==================== Панель "Сотрудники" (доступ в гостевую часть по логину/паролю) ====================
+    const staffToggleBtn = document.getElementById('staffToggleBtn');
+    const staffModal = document.getElementById('staffModal');
+    const closeStaffBtn = document.getElementById('closeStaffBtn');
+    const staffList = document.getElementById('staffList');
+    const staffAddForm = document.getElementById('staffAddForm');
+    const btnStaffAddNew = document.getElementById('btnStaffAddNew');
+    const btnStaffDownload = document.getElementById('btnStaffDownload');
+    const btnStaffPublish = document.getElementById('btnStaffPublish');
+
+    function renderStaffList() {
+        const employees = window.STAFF_API.getList();
+        if (employees.length === 0) {
+            staffList.innerHTML = `<p style="color:var(--text-muted); font-size:13px;">Сотрудников пока нет.</p>`;
+            return;
+        }
+        staffList.innerHTML = employees.map(s => `
+            <div class="option-row" style="justify-content: space-between;" data-staff-id="${s.id}">
+                <div style="font-weight:600;">${s.name}</div>
+                <button class="btn btn-secondary staff-del-btn" style="padding:4px 10px; font-size:12px; border-color:#e74c3c; color:#e74c3c;">Удалить</button>
+            </div>
+        `).join('');
+        staffList.querySelectorAll('.staff-del-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = e.target.closest('[data-staff-id]').getAttribute('data-staff-id');
+                const rec = window.STAFF_API.getList().find(s => s.id === id);
+                if (rec && confirm(`Удалить доступ у сотрудника "${rec.name}"? Он больше не сможет войти на сайт.`)) {
+                    window.STAFF_API.setList(window.STAFF_API.getList().filter(s => s.id !== id));
+                    window.STAFF_API.saveDraft();
+                    renderStaffList();
+                }
+            });
+        });
+    }
+
+    function openStaffForm() {
+        staffAddForm.innerHTML = `
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <div>
+                    <label style="font-weight:600; font-size:13px;">Имя сотрудника</label>
+                    <input type="text" id="staffFieldName" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border-color,#ccc); margin-top:4px;">
+                </div>
+                <div>
+                    <label style="font-weight:600; font-size:13px;">Логин</label>
+                    <input type="text" id="staffFieldLogin" autocomplete="off" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border-color,#ccc); margin-top:4px;">
+                </div>
+                <div>
+                    <label style="font-weight:600; font-size:13px;">Пароль</label>
+                    <input type="password" id="staffFieldPassword" autocomplete="new-password" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border-color,#ccc); margin-top:4px;">
+                </div>
+                <div style="font-size:12px; color:var(--text-muted);">Пароль сохранится только в виде хэша — потом посмотреть его будет нельзя, только задать новый (удалить сотрудника и добавить заново).</div>
+                <div style="display:flex; gap:8px; justify-content:flex-end;">
+                    <button class="btn btn-secondary" id="btnStaffCancel" style="font-size:13px;">Отмена</button>
+                    <button class="btn btn-primary" id="btnStaffSave" style="font-size:13px;">Добавить</button>
+                </div>
+            </div>
+        `;
+        staffAddForm.style.display = 'block';
+        document.getElementById('btnStaffCancel').addEventListener('click', closeStaffForm);
+        document.getElementById('btnStaffSave').addEventListener('click', saveStaffForm);
+    }
+
+    function closeStaffForm() {
+        staffAddForm.style.display = 'none';
+        staffAddForm.innerHTML = '';
+    }
+
+    async function saveStaffForm() {
+        const name = document.getElementById('staffFieldName').value.trim();
+        const login = document.getElementById('staffFieldLogin').value.trim();
+        const password = document.getElementById('staffFieldPassword').value;
+
+        if (!name || !login || !password) {
+            alert('Заполните имя, логин и пароль.');
+            return;
+        }
+        if (window.STAFF_API.getList().some(s => s.loginLower === login.toLowerCase())) {
+            alert('Такой логин уже используется другим сотрудником.');
+            return;
+        }
+
+        const loginHash = await window.sha256ForAuth(login);
+        const passHash = await window.sha256ForAuth(password);
+
+        window.STAFF_API.setList([
+            ...window.STAFF_API.getList(),
+            { id: 'staff_' + Date.now(), name, loginLower: login.toLowerCase(), loginHash, passHash }
+        ]);
+        window.STAFF_API.saveDraft();
+        closeStaffForm();
+        renderStaffList();
+    }
+
+    if (staffToggleBtn) {
+        staffToggleBtn.addEventListener('click', () => {
+            closeStaffForm();
+            renderStaffList();
+            staffModal.style.display = 'flex';
+        });
+    }
+    if (closeStaffBtn) {
+        closeStaffBtn.addEventListener('click', () => { staffModal.style.display = 'none'; });
+    }
+    window.addEventListener('click', (e) => {
+        if (e.target === staffModal) staffModal.style.display = 'none';
+    });
+    btnStaffAddNew.addEventListener('click', openStaffForm);
+
+    btnStaffDownload.addEventListener('click', () => {
+        const jsonContent = JSON.stringify({ employees: window.STAFF_API.getList() }, null, 2);
+        const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'staff.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+
+    btnStaffPublish.addEventListener('click', async () => {
+        if (!confirm('Опубликовать список сотрудников на GitHub? Настройки подключения берутся из вкладки "Публикация" (владелец/репозиторий/токен).')) return;
+        btnStaffPublish.disabled = true;
+        const originalText = btnStaffPublish.textContent;
+        btnStaffPublish.textContent = 'Публикую...';
+        try {
+            await publishJsonFileToGitHub(
+                'staff.json',
+                { employees: window.STAFF_API.getList() },
+                'Обновление списка сотрудников из админ-панели'
+            );
+            alert('Готово! Список сотрудников опубликован.');
+        } catch (e) {
+            alert('Не удалось опубликовать: ' + e.message);
+        } finally {
+            btnStaffPublish.disabled = false;
+            btnStaffPublish.textContent = originalText;
+        }
+    });
+
     // Delivery Slider hooks
     deliverySlider.addEventListener('input', (e) => {
         const val = parseInt(e.target.value) || 0;
