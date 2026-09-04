@@ -38,10 +38,10 @@
                 cheapBaseRate: 9500,
                 materials: [
                     { id: "ext_hl_vagonka", name: "Вагонка ВС", mode: "base", price: 10000 },
-                    { id: "ext_hl_imitatsia", name: "Имитация бруса", mode: "base", price: 10000 },
+                    { id: "ext_hl_imitatsia", name: "Имитация бруса", mode: "base", price: 10000, addonOnTop: 500 },
                     { id: "ext_hl_blockhouse", name: "Блок-хаус", mode: "addon", price: 1000 },
                     { id: "ext_hl_proflist", name: "Профлист цветной", mode: "addon", price: 400 },
-                    { id: "ext_hl_osb", name: "ОСБ 12мм", mode: "addon", price: 400 }
+                    { id: "ext_hl_osb", name: "ОСБ 12мм", mode: "addon", price: 300 }
                 ]
             },
             simple: [
@@ -687,6 +687,9 @@
                 <option value="150">150 мм базальтовая плита (+${fmt(p150)} р/м², с верандой)</option>
                 <option value="200">200 мм базальтовая плита (+${fmt(p200)} р/м², с верандой)</option>
                 <option value="mix_100">Утепление MIX: каркас 50/100 (баз. плита стены + мин. вата пол/потолок)</option>
+                <option value="kd_100_real">Каркас 50/100 "камерная сушка" + утепление 100мм баз. плита (по формуле + ${fmt(pr100kd)} р/м² каркас, с верандой)</option>
+                <option value="kd_150_real">Каркас 50/150 "камерная сушка" + утепление 150мм баз. плита (+${fmt(pKd150Real)} р/м², с верандой)</option>
+                <option value="kd_200_real">Каркас 50/200 "камерная сушка" + утепление 200мм баз. плита (+${fmt(pKd200Real)} р/м², с верандой)</option>
             `;
         } else {
             const hlNoIns = MATERIALS.exterior.houseLow.noInsRate;
@@ -1557,6 +1560,10 @@
                 const hlExt = getExteriorHouseLowRecord(state.selCustomExterior);
                 if (hlExt && hlExt.mode === 'addon') {
                     extCost = extWallArea * hlExt.price;
+                } else if (hlExt && hlExt.addonOnTop) {
+                    // Особый случай (например "Имитация бруса"): база остаётся как у "своей базы",
+                    // но сверху всё равно накидывается доплата за площадь стен.
+                    extCost = extWallArea * hlExt.addonOnTop;
                 }
             } else if (state.customType === 'cabin' || state.customType === 'hozblok') {
                 const simpleExt = getExteriorSimpleRecord(state.selCustomExterior);

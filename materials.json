@@ -181,7 +181,8 @@
           "id": "ext_hl_imitatsia",
           "name": "Имитация бруса",
           "mode": "base",
-          "price": 10000
+          "price": 10000,
+          "addonOnTop": 500
         },
         {
           "id": "ext_hl_blockhouse",
@@ -199,7 +200,7 @@
           "id": "ext_hl_osb",
           "name": "ОСБ 12мм",
           "mode": "addon",
-          "price": 400
+          "price": 300
         }
       ]
     },
