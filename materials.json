@@ -271,7 +271,7 @@
         "categories": [
           "hozblok"
         ],
-        "price": 250
+        "price": 500
       }
     ]
   },
@@ -283,7 +283,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -297,7 +298,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -311,7 +313,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -325,7 +328,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -339,7 +343,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -353,7 +358,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -367,7 +373,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -381,7 +388,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -395,7 +403,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -409,7 +418,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -423,7 +433,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -437,7 +448,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -451,7 +463,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -465,7 +478,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -479,7 +493,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -493,7 +508,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -507,7 +523,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -521,7 +538,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -533,7 +551,8 @@
       "name": "Окно ПВХ 60х90 (2 камеры) поворотно-откидное",
       "categories": [
         "house_high",
-        "house_low"
+        "house_low",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -545,7 +564,8 @@
       "name": "Окно ПВХ 60х120 (2 камеры) поворотно-откидное",
       "categories": [
         "house_high",
-        "house_low"
+        "house_low",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -557,7 +577,8 @@
       "name": "Окно ПВХ 60х180 (2 камеры) поворотно-откидное",
       "categories": [
         "house_high",
-        "house_low"
+        "house_low",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -569,7 +590,8 @@
       "name": "Окно ПВХ 100х100 (2 камеры) поворотно-откидное",
       "categories": [
         "house_high",
-        "house_low"
+        "house_low",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -581,7 +603,8 @@
       "name": "Окно ПВХ 120х120 (2 камеры) поворотно-откидное",
       "categories": [
         "house_high",
-        "house_low"
+        "house_low",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -593,7 +616,8 @@
       "name": "Окно ПВХ 100х140 (2 камеры) поворотно-откидное",
       "categories": [
         "house_high",
-        "house_low"
+        "house_low",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -605,7 +629,8 @@
       "name": "Окно ПВХ 100х150 (2 камеры) поворотно-откидное",
       "categories": [
         "house_high",
-        "house_low"
+        "house_low",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -617,7 +642,8 @@
       "name": "Окно ПВХ 120х150 (2 камеры) поворотно-откидное",
       "categories": [
         "house_high",
-        "house_low"
+        "house_low",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -629,7 +655,8 @@
       "name": "Окно ПВХ 140х150 (2 камеры) поворотно-откидное",
       "categories": [
         "house_high",
-        "house_low"
+        "house_low",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -641,7 +668,8 @@
       "name": "Окно ПВХ 150х150 (2 камеры) поворотно-откидное",
       "categories": [
         "house_high",
-        "house_low"
+        "house_low",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -653,7 +681,8 @@
       "name": "Окно ПВХ 150х100 (2 камеры) поворотно-откидное",
       "categories": [
         "house_high",
-        "house_low"
+        "house_low",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -665,7 +694,8 @@
       "name": "Окно ПВХ 150х190 (2 камеры) поворотно-откидное",
       "categories": [
         "house_high",
-        "house_low"
+        "house_low",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -677,7 +707,8 @@
       "name": "Окно ПВХ 180х190 (2 камеры) поворотно-откидное",
       "categories": [
         "house_high",
-        "house_low"
+        "house_low",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -689,7 +720,8 @@
       "name": "Окно ПВХ 180х200 (2 камеры) поворотно-откидное",
       "categories": [
         "house_high",
-        "house_low"
+        "house_low",
+        "chalet"
       ],
       "group": "windows",
       "unit": "quantity",
@@ -703,7 +735,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "piles",
       "unit": "quantity",
@@ -717,7 +750,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "piles",
       "unit": "quantity",
@@ -731,7 +765,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "piles",
       "unit": "quantity",
@@ -745,7 +780,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "piles",
       "unit": "quantity",
@@ -759,7 +795,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "piles",
       "unit": "quantity",
@@ -773,7 +810,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "piles",
       "unit": "quantity",
@@ -787,7 +825,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "piles",
       "unit": "quantity",
@@ -801,7 +840,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "piles",
       "unit": "quantity",
@@ -815,7 +855,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "piles",
       "unit": "quantity",
@@ -829,7 +870,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "piles",
       "unit": "quantity",
@@ -843,7 +885,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "other",
       "unit": "quantity",
@@ -857,7 +900,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "other",
       "unit": "quantity",
@@ -871,7 +915,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "area",
       "unit": "quantity",
@@ -885,7 +930,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "area",
       "unit": "quantity",
@@ -899,7 +945,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "other",
       "unit": "quantity",
@@ -911,7 +958,8 @@
       "name": "Зашить потолок веранды (за м²)",
       "categories": [
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "other",
       "unit": "quantity",
@@ -925,7 +973,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "doors",
       "unit": "quantity",
@@ -939,7 +988,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "doors",
       "unit": "quantity",
@@ -953,7 +1003,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "doors",
       "unit": "quantity",
@@ -967,7 +1018,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "doors",
       "unit": "quantity",
@@ -981,7 +1033,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "doors",
       "unit": "quantity",
@@ -995,7 +1048,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "doors",
       "unit": "quantity",
@@ -1009,7 +1063,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "area",
       "unit": "area",
@@ -1023,7 +1078,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "area",
       "unit": "area",
@@ -1037,7 +1093,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "other",
       "unit": "quantity",
@@ -1051,7 +1108,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "other",
       "unit": "quantity",
@@ -1065,7 +1123,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "area",
       "unit": "area",
@@ -1079,7 +1138,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "area",
       "unit": "area",
@@ -1093,7 +1153,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "area",
       "unit": "area",
@@ -1107,7 +1168,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "area",
       "unit": "area",
@@ -1121,7 +1183,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "area",
       "unit": "area",
@@ -1135,7 +1198,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "area",
       "unit": "area",
@@ -1148,7 +1212,8 @@
       "categories": [
         "house_high",
         "house_low",
-        "cabin"
+        "cabin",
+        "chalet"
       ],
       "group": "area",
       "unit": "area",
@@ -1161,7 +1226,8 @@
       "categories": [
         "house_high",
         "house_low",
-        "cabin"
+        "cabin",
+        "chalet"
       ],
       "group": "area",
       "unit": "area",
@@ -1173,7 +1239,8 @@
       "name": "Крыша двухскатная с коньком 40-70 см",
       "categories": [
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "area",
       "unit": "area",
@@ -1184,7 +1251,8 @@
       "id": "roof_double_pitch_flat",
       "name": "Двухскатная крыша (увеличение стоимости)",
       "categories": [
-        "cabin"
+        "cabin",
+        "chalet"
       ],
       "group": "other",
       "unit": "quantity",
@@ -1195,7 +1263,8 @@
       "id": "ceiling_osb_12_lath",
       "name": "Настил на потолок ОСБ 12 мм с обрешеткой",
       "categories": [
-        "house_high"
+        "house_high",
+        "chalet"
       ],
       "group": "area",
       "unit": "area",
@@ -1207,7 +1276,8 @@
       "name": "Вентзазор",
       "categories": [
         "house_high",
-        "house_low"
+        "house_low",
+        "chalet"
       ],
       "group": "area",
       "unit": "area",
@@ -1221,7 +1291,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "other",
       "unit": "quantity",
@@ -1246,7 +1317,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "other",
       "unit": "quantity",
@@ -1260,7 +1332,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "other",
       "unit": "quantity",
@@ -1274,7 +1347,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "other",
       "unit": "quantity",
@@ -1288,7 +1362,8 @@
         "house_high",
         "house_low",
         "cabin",
-        "hozblok"
+        "hozblok",
+        "chalet"
       ],
       "group": "other",
       "unit": "quantity",
