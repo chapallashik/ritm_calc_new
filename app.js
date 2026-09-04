@@ -1577,9 +1577,8 @@
                 const intRecord = getInteriorRecord(state.selCustomInterior);
                 const rate = intRecord ? (intRecord.price || 0) : 0;
                 if (rate > 0) {
-                    // Дом низкий — по формуле заказчика с двойным членом площади; для остальных категорий — одинарным.
-                    const areaTerm = (state.customType === 'house_low') ? (area * 2) : area;
-                    const intArea = (state.customLength * 2 * 2.5) + (state.customWidth * 2 * 2.5) + areaTerm;
+                    // Единая формула для всех категорий: стены + одна площадь (пол ИЛИ потолок)
+                    const intArea = (state.customLength * 2 * 2.5) + (state.customWidth * 2 * 2.5) + area;
                     intCost = intArea * rate;
                 }
             }
@@ -2318,8 +2317,8 @@
             verandaLengthSlider.value = state.verandaLength;
             verandaWidthSlider.value = state.verandaWidth;
             verandaHeightSlider.value = state.verandaHeight;
-            lblVerandaLength.textContent = `${state.verandaLength.toFixed(1)} м`;
-            lblVerandaWidth.textContent = `${state.verandaWidth.toFixed(1)} м`;
+            lblVerandaLength.textContent = `${Math.round(state.verandaLength)} м`;
+            lblVerandaWidth.textContent = `${Math.round(state.verandaWidth)} м`;
             lblVerandaHeight.textContent = `${state.verandaHeight.toFixed(1)} м`;
         }
         syncVerandaToAdditions();
@@ -2329,7 +2328,7 @@
 
     verandaLengthSlider.addEventListener('input', (e) => {
         state.verandaLength = parseFloat(e.target.value) || 1;
-        lblVerandaLength.textContent = `${state.verandaLength.toFixed(1)} м`;
+        lblVerandaLength.textContent = `${Math.round(state.verandaLength)} м`;
         syncVerandaToAdditions();
         updateVerandaSummary();
         renderModelUI();
@@ -2337,7 +2336,7 @@
 
     verandaWidthSlider.addEventListener('input', (e) => {
         state.verandaWidth = parseFloat(e.target.value) || 1;
-        lblVerandaWidth.textContent = `${state.verandaWidth.toFixed(1)} м`;
+        lblVerandaWidth.textContent = `${Math.round(state.verandaWidth)} м`;
         syncVerandaToAdditions();
         updateVerandaSummary();
         renderModelUI();
