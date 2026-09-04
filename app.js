@@ -672,6 +672,7 @@
                 <option value="50_min_wool">50 мм мин. вата (базовая, включена)</option>
                 <option value="100_min_wool">100 мм мин. вата (${customRates.rate_ins_100_min_wool > 0 ? '+' + fmt(customRates.rate_ins_100_min_wool) + ' р/м²' : 'базовая, включена'})</option>
                 <option value="100">100 мм базальтовая плита (по формуле)</option>
+                <option value="mix_100">Утепление MIX: каркас 50/100 (баз. плита стены + мин. вата пол/потолок)</option>
                 <option value="150">150 мм базальтовая плита (+${fmt(p150)} р/м²)</option>
                 <option value="0">Без утепления</option>
             `;
@@ -1608,8 +1609,8 @@
             } else if (state.selCustomInsulation === 'kd_200_real') {
                 insulationSum = (area + getVerandaArea()) * (customRates.rate_kd_200_real || 7600);
             } else if (state.selCustomInsulation === 'mix_100') {
-                // Утепление MIX: каркас 50/100, баз. плита стены + мин. вата пол/потолок (стены + 2×площадь)
-                const wallAreaMix = (state.customWidth * 2 * 2.5) + (state.customLength * 2 * 2.5) + area + area;
+                // Утепление MIX: каркас 50/100, баз. плита стены (450 р/м²) + мин. вата пол/потолок (не тарифицируется отдельно) — только площадь стен
+                const wallAreaMix = (state.customWidth * 2 * 2.5) + (state.customLength * 2 * 2.5);
                 insulationSum = wallAreaMix * (customRates.rate_ins_mix || 450);
             } else if (state.selCustomInsulation === '200_ceiling') {
                 insulationSum = area * (customRates.rate_ins_200_ceiling || 1000);
