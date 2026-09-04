@@ -8,11 +8,11 @@
       "passHash": "e606e38b0d8c19b24cf0ee3808183162ea7cd63ff7912dbb22b5e803286b4446"
     },
     {
-      "id": "staff_1788508146166",
-      "name": "ФЫВ",
-      "loginLower": "фыв",
-      "loginHash": "ae7e85a30a06e8ff7e970a174ca5c56a2b3a44cd8e5949b344d1e17af90eb5ce",
-      "passHash": "ae7e85a30a06e8ff7e970a174ca5c56a2b3a44cd8e5949b344d1e17af90eb5ce"
+      "id": "staff_1788508355555",
+      "name": "Сотрудник 1",
+      "loginLower": "user1",
+      "loginHash": "0a041b9462caa4a31bac3567e0b6e6fd9100787db2ab433d96f6d178cabfce90",
+      "passHash": "0a041b9462caa4a31bac3567e0b6e6fd9100787db2ab433d96f6d178cabfce90"
     }
   ]
 }
