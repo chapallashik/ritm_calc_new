@@ -1,11 +1,3 @@
 {
-  "employees": [
-    {
-      "id": "staff_1788450045906",
-      "name": "Никита программист",
-      "loginLower": "user",
-      "loginHash": "04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb",
-      "passHash": "e606e38b0d8c19b24cf0ee3808183162ea7cd63ff7912dbb22b5e803286b4446"
-    }
-  ]
+  "employees": []
 }
