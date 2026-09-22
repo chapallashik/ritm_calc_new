@@ -13,6 +13,13 @@
       "loginLower": "user1",
       "loginHash": "0a041b9462caa4a31bac3567e0b6e6fd9100787db2ab433d96f6d178cabfce90",
       "passHash": "0a041b9462caa4a31bac3567e0b6e6fd9100787db2ab433d96f6d178cabfce90"
+    },
+    {
+      "id": "staff_1790060519883",
+      "name": "Сотрудник 2",
+      "loginLower": "user2",
+      "loginHash": "6025d18fe48abd45168528f18a82e265dd98d421a7084aa09f61b341703901a3",
+      "passHash": "d05c169d060683dd934fc2876107f06d80acdb48e32d8c149c70d6312485478c"
     }
   ]
 }
